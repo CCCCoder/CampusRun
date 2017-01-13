@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/first_item"
+            android:icon="@drawable/aim"
+            android:title="aim"></item>
+        <item
+            android:id="@+id/second_item"
+            android:icon="@drawable/behance"
+            android:title="behance"></item>
+        <item
+            android:id="@+id/third_item"
+            android:icon="@drawable/etsy"
+            android:title="etsy"></item>
+        <item
+            android:id="@+id/about_item"
+            android:icon="@drawable/dropbox"
+            android:title="about"></item>
+    </group>
+</menu>

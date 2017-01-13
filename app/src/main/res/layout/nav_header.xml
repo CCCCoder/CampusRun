@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/bg3"
+    android:layout_width="match_parent"
+    android:layout_height="180dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/icon_image"
+        android:src="@drawable/icon"
+        android:layout_centerInParent="true"
+        android:layout_width="70dp"
+        android:layout_height="70dp" />
+
+    <TextView
+        android:layout_below="@+id/icon_image"
+        android:id="@+id/username_tx"
+        android:text="Android"
+        android:padding="10dp"
+        android:textSize="20sp"
+        android:textColor="#fff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/signature_tx"
+        android:text="校园跑，跑出健康"
+        android:textColor="#fff"
+        android:padding="10dp"
+        android:layout_below="@+id/username_tx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
