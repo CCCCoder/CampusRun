@@ -1,8 +1,10 @@
 package com.n1njac.yiqipao.android;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -11,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()){
                     case R.id.first_item:
+
                         Toast.makeText(MainActivity.this,"click aim",Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.second_item:
@@ -75,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        mToolbar.setTitle("校园跑");
-        setSupportActionBar(mToolbar);
+//        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+//        mToolbar.setTitle("校园跑");
+//        setSupportActionBar(mToolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
@@ -110,30 +114,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout.Tab two = mTabLayout.getTabAt(1);
         TabLayout.Tab three = mTabLayout.getTabAt(2);
 
-
         one.setIcon(R.mipmap.ic_launcher);
 
-    }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_setting,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.setting:
-                Toast.makeText(this,"click setting",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.about:
-                Toast.makeText(this,"click about",Toast.LENGTH_SHORT).show();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
