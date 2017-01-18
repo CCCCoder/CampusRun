@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.personalInfo.ExecPlanActivity;
+import com.n1njac.yiqipao.android.personalInfo.HistoryDistanceActivity;
 import com.n1njac.yiqipao.android.view.ArcView;
 
 import static android.app.Activity.RESULT_OK;
@@ -25,13 +26,11 @@ public class PersonalInfoFragment extends Fragment {
     private ArcView arcView;
     private TextView exec, history;
 
-    private ExecPlanActivity activity;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.personlinfo_frag, container, false);
-        Log.i("xyz","onCreateView");
         exec = (TextView) view.findViewById(R.id.exec_text);
         history = (TextView) view.findViewById(R.id.history_tx);
         exec.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +43,8 @@ public class PersonalInfoFragment extends Fragment {
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getActivity(), HistoryDistanceActivity.class);
+                startActivity(intent);
             }
         });
         arcView = (ArcView) view.findViewById(R.id.arc_view);
@@ -56,12 +56,10 @@ public class PersonalInfoFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("xyz","onActivityResult");
 
         if (resultCode == RESULT_OK){
             String content = data.getStringExtra("distance");
             double distance = Double.parseDouble(content);
-            Log.i("xyz","distance:"+distance);
             arcView.setNowDistance(distance,10);
         }
     }

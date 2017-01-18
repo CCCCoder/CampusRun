@@ -5,4 +5,12 @@ package com.n1njac.yiqipao.android.personalInfo;
  */
 
 public class ItemBean {
+
+    String runTime;
+    String runDistance;
+
+    public ItemBean(String runTime, String runDistance) {
+        this.runTime = runTime;
+        this.runDistance = runDistance;
+    }
 }
