@@ -4,8 +4,8 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/first_item"
-            android:icon="@drawable/aim"
-            android:title="aim"></item>
+            android:icon="@drawable/info"
+            android:title="个人信息"></item>
         <item
             android:id="@+id/second_item"
             android:icon="@drawable/behance"

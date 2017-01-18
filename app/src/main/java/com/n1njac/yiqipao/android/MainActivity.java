@@ -3,9 +3,11 @@ package com.n1njac.yiqipao.android;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -66,10 +68,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initTabLayoutWithFragment();
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
         View view = mNavigationView.getHeaderView(0);
         mIcon = (ImageView) view.findViewById(R.id.icon_image);
+
+        //判断是否有头像uri，有的话直接从缓存里面拿。没有设置即默认。
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getString("iconUri", null) != null) {
+            Uri uri = Uri.parse(prefs.getString("iconUri", null));
+            Glide.with(this).load(uri).centerCrop().into(mIcon);
+        }
 
         mIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,23 +90,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mNavigationView.setCheckedItem(R.id.first_item);
+        mNavigationView.setItemIconTintList(null);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
 
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.first_item:
 
-                        Toast.makeText(MainActivity.this,"click aim",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "click aim", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.second_item:
-                        Toast.makeText(MainActivity.this,"click behance",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "click behance", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.third_item:
-                        Toast.makeText(MainActivity.this,"click etsy",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "click etsy", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.about_item:
-                        Toast.makeText(MainActivity.this,"click about",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "click about", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -107,13 +119,12 @@ public class MainActivity extends AppCompatActivity {
 //        mToolbar.setTitle("校园跑");
 //        setSupportActionBar(mToolbar);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
-        mDrawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close);
+//        mDrawerLayout.addDrawerListener(toggle);
+//        toggle.syncState();
 
     }
-
 
 
     private void initTabLayoutWithFragment() {
@@ -131,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (IndexViewPager) findViewById(R.id.view_pager);
 
 
-        FragmentManager adapter = new FragmentManager(getSupportFragmentManager(),mList);
+        FragmentManager adapter = new FragmentManager(getSupportFragmentManager(), mList);
         //mViewPager.setAdapter(adapter);
         viewPager.setAdapter(adapter);
 
@@ -146,21 +157,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showTakePhotoOrChooseFromAlbumDialog() {
-        CharSequence[] items = {"拍照","从相册选择"};
+        CharSequence[] items = {"拍照", "从相册选择"};
         new AlertDialog.Builder(this)
                 .setTitle("更换头像")
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which == TAKE_PHOTO){
+                        if (which == TAKE_PHOTO) {
 
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
                             intent.setType("image/*");
-                            startActivityForResult(intent,TAKE_PHOTO);
-                        }else {
+                            startActivityForResult(intent, TAKE_PHOTO);
+                        } else {
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(intent,CHOOSE_FROM_ALBUM);
+                            startActivityForResult(intent, CHOOSE_FROM_ALBUM);
                         }
                     }
                 })
@@ -177,9 +188,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             Uri uri = data.getData();
-                Glide.with(this).load(uri).into(mIcon);
+            Glide.with(this).load(uri).centerCrop().into(mIcon);
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+            editor.putString("iconUri", uri.toString());
+            editor.apply();
         }
     }
 }
