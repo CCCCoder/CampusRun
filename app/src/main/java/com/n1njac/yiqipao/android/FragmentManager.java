@@ -13,7 +13,7 @@ public class FragmentManager extends FragmentPagerAdapter {
 
     List<Fragment> list;
 
-    String [] titles = new String[]{"个人信息","校园跑","附近校友"};
+    String [] titles = new String[]{"路程","校园跑","附近校友","我"};
 
     public FragmentManager(android.support.v4.app.FragmentManager fm,List<Fragment> list) {
         super(fm);

@@ -1,11 +1,9 @@
 package com.n1njac.yiqipao.android;
 
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -15,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,9 +26,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.Fragment.NearbyPersonInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.PersonalInfoFragment;
+import com.n1njac.yiqipao.android.Fragment.PersonalRunInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.RunFragment;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,12 +127,14 @@ public class MainActivity extends AppCompatActivity {
     private void initTabLayoutWithFragment() {
 
         mList = new ArrayList<>();
-        PersonalInfoFragment personalInfoFragment = new PersonalInfoFragment();
+        PersonalRunInfoFragment personalRunInfoFragment = new PersonalRunInfoFragment();
         RunFragment runFragment = new RunFragment();
         NearbyPersonInfoFragment nearbyPersonInfoFragment = new NearbyPersonInfoFragment();
-        mList.add(personalInfoFragment);
+        PersonalInfoFragment personalInfoFragment = new PersonalInfoFragment();
+        mList.add(personalRunInfoFragment);
         mList.add(runFragment);
         mList.add(nearbyPersonInfoFragment);
+        mList.add(personalInfoFragment);
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         //mViewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -189,11 +188,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            Glide.with(this).load(uri).centerCrop().into(mIcon);
-            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-            editor.putString("iconUri", uri.toString());
-            editor.apply();
+            if (requestCode == TAKE_PHOTO){
+                Uri uri = data.getData();
+                Glide.with(this).load(uri).centerCrop().into(mIcon);
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+                editor.putString("iconUri", uri.toString());
+                editor.apply();
+            }
         }
     }
 }

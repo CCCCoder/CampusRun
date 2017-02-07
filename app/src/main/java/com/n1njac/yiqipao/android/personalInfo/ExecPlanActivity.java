@@ -19,8 +19,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.n1njac.yiqipao.android.Fragment.PersonalInfoFragment;
-import com.n1njac.yiqipao.android.MainActivity;
 import com.n1njac.yiqipao.android.R;
 
 import java.text.DateFormat;
