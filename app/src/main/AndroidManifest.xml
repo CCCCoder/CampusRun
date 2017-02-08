@@ -18,9 +18,9 @@
         </activity>
         <activity
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:name=".personalInfo.ExecPlanActivity"/>
+            android:name=".DistanceDisplay.ExecPlanActivity"/>
         <activity
-            android:name=".personalInfo.HistoryDistanceActivity"/>
+            android:name=".DistanceDisplay.HistoryDistanceActivity"/>
         
     </application>
 

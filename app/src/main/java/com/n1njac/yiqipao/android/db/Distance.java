@@ -5,7 +5,7 @@ import org.litepal.crud.DataSupport;
 /**
  * Created by huanglei on 2017/1/17.
  */
-
+//每天的路程数据库
 public class Distance extends DataSupport {
 
     private int id;

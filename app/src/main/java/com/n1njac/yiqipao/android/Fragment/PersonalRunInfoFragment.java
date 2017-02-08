@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
-import com.n1njac.yiqipao.android.personalInfo.ExecPlanActivity;
-import com.n1njac.yiqipao.android.personalInfo.HistoryDistanceActivity;
+import com.n1njac.yiqipao.android.DistanceDisplay.ExecPlanActivity;
+import com.n1njac.yiqipao.android.DistanceDisplay.HistoryDistanceActivity;
 import com.n1njac.yiqipao.android.view.ArcView;
 
 import static android.app.Activity.RESULT_OK;

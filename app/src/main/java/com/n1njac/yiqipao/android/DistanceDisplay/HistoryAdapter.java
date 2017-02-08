@@ -1,4 +1,4 @@
-package com.n1njac.yiqipao.android.personalInfo;
+package com.n1njac.yiqipao.android.DistanceDisplay;
 
 import android.content.Context;
 import android.view.LayoutInflater;

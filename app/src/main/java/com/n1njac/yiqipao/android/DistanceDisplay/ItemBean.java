@@ -1,4 +1,4 @@
-package com.n1njac.yiqipao.android.personalInfo;
+package com.n1njac.yiqipao.android.DistanceDisplay;
 
 /**
  * Created by huanglei on 2017/1/17.
