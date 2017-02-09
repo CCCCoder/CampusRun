@@ -7,11 +7,13 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -120,6 +122,24 @@ public class PersonalInfoFragment extends Fragment {
 
                         break;
                     case 2:
+                        View view2 = View.inflate(getActivity(), R.layout.dialog_datepicker, null);
+                        final DatePicker datePicker = (DatePicker) view2.findViewById(R.id.date_picker);
+                        new AlertDialog.Builder(getActivity())
+                                .setView(view2)
+                                .setTitle("出生年月")
+                                .setNegativeButton("保存", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int month = datePicker.getMonth() + 1;
+                                        int year = datePicker.getYear();
+                                        String birth = year + "年" + month + "月";
+                                        personalContent.setText(birth);
+                                        editor.putString("birth", birth);
+                                        editor.apply();
+                                    }
+                                })
+                                .setCancelable(true)
+                                .show();
 
 
                         break;
@@ -135,24 +155,47 @@ public class PersonalInfoFragment extends Fragment {
                         numberPicker.setMaxValue(lengths.length - 1);
                         numberPicker.setMinValue(0);
                         new AlertDialog.Builder(getActivity())
-                                .setTitle("身高")
+                                .setTitle("身高（厘米）")
                                 .setView(view1)
                                 .setPositiveButton("保存", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        String height = lengths[numberPicker.getValue()]+"厘米";
+                                        String height = lengths[numberPicker.getValue()] + "厘米";
                                         personalContent.setText(height);
-                                        editor.putString("height",height);
+                                        editor.putString("height", height);
                                         editor.apply();
                                     }
                                 })
-                                .setNegativeButton("取消",null)
+                                .setNegativeButton("取消", null)
                                 .setCancelable(false)
                                 .show();
 
                         break;
                     case 4:
-                        Toast.makeText(getActivity(), "4", Toast.LENGTH_SHORT).show();
+                        final EditText et2 = new EditText(getActivity());
+                        et2.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("体重（kg）")
+                                .setView(et2)
+                                .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String input = et2.getText().toString();
+                                        if (input.equals("")) {
+                                            Toast.makeText(getActivity(), "内容不能为空哦：）", Toast.LENGTH_SHORT).show();
+
+                                        } else {
+                                            //需要将信息保存到sf中
+                                            String weight = input + "kg";
+                                            personalContent.setText(weight);
+                                            editor.putString("weight", weight);
+                                            editor.apply();
+                                        }
+                                    }
+                                })
+                                .setCancelable(false)
+                                .setNegativeButton("取消", null)
+                                .show();
                         break;
                     case 5:
                         Toast.makeText(getActivity(), "5", Toast.LENGTH_SHORT).show();
@@ -168,7 +211,7 @@ public class PersonalInfoFragment extends Fragment {
     private void initList() {
 
         String[] descriptions = new String[]{"昵称", "性别", "出生年月", "身高", "体重", "兴趣爱好"};
-        String[] content = new String[]{"N1njaC", "男", "1993年7月", "170厘米", "120.0斤", "点击修改"};
+        String[] content = new String[]{"N1njaC", "男", "1993年7月", "170厘米", "62kg", "点击修改"};
         PersonalItemBean itemBean;
         for (int i = 0; i < 6; i++) {
             itemBean = new PersonalItemBean(descriptions[i], content[i]);

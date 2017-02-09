@@ -78,7 +78,16 @@ public class PersonalInfoAdapter extends BaseAdapter {
                 viewHolder.content.setText(content2);
                 break;
             case 2:
-
+                String content3 = sf.getString("birth","1999年9月");
+                viewHolder.content.setText(content3);
+                break;
+            case 3:
+                String content4 = sf.getString("height","170厘米");
+                viewHolder.content.setText(content4);
+                break;
+            case 4:
+                String content5 = sf.getString("weight","60kg");
+                viewHolder.content.setText(content5);
                 break;
 
 
