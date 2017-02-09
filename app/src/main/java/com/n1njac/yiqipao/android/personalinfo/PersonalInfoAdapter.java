@@ -1,12 +1,15 @@
 package com.n1njac.yiqipao.android.personalinfo;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.n1njac.yiqipao.android.R;
 
@@ -20,11 +23,14 @@ public class PersonalInfoAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
 
+    private Context mContext;
     private List<PersonalItemBean> mPersonalItemBeen;
 
+
     public PersonalInfoAdapter(Context context, List<PersonalItemBean> personalItemBeen) {
+        this.mContext = context;
         this.mPersonalItemBeen = personalItemBeen;
-        mInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(mContext);
 
     }
 
@@ -58,13 +64,32 @@ public class PersonalInfoAdapter extends BaseAdapter {
 
         PersonalItemBean itemBean = mPersonalItemBeen.get(position);
         viewHolder.description.setText(itemBean.getDescription());
+        //默认值
         viewHolder.content.setText(itemBean.getContent());
+
+        SharedPreferences sf = PreferenceManager.getDefaultSharedPreferences(mContext);
+        switch (position){
+            case 0:
+                String content1 = sf.getString("user_nickname","user");
+                viewHolder.content.setText(content1);
+                break;
+            case 1:
+                String content2 = sf.getString("sex","男");
+                viewHolder.content.setText(content2);
+                break;
+            case 2:
+
+                break;
+
+
+        }
+
 
         return convertView;
     }
 
-
     class ViewHolder {
+
         TextView description;
         TextView content;
 
