@@ -29,7 +29,7 @@ public class PersonalRunInfoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.personl_run_info_frag, container, false);
+        View view = inflater.inflate(R.layout.personal_run_frag, container, false);
         exec = (TextView) view.findViewById(R.id.exec_text);
         history = (TextView) view.findViewById(R.id.history_tx);
         exec.setOnClickListener(new View.OnClickListener() {

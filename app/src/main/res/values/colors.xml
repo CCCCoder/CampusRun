@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--#D88700  #CB272C-->
-    <color name="colorPrimary">#3F51B5</color>
+    <!--#D88700  #CB272C  #00BFFF-->
+
+    <!--<color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>-->
+    <color name="colorPrimary">#00BFFF</color>
+    <color name="colorPrimaryDark">#00BFFF</color>
     <color name="colorAccent">#FF4081</color>
     <color name="sienna">#FF8247</color>
     <color name="text">#D88700</color>

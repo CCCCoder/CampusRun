@@ -15,7 +15,7 @@
             android:layout_centerInParent="true"
             android:text="个人信息"
             android:textColor="#fff"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -34,9 +34,10 @@
                 android:layout_height="70dp"
                 android:src="@drawable/icon" />
             <TextView
-                android:id="@+id/id_tx_personal_info"
+                android:id="@+id/personal_info_id_tx"
                 android:text="ID:123456"
                 android:textColor="#000"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

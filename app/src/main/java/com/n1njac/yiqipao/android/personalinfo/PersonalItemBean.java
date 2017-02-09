@@ -8,11 +8,18 @@ public class PersonalItemBean {
 
     private String description;
     private String content;
-    private int iconId;
 
-    public PersonalItemBean(String description, String content, int iconId) {
+
+    public PersonalItemBean(String description, String content) {
         this.description = description;
         this.content = content;
-        this.iconId = iconId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getContent() {
+        return content;
     }
 }
