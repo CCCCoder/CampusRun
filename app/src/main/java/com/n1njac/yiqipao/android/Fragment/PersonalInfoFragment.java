@@ -64,6 +64,7 @@ public class PersonalInfoFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
 
                 final TextView personalContent = (TextView) view.findViewById(R.id.content_tx);
+                final SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 final SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
                 switch (position) {
 
@@ -198,7 +199,25 @@ public class PersonalInfoFragment extends Fragment {
                                 .show();
                         break;
                     case 5:
-                        Toast.makeText(getActivity(), "5", Toast.LENGTH_SHORT).show();
+                        View view3 = View.inflate(getActivity(),R.layout.personal_info_hobby,null);
+                        final EditText hobbyEt = (EditText) view3.findViewById(R.id.hobby_et);
+                        hobbyEt.setText(spf.getString("hobbyContent",null));
+                        hobbyEt.setSelection(hobbyEt.getText().length());
+                        new AlertDialog.Builder(getActivity())
+                                .setView(view3)
+                                .setTitle("兴趣爱好")
+                                .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String hobbyContent = hobbyEt.getText().toString();
+                                        editor.putString("hobbyContent",hobbyContent);
+                                        editor.apply();
+                                        Toast.makeText(getActivity(),"保存成功：）",Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("取消",null)
+                                .setCancelable(false)
+                                .show();
                         break;
                     default:
                         break;

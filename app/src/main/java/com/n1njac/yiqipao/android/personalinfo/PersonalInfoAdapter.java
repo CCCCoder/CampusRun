@@ -89,6 +89,9 @@ public class PersonalInfoAdapter extends BaseAdapter {
                 String content5 = sf.getString("weight","60kg");
                 viewHolder.content.setText(content5);
                 break;
+            case 5:
+
+                break;
 
 
         }
