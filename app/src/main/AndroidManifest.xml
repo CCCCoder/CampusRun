@@ -18,10 +18,10 @@
         </activity>
         <activity
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:name=".DistanceDisplay.ExecPlanActivity"/>
+            android:name=".distanceDisplay.ExecPlanActivity"/>
         <activity
-            android:name=".DistanceDisplay.HistoryDistanceActivity"/>
-        
+            android:name=".distanceDisplay.HistoryDistanceActivity"/>
+        <activity android:name="run.RunActivity"/>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.n1njac.yiqipao.android.DistanceDisplay;
+package com.n1njac.yiqipao.android.distanceDisplay;
 
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
