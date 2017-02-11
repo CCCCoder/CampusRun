@@ -2,6 +2,7 @@ package com.n1njac.yiqipao.android.Fragment;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.personalinfo.PersonalInfoAdapter;
 import com.n1njac.yiqipao.android.personalinfo.PersonalItemBean;
@@ -55,6 +57,12 @@ public class PersonalInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.personal_info_frag, container, false);
         listView = (ListView) view.findViewById(R.id.personal_info_lv);
         circleImageView = (CircleImageView) view.findViewById(R.id.icon_personal_info);
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String iconUri = spf.getString("iconUri", null);
+        if (iconUri != null) {
+            Uri uri = Uri.parse(iconUri);
+            Glide.with(getActivity()).load(uri).centerCrop().into(circleImageView);
+        }
         personalId = (TextView) view.findViewById(R.id.personal_info_id_tx);
 
         mAdapter = new PersonalInfoAdapter(getActivity(), mPersonalItemBeanList);
@@ -199,9 +207,9 @@ public class PersonalInfoFragment extends Fragment {
                                 .show();
                         break;
                     case 5:
-                        View view3 = View.inflate(getActivity(),R.layout.personal_info_hobby,null);
+                        View view3 = View.inflate(getActivity(), R.layout.personal_info_hobby, null);
                         final EditText hobbyEt = (EditText) view3.findViewById(R.id.hobby_et);
-                        hobbyEt.setText(spf.getString("hobbyContent",null));
+                        hobbyEt.setText(spf.getString("hobbyContent", null));
                         hobbyEt.setSelection(hobbyEt.getText().length());
                         new AlertDialog.Builder(getActivity())
                                 .setView(view3)
@@ -210,12 +218,12 @@ public class PersonalInfoFragment extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         String hobbyContent = hobbyEt.getText().toString();
-                                        editor.putString("hobbyContent",hobbyContent);
+                                        editor.putString("hobbyContent", hobbyContent);
                                         editor.apply();
-                                        Toast.makeText(getActivity(),"保存成功：）",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "保存成功：）", Toast.LENGTH_SHORT).show();
                                     }
                                 })
-                                .setNegativeButton("取消",null)
+                                .setNegativeButton("取消", null)
                                 .setCancelable(false)
                                 .show();
                         break;
