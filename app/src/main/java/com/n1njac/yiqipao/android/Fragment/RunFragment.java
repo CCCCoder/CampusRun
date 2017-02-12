@@ -31,7 +31,7 @@ public class RunFragment extends Fragment {
         View view = inflater.inflate(R.layout.run_frag,container,false);
 
         circleButton = (CircleButton) view.findViewById(R.id.circle_btn);
-        
+
         circleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

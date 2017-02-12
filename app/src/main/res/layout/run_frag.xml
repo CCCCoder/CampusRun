@@ -9,6 +9,7 @@
     <at.markushi.ui.CircleButton
         android:id="@+id/circle_btn"
         app:cb_color="#aa00BFFF"
+
         android:layout_marginBottom="30dp"
         app:cb_pressedRingWidth="10dip"
         android:layout_centerHorizontal="true"
