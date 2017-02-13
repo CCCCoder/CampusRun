@@ -3,6 +3,7 @@ package com.n1njac.yiqipao.android.distanceDisplay;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -43,6 +44,9 @@ public class HistoryDistanceActivity extends AppCompatActivity {
         initRunDistanceData();
         mAdapter = new HistoryAdapter(this, mItemBeanList);
         mListView.setAdapter(mAdapter);
+        //当listview为空的时候，加载这个布局
+        View emptyView = View.inflate(this,R.layout.empty_listview,null);
+        mListView.setEmptyView(emptyView);
         returnBtn = (Button) findViewById(R.id.return_history_btn);
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
