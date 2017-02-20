@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.n1njac.yiqipao.android.R;
@@ -23,7 +24,7 @@ public class ArcView extends View {
     //    转的度数
     private float sweepAngle = 270;
 
-    private float borderWidth = 38f;
+    private float borderWidth = 43f;
 
     private float currentAngle = 0;
 
@@ -45,18 +46,28 @@ public class ArcView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        RectF rectf = new RectF(borderWidth + 110, borderWidth + 110, getWidth() - borderWidth - 110, getWidth() - borderWidth - 110);
+//        RectF rectf = new RectF(borderWidth + 110, borderWidth + 110, getWidth() - borderWidth - 110, getWidth() - borderWidth - 110);
+
+        float left = getWidth() / 8;
+//        float top = getHeight() / 2 - getWidth() / 4 - 150;
+        float top = getHeight() / 2 - getWidth() / 8 * 3-100;
+        float right = getWidth() / 2 + getWidth() / 8 * 3;
+//        float bottom = getHeight() / 2 + getWidth() / 4 - 150;
+        float bottom = getHeight() / 2 + getWidth() / 8 * 3-100;
+
+        RectF rectf = new RectF(left, top, right, bottom);
         drawOutSideArc(canvas, rectf);
         drawInsideArc(canvas, rectf);
         drawNowDistance(canvas);
         drawStepText(canvas);
+//        Log.d("xyz", "width:" + getWidth() + "height:" + getHeight());
     }
 
 
     private void drawOutSideArc(Canvas canvas, RectF rectf) {
 
         Paint paint = new Paint();
-        paint.setColor(getResources().getColor(R.color.text));
+        paint.setColor(getResources().getColor(R.color.OutSideCircle));
 //        设置绘制时各图形的结合方式，如平滑效果等
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(borderWidth);
@@ -69,7 +80,7 @@ public class ArcView extends View {
 
     private void drawInsideArc(Canvas canvas, RectF rectf) {
         Paint p = new Paint();
-        p.setColor(getResources().getColor(R.color.text2));
+        p.setColor(getResources().getColor(R.color.inSideCircle));
         p.setStrokeCap(Paint.Cap.ROUND);
         p.setStrokeJoin(Paint.Join.ROUND);
         p.setStyle(Paint.Style.STROKE);
@@ -80,12 +91,13 @@ public class ArcView extends View {
 
     private void drawNowDistance(Canvas canvas) {
         Paint p = new Paint();
-        p.setColor(getResources().getColor(R.color.text2));
+//        p.setColor(getResources().getColor(R.color.text2));
+        p.setColor(Color.BLACK);
         p.setTextSize(dip2px(50));
         p.setTextAlign(Paint.Align.CENTER);
         Typeface font = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL);
         p.setTypeface(font);
-        canvas.drawText(distance, getWidth() / 2, getWidth() / 2, p);
+        canvas.drawText(distance, getWidth() / 2, getHeight() / 2-100, p);
     }
 
     private void drawStepText(Canvas canvas) {
@@ -94,7 +106,7 @@ public class ArcView extends View {
         p.setTextSize(dip2px(18));
         p.setTextAlign(Paint.Align.CENTER);
         String content = "路程(km)";
-        canvas.drawText(content, getWidth() / 2, getWidth() / 2 + 150, p);
+        canvas.drawText(content, getWidth() / 2, getHeight() / 2 , p);
     }
 
     //    dip to px

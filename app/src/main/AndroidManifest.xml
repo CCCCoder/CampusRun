@@ -9,19 +9,27 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <activity
+            android:label="@string/app_name"
+            android:name=".SplashActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:name=".distanceDisplay.ExecPlanActivity"/>
+            android:theme="@style/AppTheme"
+            android:name=".MainActivity">
+        </activity>
+
         <activity
-            android:name=".distanceDisplay.HistoryDistanceActivity"/>
-        <activity android:name="run.RunActivity"/>
+            android:name=".distanceDisplay.ExecPlanActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".distanceDisplay.HistoryDistanceActivity" />
+        <activity android:name="run.RunActivity" />
     </application>
 
 </manifest>

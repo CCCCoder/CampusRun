@@ -12,4 +12,6 @@
     <color name="text">#D88700</color>
     <color name="text2">#CB272C</color>
     <color name="bg">#9000</color>
+    <color name="OutSideCircle">#FF8247</color>
+    <color name="inSideCircle">#00FA9A</color>
 </resources>

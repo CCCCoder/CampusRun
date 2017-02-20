@@ -59,7 +59,7 @@ public class PersonalRunInfoFragment extends Fragment {
         if (resultCode == RESULT_OK){
             String content = data.getStringExtra("distance");
             double distance = Double.parseDouble(content);
-            arcView.setNowDistance(distance,10);
+            arcView.setNowDistance(distance,13.2);
         }
     }
 }
