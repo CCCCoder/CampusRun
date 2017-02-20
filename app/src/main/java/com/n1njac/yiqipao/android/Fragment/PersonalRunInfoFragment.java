@@ -24,6 +24,7 @@ public class PersonalRunInfoFragment extends Fragment {
 
     private ArcView arcView;
     private TextView exec, history;
+    private TextView remindText;
 
 
     @Nullable
@@ -32,6 +33,8 @@ public class PersonalRunInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.personal_run_frag, container, false);
         exec = (TextView) view.findViewById(R.id.exec_text);
         history = (TextView) view.findViewById(R.id.history_tx);
+        remindText = (TextView) view.findViewById(R.id.remind_tx);
+
         exec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +51,7 @@ public class PersonalRunInfoFragment extends Fragment {
         });
         arcView = (ArcView) view.findViewById(R.id.arc_view);
 
+
         return view;
     }
 
@@ -60,6 +64,9 @@ public class PersonalRunInfoFragment extends Fragment {
             String content = data.getStringExtra("distance");
             double distance = Double.parseDouble(content);
             arcView.setNowDistance(distance,13.2);
+
+//            这里写text提示语句
+
         }
     }
 }
