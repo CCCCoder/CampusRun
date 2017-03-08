@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <Button
+        android:id="@+id/btn_circularfence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:background="#FFFFFF"
+        android:text="@string/circular_fence"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/btn_vertexesfence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_circularfence"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="2dp"
+        android:background="#FFFFFF"
+        android:text="@string/vertexes_fence"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/btn_deletefence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_vertexesfence"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="2dp"
+        android:background="#FFFFFF"
+        android:text="@string/delete_fence"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/btn_monitoredstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_deletefence"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="2dp"
+        android:background="#FFFFFF"
+        android:text="@string/monitored_status"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/btn_historyalarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_monitoredstatus"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="2dp"
+        android:background="#FFFFFF"
+        android:text="@string/history_alarm"
+        android:textColor="#000000" />
+
+</RelativeLayout>

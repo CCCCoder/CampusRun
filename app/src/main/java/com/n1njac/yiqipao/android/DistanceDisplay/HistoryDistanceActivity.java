@@ -11,7 +11,6 @@ import android.widget.ListView;
 
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.db.Distance;
-
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -75,20 +74,20 @@ public class HistoryDistanceActivity extends AppCompatActivity {
         mItemBeanList = new ArrayList<>();
 
         //从数据库中拿数据
-        new Thread(new Runnable() {
-            ItemBean itemBean;
-
-            @Override
-            public void run() {
-                List<Distance> distanceList = DataSupport.findAll(Distance.class);
-                for (int i = 0; i < distanceList.size(); i++) {
-                    String time = distanceList.get(i).getTime();
-                    String totalDistance = distanceList.get(i).getTotalDistance();
-                    itemBean = new ItemBean(time, totalDistance);
-                    mItemBeanList.add(itemBean);
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            ItemBean itemBean;
+//
+//            @Override
+//            public void run() {
+//                List<Distance> distanceList = DataSupport.findAll(Distance.class);
+//                for (int i = 0; i < distanceList.size(); i++) {
+//                    String time = distanceList.get(i).getTime();
+//                    String totalDistance = distanceList.get(i).getTotalDistance();
+//                    itemBean = new ItemBean(time, totalDistance);
+//                    mItemBeanList.add(itemBean);
+//                }
+//            }
+//        }).start();
 
     }
 }

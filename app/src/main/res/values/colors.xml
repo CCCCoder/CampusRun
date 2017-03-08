@@ -14,4 +14,18 @@
     <color name="bg">#9000</color>
     <color name="OutSideCircle">#FF8247</color>
     <color name="inSideCircle">#00FA9A</color>
+
+
+
+    <drawable name="window_bg">#fff5f5f5</drawable>
+    <drawable name="divider_line">#d9d9d9</drawable>
+    <drawable name="main_tab_bar_bg">#f9f9f9</drawable>
+    <drawable name="main_tab_btn_normal">#ff2e2e2e</drawable>
+    <drawable name="main_tab_btn_pressed">#ff181818</drawable>
+    <drawable name="entrust_tab_btn_normal">#00000000</drawable>
+    <drawable name="entrust_tab_btn_pressed">#00000000</drawable>
+    <drawable name="header_bar_bg">#0092ff</drawable>
+    <drawable name="transparent">#00000000</drawable>
+
+
 </resources>

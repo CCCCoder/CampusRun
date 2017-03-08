@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout.Tab one = mTabLayout.getTabAt(0);
         TabLayout.Tab two = mTabLayout.getTabAt(1);
         TabLayout.Tab three = mTabLayout.getTabAt(2);
+        one.setIcon(R.mipmap.ic_launcher);
 
 
     }

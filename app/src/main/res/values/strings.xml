@@ -2,4 +2,38 @@
     <string name="app_name">YiQiPao</string>
     <string name="open">open drawer</string>
     <string name="close">close drawer</string>
+
+
+    <string name="app_title">一起跑</string>
+    <string name="start_trace">开始</string>
+    <string name="stop_trace">停止</string>
+    <string name="select_date">日期</string>
+    <string name="fence_operator">操作</string>
+    <string name="is_processed">纠偏</string>
+    <string name="track_distance">里程</string>
+    <string name="geo_fence">地理围栏</string>
+    <string name="track_upload">轨迹追踪</string>
+    <string name="track_query">历史轨迹</string>
+    <string name="history_track">  查询历史轨迹</string>
+    <string name="realtime_track">查询实时轨迹</string>
+    <string name="circular_fence">圆形围栏</string>
+    <string name="vertexes_fence">多边形围栏</string>
+    <string name="delete_fence">删除围栏</string>
+    <string name="fence_list">围栏列表</string>
+    <string name="monitored_status">监控状态</string>
+    <string name="history_alarm">历史报警</string>
+    <string name="delay_alarm">延迟报警</string>
+    <string name="fence_name">围栏名称</string>
+    <string name="fence_desc">围栏描述</string>
+    <string name="set_fence">设置围栏</string>
+    <string name="fence_radius">围栏半径(单位：米)</string>
+    <string name="vertex_number">顶点数量</string>
+    <string name="fence_precision">去噪精度(单位：米)</string>
+    <string name="fence_type">围栏类型</string>
+    <string name="server_fence">服务端围栏</string>
+    <string name="local_fence">本地围栏</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="circular_fence_caption">请点击地图标记围栏圆心</string>
+    <string name="vertexes_fence_caption">请按顺时针或逆时针方向点击地图</string>
 </resources>

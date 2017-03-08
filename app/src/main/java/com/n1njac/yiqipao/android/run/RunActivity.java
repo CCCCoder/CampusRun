@@ -1,4 +1,4 @@
-package run;
+package com.n1njac.yiqipao.android.run;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;

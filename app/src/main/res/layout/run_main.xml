@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true" />
+
+    <fragment
+        android:id="@+id/fragment_title"
+        android:name="com.n1njac.yiqipao.android.run.trackshow.TitleFragment"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+
+    <fragment
+        android:id="@+id/fragment_bottom"
+        android:name="com.n1njac.yiqipao.android.run.trackshow.BottomFragment"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp" />
+
+    <FrameLayout
+        android:id="@+id/fragment_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/fragment_bottom"
+        android:layout_below="@id/fragment_title" />
+
+</RelativeLayout>
