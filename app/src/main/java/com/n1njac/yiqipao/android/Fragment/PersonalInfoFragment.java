@@ -44,6 +44,8 @@ public class PersonalInfoFragment extends Fragment {
     private CircleImageView circleImageView;
     private TextView personalId;
 
+    public static final int COUNT  = 1;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -12,8 +12,8 @@
     <string name="is_processed">纠偏</string>
     <string name="track_distance">里程</string>
     <string name="geo_fence">地理围栏</string>
-    <string name="track_upload">轨迹追踪</string>
-    <string name="track_query">历史轨迹</string>
+    <string name="track_upload">跑步</string>
+    <string name="track_query">历史</string>
     <string name="history_track">  查询历史轨迹</string>
     <string name="realtime_track">查询实时轨迹</string>
     <string name="circular_fence">圆形围栏</string>

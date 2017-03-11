@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -214,4 +215,6 @@ public class RunMainActivity extends FragmentActivity implements OnClickListener
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+
 }

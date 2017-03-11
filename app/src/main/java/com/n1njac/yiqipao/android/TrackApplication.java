@@ -32,12 +32,12 @@ public class TrackApplication extends Application {
     /**
      * 鹰眼服务ID，开发者创建的鹰眼服务对应的服务ID
      */
-    private int serviceId = 133896;
+    private int serviceId =135472;
 
     /**
      * entity标识
      */
-    private String entityName = "myTrace";
+    private String entityName = "YiQiPao";
 
     /**
      * 轨迹服务类型（0 : 不建立socket长连接， 1 : 建立socket长连接但不上传位置数据，2 : 建立socket长连接并上传位置数据）

@@ -181,12 +181,15 @@ public class TrackQueryFragment extends Fragment implements OnClickListener {
      * 轨迹查询(先选择日期，再根据是否纠偏，发送请求)
      */
     private void queryTrack() {
+
+
         // 选择日期
         int[] date = null;
         DisplayMetrics dm = new DisplayMetrics();
         this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
+
 
         if (year == 0 && month == 0 && day == 0) {
             String curDate = DateUtils.getCurrentDate();
@@ -199,12 +202,15 @@ public class TrackQueryFragment extends Fragment implements OnClickListener {
             day = date[2];
         }
 
-        DateDialog dateDiolog = new DateDialog(this.getActivity(), new DateDialog.PriorityListener() {
+
+        DateDialog dateDiolog = new DateDialog(getContext(), new DateDialog.PriorityListener() {
+
 
             public void refreshPriorityUI(String sltYear, String sltMonth,
                                           String sltDay, DateDialog.CallBack back) {
 
                 Log.d("TGA", sltYear + sltMonth + sltDay);
+
                 year = Integer.parseInt(sltYear);
                 month = Integer.parseInt(sltMonth);
                 day = Integer.parseInt(sltDay);
@@ -234,9 +240,11 @@ public class TrackQueryFragment extends Fragment implements OnClickListener {
         }, year, month, day, width, height, "选择日期", 1);
 
         Window window = dateDiolog.getWindow();
+        assert window != null;
         window.setGravity(Gravity.CENTER); // 此处可以设置dialog显示的位置
         dateDiolog.setCancelable(true);
         dateDiolog.show();
+
 
     }
 
@@ -436,8 +444,5 @@ public class TrackQueryFragment extends Fragment implements OnClickListener {
         fragment.trackApp = trackApp;
         return fragment;
     }
-
-
-
 
 }

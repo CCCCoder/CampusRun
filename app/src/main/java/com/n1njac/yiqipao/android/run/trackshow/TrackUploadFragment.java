@@ -58,7 +58,7 @@ public class TrackUploadFragment extends Fragment {
 
     private Button btnStopTrace = null;
 
-    private Button btnOperator = null;
+//    private Button btnOperator = null;
 
     protected TextView tvEntityName = null;
 
@@ -167,11 +167,11 @@ public class TrackUploadFragment extends Fragment {
 
         btnStopTrace = (Button) view.findViewById(R.id.btn_stopTrace);
 
-        btnOperator = (Button) view.findViewById(R.id.btn_operator);
+//        btnOperator = (Button) view.findViewById(R.id.btn_operator);
 
         tvEntityName = (TextView) view.findViewById(R.id.tv_entityName);
 
-        tvEntityName.setText(" entityName : " + trackApp.getEntityName() + " ");
+        tvEntityName.setText("");
 
         btnStartTrace.setOnClickListener(new View.OnClickListener() {
 
@@ -219,20 +219,20 @@ public class TrackUploadFragment extends Fragment {
             }
         });
 
-        btnOperator.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                geoFence = new Geofence(getActivity(), trackApp, mInflater);
-                if (geoFence.popupwindow != null && geoFence.popupwindow.isShowing()) {
-                    geoFence.popupwindow.dismiss();
-                    return;
-                } else {
-                    geoFence.initPopupWindowView();
-                    geoFence.popupwindow.showAsDropDown(v, 0, 5);
-                }
-            }
-        });
+//        btnOperator.setOnClickListener(new View.OnClickListener() {
+//
+//            public void onClick(View v) {
+//                // TODO Auto-generated method stub
+//                geoFence = new Geofence(getActivity(), trackApp, mInflater);
+//                if (geoFence.popupwindow != null && geoFence.popupwindow.isShowing()) {
+//                    geoFence.popupwindow.dismiss();
+//                    return;
+//                } else {
+//                    geoFence.initPopupWindowView();
+//                    geoFence.popupwindow.showAsDropDown(v, 0, 5);
+//                }
+//            }
+//        });
 
     }
 

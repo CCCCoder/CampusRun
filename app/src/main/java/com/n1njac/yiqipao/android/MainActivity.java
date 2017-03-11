@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -23,6 +24,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.Fragment.NearbyPersonInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.PersonalInfoFragment;
@@ -32,13 +35,16 @@ import com.n1njac.yiqipao.android.Fragment.RunFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
 
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
-
     private IndexViewPager viewPager;
+
+
+    private BottomNavigationBar mNavigationBar;
+
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -63,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         setContentView(R.layout.activity_main);
-        initTabLayoutWithFragment();
+//        initTabLayoutWithFragment();
+        setBottomNavigationBar();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -124,8 +131,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initTabLayoutWithFragment() {
+//    private void initTabLayoutWithFragment() {
+//
+//        mList = new ArrayList<>();
+//        PersonalRunInfoFragment personalRunInfoFragment = new PersonalRunInfoFragment();
+//        RunFragment runFragment = new RunFragment();
+//        NearbyPersonInfoFragment nearbyPersonInfoFragment = new NearbyPersonInfoFragment();
+//        PersonalInfoFragment personalInfoFragment = new PersonalInfoFragment();
+//        mList.add(personalRunInfoFragment);
+//        mList.add(runFragment);
+//        mList.add(nearbyPersonInfoFragment);
+//        mList.add(personalInfoFragment);
+//
+//        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+//        //mViewPager = (ViewPager) findViewById(R.id.view_pager);
+//        viewPager = (IndexViewPager) findViewById(R.id.view_pager);
+//
+//
+//        FragmentManager adapter = new FragmentManager(getSupportFragmentManager(), mList);
+//        //mViewPager.setAdapter(adapter);
+//        viewPager.setAdapter(adapter);
+//
+//        mTabLayout.setupWithViewPager(viewPager);
+//        TabLayout.Tab one = mTabLayout.getTabAt(0);
+//
+//        TabLayout.Tab two = mTabLayout.getTabAt(1);
+//        TabLayout.Tab three = mTabLayout.getTabAt(2);
+//        one.setIcon(R.mipmap.ic_launcher);
+//
+//    }
 
+
+    //    设置底部的bar
+    public void setBottomNavigationBar() {
+
+        mNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_bar);
+        mNavigationBar.setMode(BottomNavigationBar.MODE_SHIFTING);
+        mNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
+        mNavigationBar.addItem(new BottomNavigationItem(R.mipmap.distance_64dp, "路程").setActiveColor("#00BFFF"))
+                .addItem(new BottomNavigationItem(R.mipmap.run_64dp, "一起跑").setActiveColor("#00BFFF"))
+                .addItem(new BottomNavigationItem(R.mipmap.friend_64dp, "附近").setActiveColor("#00BFFF"))
+                .addItem(new BottomNavigationItem(R.mipmap.me_64dp, "我").setActiveColor("#00BFFF"))
+                .setFirstSelectedPosition(0)
+                .initialise();
+
+
+//        把fragment加入容器
         mList = new ArrayList<>();
         PersonalRunInfoFragment personalRunInfoFragment = new PersonalRunInfoFragment();
         RunFragment runFragment = new RunFragment();
@@ -136,21 +187,50 @@ public class MainActivity extends AppCompatActivity {
         mList.add(nearbyPersonInfoFragment);
         mList.add(personalInfoFragment);
 
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        //mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager = (IndexViewPager) findViewById(R.id.view_pager);
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.frag_layout, personalRunInfoFragment);
+        ft.commit();
+
+        mNavigationBar.setTabSelectedListener(this);
+
+    }
 
 
-        FragmentManager adapter = new FragmentManager(getSupportFragmentManager(), mList);
-        //mViewPager.setAdapter(adapter);
-        viewPager.setAdapter(adapter);
+    @Override
+    public void onTabSelected(int position) {
+        if (mList != null) {
+            if (position < mList.size()) {
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                Fragment fragment = mList.get(position);
+                if (fragment.isAdded()){
+                    ft.show(fragment);
+                }else {
+                    ft.add(R.id.frag_layout,fragment);
+                }
+                ft.commitAllowingStateLoss();
+            }
+        }
+    }
 
-        mTabLayout.setupWithViewPager(viewPager);
-        TabLayout.Tab one = mTabLayout.getTabAt(0);
-        TabLayout.Tab two = mTabLayout.getTabAt(1);
-        TabLayout.Tab three = mTabLayout.getTabAt(2);
-        one.setIcon(R.mipmap.ic_launcher);
+    @Override
+    public void onTabUnselected(int position) {
 
+        if (mList != null) {
+            if (position < mList.size()) {
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                Fragment fragment = mList.get(position);
+                ft.hide(fragment);
+                ft.commitAllowingStateLoss();
+            }
+        }
+
+    }
+
+    @Override
+    public void onTabReselected(int position) {
 
     }
 
@@ -188,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == TAKE_PHOTO){
+            if (requestCode == TAKE_PHOTO) {
                 Uri uri = data.getData();
                 Glide.with(this).load(uri).centerCrop().into(mIcon);
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -197,4 +277,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

@@ -5,6 +5,7 @@
 
     <TextView
         android:id="@+id/tv_entityName"
+        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -37,16 +38,16 @@
         android:text="@string/stop_trace"
         android:textColor="#000000" />
 
-    <Button
-        android:id="@+id/btn_operator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/btn_stopTrace"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:background="#FFFFFF"
-        android:text="@string/fence_operator"
-        android:textColor="#000000" />
+    <!--<Button-->
+        <!--android:id="@+id/btn_operator"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_below="@+id/btn_stopTrace"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:background="#FFFFFF"-->
+        <!--android:text="@string/fence_operator"-->
+        <!--android:textColor="#000000" />-->
 
 </RelativeLayout>
