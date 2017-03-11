@@ -35,6 +35,8 @@ import com.n1njac.yiqipao.android.Fragment.RunFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.Bmob;
+
 public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
 
 
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private static final int TAKE_PHOTO = 1;
     private static final int CHOOSE_FROM_ALBUM = 2;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         setContentView(R.layout.activity_main);
+
+//        初始化bmob
+        Bmob.initialize(this,"130b520015c4c581392956ec14bc86c4");
+
 //        initTabLayoutWithFragment();
         setBottomNavigationBar();
 

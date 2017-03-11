@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +24,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.bmobObject.PersonInfoBmob;
 import com.n1njac.yiqipao.android.personalinfo.PersonalInfoAdapter;
 import com.n1njac.yiqipao.android.personalinfo.PersonalItemBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -44,12 +49,23 @@ public class PersonalInfoFragment extends Fragment {
     private CircleImageView circleImageView;
     private TextView personalId;
 
-    public static final int COUNT  = 1;
+    PersonInfoBmob mPersonInfoBmob = new PersonInfoBmob();
+    private String bmobObjectId = null;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initList();
+        mPersonInfoBmob.setInitNum(1);
+        mPersonInfoBmob.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                bmobObjectId = s;
+                Log.d("xyz", "objectId:" + s);
+            }
+        });
+
     }
 
     @Nullable
@@ -95,6 +111,19 @@ public class PersonalInfoFragment extends Fragment {
                                             personalContent.setText(input);
                                             editor.putString("user_nickname", input);
                                             editor.apply();
+
+                                            //将数据保存到服务器数据库。
+                                            mPersonInfoBmob.setNickName(input);
+                                            mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        Toast.makeText(getActivity(), "更新成功", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(getActivity(), "连接服务器失败！请检查网络连接：）", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                 })
@@ -115,17 +144,31 @@ public class PersonalInfoFragment extends Fragment {
                                                 personalContent.setText(charSequences[0]);
                                                 editor.putString("sex", charSequences[0] + "");
                                                 editor.apply();
+                                                mPersonInfoBmob.setSex("男");
                                                 dialog.dismiss();
                                                 break;
                                             case 1:
                                                 personalContent.setText(charSequences[1]);
                                                 editor.putString("sex", charSequences[1] + "");
                                                 editor.apply();
+                                                mPersonInfoBmob.setSex("女");
                                                 dialog.dismiss();
                                                 break;
                                             default:
                                                 break;
+
                                         }
+
+                                        mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    Toast.makeText(getActivity(), "更新成功", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getActivity(), "连接服务器失败！请检查网络连接：）", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
                                 })
                                 .setCancelable(true)
@@ -147,12 +190,22 @@ public class PersonalInfoFragment extends Fragment {
                                         personalContent.setText(birth);
                                         editor.putString("birth", birth);
                                         editor.apply();
+
+                                        mPersonInfoBmob.setBirth(birth);
+                                        mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    Toast.makeText(getActivity(), "更新成功", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getActivity(), "连接服务器失败！请检查网络连接：）", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
                                 })
                                 .setCancelable(true)
                                 .show();
-
-
                         break;
                     case 3:
 
@@ -175,6 +228,19 @@ public class PersonalInfoFragment extends Fragment {
                                         personalContent.setText(height);
                                         editor.putString("height", height);
                                         editor.apply();
+
+                                        mPersonInfoBmob.setHeight(height);
+                                        mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    Toast.makeText(getActivity(), "更新成功", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getActivity(), "连接服务器失败！请检查网络连接：）", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+
                                     }
                                 })
                                 .setNegativeButton("取消", null)
@@ -201,6 +267,18 @@ public class PersonalInfoFragment extends Fragment {
                                             personalContent.setText(weight);
                                             editor.putString("weight", weight);
                                             editor.apply();
+
+                                            mPersonInfoBmob.setWeight(weight);
+                                            mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        Toast.makeText(getActivity(), "更新成功", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(getActivity(), "连接服务器失败！请检查网络连接：）" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                 })
@@ -222,7 +300,19 @@ public class PersonalInfoFragment extends Fragment {
                                         String hobbyContent = hobbyEt.getText().toString();
                                         editor.putString("hobbyContent", hobbyContent);
                                         editor.apply();
-                                        Toast.makeText(getActivity(), "保存成功：）", Toast.LENGTH_SHORT).show();
+
+                                        mPersonInfoBmob.setHobby(hobbyContent);
+
+                                        mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    Toast.makeText(getActivity(), "更新成功", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getActivity(), "连接服务器失败！请检查网络连接：）", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
                                 })
                                 .setNegativeButton("取消", null)

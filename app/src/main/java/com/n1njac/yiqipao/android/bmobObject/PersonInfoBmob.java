@@ -18,6 +18,13 @@ public class PersonInfoBmob extends BmobObject {
     private String pHeight;
     private String pWeight;
     private String pHobby;
+//    此字段只作为用来初始化该表，拿到objectId。
+    private int initNum;
+
+
+    public void setInitNum(int initNum) {
+        this.initNum = initNum;
+    }
 
     public int getId() {
         return pId;
