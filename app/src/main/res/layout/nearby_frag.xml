@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="second"
+        android:text="附近的人模块"
         android:textSize="60sp"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"

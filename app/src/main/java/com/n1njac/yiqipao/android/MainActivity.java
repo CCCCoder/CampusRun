@@ -283,7 +283,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 editor.apply();
             }
         }
+
+//        这里做runActiity返回数据的处理。
+
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

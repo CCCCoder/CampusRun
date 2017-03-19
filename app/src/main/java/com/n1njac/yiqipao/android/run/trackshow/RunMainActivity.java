@@ -18,6 +18,7 @@ import com.baidu.mapapi.map.MapView;
 import com.n1njac.yiqipao.android.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.TrackApplication;
+import com.n1njac.yiqipao.android.run.RunActivity;
 
 public class RunMainActivity extends FragmentActivity implements OnClickListener {
 
@@ -212,8 +213,11 @@ public class RunMainActivity extends FragmentActivity implements OnClickListener
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
+
+        Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
+//        这里应该做调转到主activity做result处理
+
     }
 
 
