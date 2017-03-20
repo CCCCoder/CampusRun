@@ -189,7 +189,7 @@ public class RunMainActivity extends FragmentActivity implements OnClickListener
         super.onDestroy();
         trackApp.getClient().onDestroy();
         trackApp.getBmapView().onDestroy();
-        android.os.Process.killProcess(android.os.Process.myPid());
+//        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     /**
@@ -211,11 +211,14 @@ public class RunMainActivity extends FragmentActivity implements OnClickListener
     }
 
 
+
     @Override
     public void onBackPressed() {
 
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
+        Log.d("xyz","RunMainActivity---onBackPressed");
+//        Intent intent = new Intent(this,MainActivity.class);
+//        startActivity(intent);
+        finish();
 //        这里应该做调转到主activity做result处理
 
     }

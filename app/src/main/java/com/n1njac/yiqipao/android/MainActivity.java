@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -284,12 +285,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             }
         }
 
-//        这里做runActiity返回数据的处理。
+//        这里做runMianActiity返回数据的处理。
 
     }
 
     @Override
     public void onBackPressed() {
+        Log.d("xyz","MainActivity---onBackPressed");
         finish();
     }
 }

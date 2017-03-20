@@ -32,7 +32,7 @@
     <drawable name="main_tab_btn_pressed">#ff181818</drawable>
     <drawable name="entrust_tab_btn_normal">#00000000</drawable>
     <drawable name="entrust_tab_btn_pressed">#00000000</drawable>
-    <drawable name="header_bar_bg">#0092ff</drawable>
+    <drawable name="header_bar_bg">#00BFFF</drawable>
     <drawable name="transparent">#00000000</drawable>
 
 
