@@ -5,18 +5,22 @@
         <item
             android:id="@+id/first_item"
             android:icon="@drawable/info"
-            android:title="个人信息"></item>
+            android:title="@string/person_info"/>
         <item
             android:id="@+id/second_item"
             android:icon="@drawable/behance"
-            android:title="behance"></item>
+            android:title="@string/exe_plan"/>
         <item
             android:id="@+id/third_item"
             android:icon="@drawable/etsy"
-            android:title="etsy"></item>
+            android:title="历史记录"/>
+        <item
+            android:id="@+id/four_item"
+            android:icon="@drawable/desad"
+            android:title="聊天列表"/>
         <item
             android:id="@+id/about_item"
             android:icon="@drawable/dropbox"
-            android:title="about"></item>
+            android:title="@string/about_app" />
     </group>
 </menu>

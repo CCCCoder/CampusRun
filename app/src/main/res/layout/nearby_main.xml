@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:background="@drawable/lkd"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.n1njac.yiqipao.android.nearybyview.RadarViewGroup
+        android:id="@+id/radar_view_group"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:layout_width="320dp"
+        android:layout_height="320dp">
+        <com.n1njac.yiqipao.android.nearybyview.RadarView
+            android:id="@+id/radar_view"
+            android:layout_width="320dp"
+            android:layout_height="320dp" />
+    </com.n1njac.yiqipao.android.nearybyview.RadarViewGroup>
+
+    <RelativeLayout
+        android:id="@+id/rl_vp"
+        android:clipChildren="false"
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.n1njac.yiqipao.android.nearybyview.CustomViewPager
+            android:layout_centerInParent="true"
+            android:id="@+id/view_pager"
+            android:layout_width="130dp"
+            android:layout_height="160dp">
+
+        </com.n1njac.yiqipao.android.nearybyview.CustomViewPager>
+    </RelativeLayout>
+
+
+</RelativeLayout>

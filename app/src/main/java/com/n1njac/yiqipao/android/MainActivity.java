@@ -32,6 +32,9 @@ import com.n1njac.yiqipao.android.Fragment.NearbyPersonInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.PersonalInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.PersonalRunInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.RunFragment;
+import com.n1njac.yiqipao.android.distanceDisplay.ExecPlanActivity;
+import com.n1njac.yiqipao.android.distanceDisplay.HistoryDistanceActivity;
+import com.n1njac.yiqipao.android.nearbychat.NearbyChatMainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,17 +112,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
                 switch (item.getItemId()) {
                     case R.id.first_item:
-
                         Toast.makeText(MainActivity.this, "click aim", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.second_item:
-                        Toast.makeText(MainActivity.this, "click behance", Toast.LENGTH_SHORT).show();
+                        Intent intent1 = new Intent(MainActivity.this, ExecPlanActivity.class);
+                        startActivity(intent1);
                         break;
                     case R.id.third_item:
-                        Toast.makeText(MainActivity.this, "click etsy", Toast.LENGTH_SHORT).show();
+                        Intent intent2 = new Intent(MainActivity.this, HistoryDistanceActivity.class);
+                        startActivity(intent2);
+                        break;
+                    case R.id.four_item:
+                        Intent intent3 = new Intent(MainActivity.this, NearbyChatMainActivity.class);
+                        startActivity(intent3);
                         break;
                     case R.id.about_item:
-                        Toast.makeText(MainActivity.this, "click about", Toast.LENGTH_SHORT).show();
+                        Intent intent4 = new Intent(MainActivity.this,AboutActivity.class);
+                        startActivity(intent4);
                         break;
                 }
                 mDrawerLayout.closeDrawer(GravityCompat.START);

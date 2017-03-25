@@ -36,4 +36,7 @@
     <string name="confirm">确定</string>
     <string name="circular_fence_caption">请点击地图标记围栏圆心</string>
     <string name="vertexes_fence_caption">请按顺时针或逆时针方向点击地图</string>
+    <string name="exe_plan">锻炼计划</string>
+    <string name="person_info">个人信息</string>
+    <string name="about_app">关于app</string>
 </resources>

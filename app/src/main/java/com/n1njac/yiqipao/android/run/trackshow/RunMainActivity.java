@@ -1,5 +1,6 @@
 package com.n1njac.yiqipao.android.run.trackshow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -198,6 +199,7 @@ public class RunMainActivity extends FragmentActivity implements OnClickListener
      * @param context
      * @return
      */
+    @SuppressLint("HardwareIds")
     protected static String getImei(Context context) {
         String mImei = "NULL";
         try {

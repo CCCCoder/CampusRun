@@ -52,6 +52,9 @@
         <activity android:name=".distanceDisplay.HistoryDistanceActivity" />
         <activity android:name=".run.RunActivity" />
         <activity android:name=".run.trackshow.RunMainActivity"/>
+        <activity android:name=".nearybyview.NearbyMainActivity"/>
+        <activity android:name=".nearbychat.NearbyChatMainActivity"/>
+        <activity android:name=".AboutActivity"/>
 
         <service
             android:name="com.baidu.trace.LBSTraceService"
