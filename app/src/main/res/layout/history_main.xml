@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/actionBar_relative"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
@@ -26,9 +27,23 @@
             android:layout_height="25dp" />
     </RelativeLayout>
 
+    <!--<ProgressBar-->
+        <!--android:id="@+id/load_progress"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:visibility="visible"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <com.mingle.widget.LoadingView
+        android:id="@+id/loadView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
     <ListView
+        android:visibility="gone"
+        android:layout_below="@+id/actionBar_relative"
         android:id="@+id/history_lv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="wrap_content"/>
 
-</LinearLayout>
+</RelativeLayout>

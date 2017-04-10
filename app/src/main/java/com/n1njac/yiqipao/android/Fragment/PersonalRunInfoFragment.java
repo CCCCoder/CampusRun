@@ -51,6 +51,7 @@ public class PersonalRunInfoFragment extends Fragment {
         });
         arcView = (ArcView) view.findViewById(R.id.arc_view);
 
+        arcView.setNowDistance(10,4.7);
 
         return view;
     }
@@ -63,10 +64,7 @@ public class PersonalRunInfoFragment extends Fragment {
         if (resultCode == RESULT_OK){
             String content = data.getStringExtra("distance");
             double distance = Double.parseDouble(content);
-            arcView.setNowDistance(distance,13.2);
-
-//            这里写text提示语句
-
+            arcView.setNowDistance(distance,4.7);
         }
     }
 }

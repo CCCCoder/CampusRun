@@ -23,14 +23,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.n1njac.yiqipao.android.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.PersonInfoBmob;
+import com.n1njac.yiqipao.android.bmobObject.PushBmob;
 import com.n1njac.yiqipao.android.personalinfo.PersonalInfoAdapter;
 import com.n1njac.yiqipao.android.personalinfo.PersonalItemBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -52,19 +55,42 @@ public class PersonalInfoFragment extends Fragment {
     PersonInfoBmob mPersonInfoBmob = new PersonInfoBmob();
     private String bmobObjectId = null;
 
+    private SharedPreferences sf;
+    private SharedPreferences.Editor editor;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initList();
-        mPersonInfoBmob.setInitNum(1);
-        mPersonInfoBmob.save(new SaveListener<String>() {
-            @Override
-            public void done(String s, BmobException e) {
-                bmobObjectId = s;
-                Log.d("xyz", "objectId:" + s);
-            }
-        });
+
+        sf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+
+        int status = sf.getInt("isCreateTablePersonInfo", 0);
+        Log.d("xyz", "isCreateTablePersonInfo:" + status);
+        if (status != 1) {
+            mPersonInfoBmob.setInitNum(1);
+            mPersonInfoBmob.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    bmobObjectId = s;
+                    editor.putString("bmobObjectId", bmobObjectId);
+                    Log.d("xyz", "objectId:" + s);
+                    editor.putInt("isCreateTablePersonInfo", 1);
+                    editor.apply();
+                }
+            });
+        }
+
+//        mPushBmob.setInitNum(1);
+//        mPushBmob.save(new SaveListener<String>() {
+//            @Override
+//            public void done(String s, BmobException e) {
+//                pushBmobObjectId = s;
+//                Log.d("xyz", "pushBmobObjectId:" + s);
+//            }
+//        });
 
     }
 
@@ -77,6 +103,7 @@ public class PersonalInfoFragment extends Fragment {
         circleImageView = (CircleImageView) view.findViewById(R.id.icon_personal_info);
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String iconUri = spf.getString("iconUri", null);
+
         if (iconUri != null) {
             Uri uri = Uri.parse(iconUri);
             Glide.with(getActivity()).load(uri).centerCrop().into(circleImageView);
@@ -111,10 +138,10 @@ public class PersonalInfoFragment extends Fragment {
                                             personalContent.setText(input);
                                             editor.putString("user_nickname", input);
                                             editor.apply();
-
+                                            String obId = spf.getString("bmobObjectId",null);
                                             //将数据保存到服务器数据库。
                                             mPersonInfoBmob.setNickName(input);
-                                            mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                            mPersonInfoBmob.update(obId, new UpdateListener() {
                                                 @Override
                                                 public void done(BmobException e) {
                                                     if (e == null) {
@@ -159,7 +186,8 @@ public class PersonalInfoFragment extends Fragment {
 
                                         }
 
-                                        mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                        String obId = spf.getString("bmobObjectId",null);
+                                        mPersonInfoBmob.update(obId, new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
                                                 if (e == null) {
@@ -192,7 +220,8 @@ public class PersonalInfoFragment extends Fragment {
                                         editor.apply();
 
                                         mPersonInfoBmob.setBirth(birth);
-                                        mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                        String obId = spf.getString("bmobObjectId",null);
+                                        mPersonInfoBmob.update(obId, new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
                                                 if (e == null) {
@@ -229,8 +258,9 @@ public class PersonalInfoFragment extends Fragment {
                                         editor.putString("height", height);
                                         editor.apply();
 
+                                        String obId = spf.getString("bmobObjectId",null);
                                         mPersonInfoBmob.setHeight(height);
-                                        mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                        mPersonInfoBmob.update(obId, new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
                                                 if (e == null) {
@@ -268,8 +298,9 @@ public class PersonalInfoFragment extends Fragment {
                                             editor.putString("weight", weight);
                                             editor.apply();
 
+                                            String obId = spf.getString("bmobObjectId",null);
                                             mPersonInfoBmob.setWeight(weight);
-                                            mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                            mPersonInfoBmob.update(obId, new UpdateListener() {
                                                 @Override
                                                 public void done(BmobException e) {
                                                     if (e == null) {
@@ -301,9 +332,9 @@ public class PersonalInfoFragment extends Fragment {
                                         editor.putString("hobbyContent", hobbyContent);
                                         editor.apply();
 
+                                        String obId = spf.getString("bmobObjectId",null);
                                         mPersonInfoBmob.setHobby(hobbyContent);
-
-                                        mPersonInfoBmob.update(bmobObjectId, new UpdateListener() {
+                                        mPersonInfoBmob.update(obId, new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
                                                 if (e == null) {
@@ -319,6 +350,58 @@ public class PersonalInfoFragment extends Fragment {
                                 .setCancelable(false)
                                 .show();
                         break;
+
+                    case 6:
+
+                        View view4 = View.inflate(getActivity(), R.layout.personal_info_phone, null);
+                        final EditText phoneEt = (EditText) view4.findViewById(R.id.phone_et);
+                        phoneEt.setText(spf.getString("phone", null));
+                        phoneEt.setSelection(phoneEt.getText().length());
+
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("手机号码")
+                                .setView(view4)
+                                .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String input = phoneEt.getText().toString();
+                                        if (input.equals("")) {
+                                            Toast.makeText(getActivity(), "内容不能为空哦：）", Toast.LENGTH_SHORT).show();
+
+                                        } else {
+                                            //需要将信息保存到sf中
+                                            String phoneNum = input;
+
+                                            Log.d("xyz","phoneNum"+phoneNum);
+                                            personalContent.setText(phoneNum);
+                                            editor.putString("phone", phoneNum);
+                                            editor.apply();
+
+                                            String installationId = BmobInstallation.getInstallationId(getContext());
+                                            mPersonInfoBmob.setInstallationId(installationId);
+                                            mPersonInfoBmob.setPhone(phoneNum);
+                                            mPersonInfoBmob.setDistance(0.28);
+                                            String obId = spf.getString("bmobObjectId",null);
+                                            mPersonInfoBmob.update(obId, new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        Toast.makeText(getActivity(), "更新成功", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Log.d("xyz", "phone:" + e.getMessage());
+                                                        Toast.makeText(getActivity(), "连接服务器失败！请检查网络连接：）", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                })
+                                .setCancelable(false)
+                                .setNegativeButton("取消", null)
+                                .show();
+
+                        break;
                     default:
                         break;
                 }
@@ -329,10 +412,10 @@ public class PersonalInfoFragment extends Fragment {
 
     private void initList() {
 
-        String[] descriptions = new String[]{"昵称", "性别", "出生年月", "身高", "体重", "兴趣爱好"};
-        String[] content = new String[]{"N1njaC", "男", "1993年7月", "170厘米", "62kg", "点击修改"};
+        String[] descriptions = new String[]{"昵称", "性别", "出生年月", "身高", "体重", "兴趣爱好", "手机号码"};
+        String[] content = new String[]{"N1njaC", "男", "1993年7月", "170厘米", "62kg", "点击修改", "点击修改"};
         PersonalItemBean itemBean;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             itemBean = new PersonalItemBean(descriptions[i], content[i]);
             mPersonalItemBeanList.add(itemBean);
         }

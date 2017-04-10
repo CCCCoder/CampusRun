@@ -51,11 +51,7 @@ public class ExecPlanActivity extends AppCompatActivity implements View.OnClickL
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-        if (!"".equals(prefs.getString("distance", null))) {
-            aimDistance.setText(prefs.getString("distance", null));
-        } else {
-            aimDistance.setText("100");
-        }
+        aimDistance.setText(prefs.getString("distance", "10"));
 
 
         if ("1".equals(prefs.getString("checkbox", null))) {
@@ -94,9 +90,9 @@ public class ExecPlanActivity extends AppCompatActivity implements View.OnClickL
             case R.id.return_btn:
 
                 Intent intent = new Intent();
-                intent.putExtra("distance",aimDistance.getText().toString());
-                Log.i("xyz","ExecPlanActivity-distance:"+aimDistance.getText().toString());
-                setResult(RESULT_OK,intent);
+                intent.putExtra("distance", aimDistance.getText().toString());
+                Log.i("xyz", "ExecPlanActivity-distance:" + aimDistance.getText().toString());
+                setResult(RESULT_OK, intent);
                 finish();
                 break;
             case R.id.run_image:

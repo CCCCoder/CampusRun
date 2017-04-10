@@ -50,6 +50,7 @@ public class HistoryAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.history_item, null);
             viewHolder.time = (TextView) convertView.findViewById(R.id.time_tx);
             viewHolder.distance = (TextView) convertView.findViewById(R.id.distance_tx);
+            convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -62,7 +63,7 @@ public class HistoryAdapter extends BaseAdapter {
         return convertView;
     }
 
-    class ViewHolder {
+    static class ViewHolder {
         TextView time;
         TextView distance;
     }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    android:minHeight="?android:attr/listPreferredItemHeight"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize">
 
     <TextView
         android:id="@+id/time_tx"
-        android:text="2017-1-17"
+        android:text="2017-4-13"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:textColor="#000"
         android:layout_marginLeft="10dp"
         android:layout_height="wrap_content" />
@@ -18,7 +18,7 @@
         android:id="@+id/distance_tx"
         android:text="2.23km"
         android:layout_marginRight="5dp"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:textColor="#000"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"

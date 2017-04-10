@@ -4,9 +4,20 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="chat"
-        android:textSize="50sp"
+        android:id="@+id/tx_explain"
+        android:text="@string/explain"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/contact_btn"
+        android:text="联系对方"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_status_selector"
+        android:layout_below="@+id/tx_explain"
+        android:layout_width="320dp"
         android:layout_height="wrap_content" />
 
 </RelativeLayout>

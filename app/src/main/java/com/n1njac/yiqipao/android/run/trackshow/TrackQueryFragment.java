@@ -109,11 +109,11 @@ public class TrackQueryFragment extends Fragment implements OnClickListener {
     private void init(final View view) {
 
         btnDate = (Button) view.findViewById(R.id.btn_date);
-        btnProcessed = (Button) view.findViewById(R.id.btn_isprocessed);
+//        btnProcessed = (Button) view.findViewById(R.id.btn_isprocessed);
         btnDistance = (Button) view.findViewById(R.id.btn_distance);
 
         btnDate.setOnClickListener(this);
-        btnProcessed.setOnClickListener(this);
+//        btnProcessed.setOnClickListener(this);
         btnDistance.setOnClickListener(this);
 
         tvDatetime = (TextView) view.findViewById(R.id.tv_datetime);
@@ -264,6 +264,7 @@ public class TrackQueryFragment extends Fragment implements OnClickListener {
                 latLngList.addAll(historyTrackData.getListPoints());
             }
 
+
             // 绘制历史轨迹
             drawHistoryTrack(latLngList, historyTrackData.distance);
 
@@ -279,20 +280,20 @@ public class TrackQueryFragment extends Fragment implements OnClickListener {
                 queryTrack();
                 break;
 
-            case R.id.btn_isprocessed:
-                isProcessed = isProcessed ^ 1;
-                if (0 == isProcessed) {
-                    btnProcessed.setBackgroundColor(Color.rgb(0xff, 0xff, 0xff));
-                    btnProcessed.setTextColor(Color.rgb(0x00, 0x00, 0x00));
-                    Toast.makeText(getActivity(), "正在查询历史轨迹，请稍候", Toast.LENGTH_SHORT).show();
-                    queryHistoryTrack(0, null);
-                } else {
-                    btnProcessed.setBackgroundColor(Color.rgb(0x99, 0xcc, 0xff));
-                    btnProcessed.setTextColor(Color.rgb(0x00, 0x00, 0xd8));
-                    Toast.makeText(getActivity(), "正在查询纠偏后的历史轨迹，请稍候", Toast.LENGTH_SHORT).show();
-                    queryHistoryTrack(1, "need_denoise=1,need_vacuate=1,need_mapmatch=1");
-                }
-                break;
+//            case R.id.btn_isprocessed:
+//                isProcessed = isProcessed ^ 1;
+//                if (0 == isProcessed) {
+//                    btnProcessed.setBackgroundColor(Color.rgb(0xff, 0xff, 0xff));
+//                    btnProcessed.setTextColor(Color.rgb(0x00, 0x00, 0x00));
+//                    Toast.makeText(getActivity(), "正在查询历史轨迹，请稍候", Toast.LENGTH_SHORT).show();
+//                    queryHistoryTrack(0, null);
+//                } else {
+//                    btnProcessed.setBackgroundColor(Color.rgb(0x99, 0xcc, 0xff));
+//                    btnProcessed.setTextColor(Color.rgb(0x00, 0x00, 0xd8));
+//                    Toast.makeText(getActivity(), "正在查询纠偏后的历史轨迹，请稍候", Toast.LENGTH_SHORT).show();
+//                    queryHistoryTrack(1, "need_denoise=1,need_vacuate=1,need_mapmatch=1");
+//                }
+//                break;
 
             case R.id.btn_distance:
                 queryDistance(0, null);
@@ -333,6 +334,7 @@ public class TrackQueryFragment extends Fragment implements OnClickListener {
                     if (null != dataJson && dataJson.has("status") && dataJson.getInt("status") == 0) {
                         double distance = dataJson.getDouble("distance");
                         DecimalFormat df = new DecimalFormat("#.0");
+
                         trackApp.getmHandler().obtainMessage(0, "里程 : " + df.format(distance) + "米").sendToTarget();
                     }
                 } catch (JSONException e) {

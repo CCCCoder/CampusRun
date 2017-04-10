@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
@@ -21,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ import com.n1njac.yiqipao.android.Fragment.NearbyPersonInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.PersonalInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.PersonalRunInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.RunFragment;
+import com.n1njac.yiqipao.android.bmobObject.PushBmob;
 import com.n1njac.yiqipao.android.distanceDisplay.ExecPlanActivity;
 import com.n1njac.yiqipao.android.distanceDisplay.HistoryDistanceActivity;
 import com.n1njac.yiqipao.android.nearbychat.NearbyChatMainActivity;
@@ -39,7 +43,12 @@ import com.n1njac.yiqipao.android.nearbychat.NearbyChatMainActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobPushManager;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
 
@@ -48,9 +57,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private ViewPager mViewPager;
     private IndexViewPager viewPager;
 
-
     private BottomNavigationBar mNavigationBar;
-
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -65,20 +72,40 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private static final int TAKE_PHOTO = 1;
     private static final int CHOOSE_FROM_ALBUM = 2;
 
+    public static String pushBmobObjectId = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //透明导航栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+            window.setNavigationBarColor(Color.TRANSPARENT);
+        }
 
         setContentView(R.layout.activity_main);
 
 //        初始化bmob
-        Bmob.initialize(this,"130b520015c4c581392956ec14bc86c4");
+        Bmob.initialize(this, "130b520015c4c581392956ec14bc86c4");
+
+//        初始化bmob推送
+        BmobInstallation.getCurrentInstallation().save();
+        BmobPush.startWork(this);
+
 
 //        initTabLayoutWithFragment();
         setBottomNavigationBar();
@@ -122,12 +149,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                         Intent intent2 = new Intent(MainActivity.this, HistoryDistanceActivity.class);
                         startActivity(intent2);
                         break;
-                    case R.id.four_item:
-                        Intent intent3 = new Intent(MainActivity.this, NearbyChatMainActivity.class);
-                        startActivity(intent3);
-                        break;
                     case R.id.about_item:
-                        Intent intent4 = new Intent(MainActivity.this,AboutActivity.class);
+                        Intent intent4 = new Intent(MainActivity.this, AboutActivity.class);
                         startActivity(intent4);
                         break;
                 }
@@ -221,10 +244,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment fragment = mList.get(position);
-                if (fragment.isAdded()){
+                if (fragment.isAdded()) {
                     ft.show(fragment);
-                }else {
-                    ft.add(R.id.frag_layout,fragment);
+                } else {
+                    ft.add(R.id.frag_layout, fragment);
                 }
                 ft.commitAllowingStateLoss();
             }
@@ -300,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
     @Override
     public void onBackPressed() {
-        Log.d("xyz","MainActivity---onBackPressed");
+        Log.d("xyz", "MainActivity---onBackPressed");
         finish();
     }
 }

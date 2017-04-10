@@ -11,11 +11,24 @@ public class PersonInfoBean {
     private float distance;
     private boolean sex;//false为男，true为女
 
-    public PersonInfoBean(int iconId, String name, float distance, boolean sex) {
+//    指定推送目标的id
+    private String installationId;
+
+    // TODO: 2017/4/8 构造函数要改
+    public PersonInfoBean(int iconId, String name, float distance, boolean sex,String installationId) {
         this.iconId = iconId;
         this.name = name;
         this.distance = distance;
         this.sex = sex;
+        this.installationId = installationId;
+    }
+
+    public String getInstallationId() {
+        return installationId;
+    }
+
+    public void setInstallationId(String installationId) {
+        this.installationId = installationId;
     }
 
     public int getIconId() {

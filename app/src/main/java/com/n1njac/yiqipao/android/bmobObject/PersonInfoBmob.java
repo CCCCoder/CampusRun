@@ -18,8 +18,38 @@ public class PersonInfoBmob extends BmobObject {
     private String pHeight;
     private String pWeight;
     private String pHobby;
-//    此字段只作为用来初始化该表，拿到objectId。
+    //    此字段只作为用来初始化该表，拿到objectId。
     private int initNum;
+
+    private String pPhone;
+    private String pInstallationId;
+
+    public double getDistance() {
+        return pDistance;
+    }
+
+    public void setDistance(double pDistance) {
+        this.pDistance = pDistance;
+    }
+
+    //附近的人距离
+    private double pDistance;
+
+    public String getPhone() {
+        return pPhone;
+    }
+
+    public void setPhone(String pPhone) {
+        this.pPhone = pPhone;
+    }
+
+    public String getInstallationId() {
+        return pInstallationId;
+    }
+
+    public void setInstallationId(String pInstallationId) {
+        this.pInstallationId = pInstallationId;
+    }
 
 
     public void setInitNum(int initNum) {

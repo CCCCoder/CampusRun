@@ -13,6 +13,8 @@ import com.baidu.trace.LBSTraceClient;
 import com.baidu.trace.LocationMode;
 import com.baidu.trace.Trace;
 //import org.litepal.LitePal;
+import org.litepal.LitePal;
+
 import java.lang.ref.WeakReference;
 
 public class TrackApplication extends Application {
@@ -59,7 +61,7 @@ public class TrackApplication extends Application {
 
         SDKInitializer.initialize(this);
 
-//        LitePal.initialize(this);
+        LitePal.initialize(this);
 
         // 初始化轨迹服务客户端
         client = new LBSTraceClient(mContext);

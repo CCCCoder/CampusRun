@@ -416,8 +416,8 @@ public class TrackUploadFragment extends Fragment {
             @Override
             public void onRequestFailedCallback(String arg0) {
                 // TODO Auto-generated method stub
-                trackApp.getmHandler().obtainMessage(0, "entity请求失败回调接口消息 : " + arg0)
-                        .sendToTarget();
+//                trackApp.getmHandler().obtainMessage(0, "entity请求失败回调接口消息 : " + arg0)
+//                        .sendToTarget();
             }
 
             // 添加entity回调接口

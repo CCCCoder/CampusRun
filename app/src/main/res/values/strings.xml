@@ -39,4 +39,8 @@
     <string name="exe_plan">锻炼计划</string>
     <string name="person_info">个人信息</string>
     <string name="about_app">关于app</string>
+
+
+
+    <string name="explain">有人通过附近的人想和你一起跑步啦！快点击按钮和对方联系吧～</string>
 </resources>

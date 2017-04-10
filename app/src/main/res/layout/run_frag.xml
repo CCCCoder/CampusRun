@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/runzz"
+    android:id="@+id/run_frag_relative"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/bg_run_frag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <at.markushi.ui.CircleButton
-        android:id="@+id/circle_btn"
-        app:cb_color="#aa00BFFF"
-        android:layout_marginBottom="50dp"
-        app:cb_pressedRingWidth="10dip"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</RelativeLayout>
+        <at.markushi.ui.CircleButton
+            android:id="@+id/circle_btn"
+            app:cb_color="#aa00BFFF"
+            android:layout_marginBottom="50dp"
+            app:cb_pressedRingWidth="10dip"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+    </RelativeLayout>
+
+</FrameLayout>

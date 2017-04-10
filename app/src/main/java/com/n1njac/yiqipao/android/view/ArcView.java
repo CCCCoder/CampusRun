@@ -50,10 +50,10 @@ public class ArcView extends View {
 
         float left = getWidth() / 8;
 //        float top = getHeight() / 2 - getWidth() / 4 - 150;
-        float top = getHeight() / 2 - getWidth() / 8 * 3-100;
+        float top = getHeight() / 2 - getWidth() / 8 * 3 - 100;
         float right = getWidth() / 2 + getWidth() / 8 * 3;
 //        float bottom = getHeight() / 2 + getWidth() / 4 - 150;
-        float bottom = getHeight() / 2 + getWidth() / 8 * 3-100;
+        float bottom = getHeight() / 2 + getWidth() / 8 * 3 - 100;
 
         RectF rectf = new RectF(left, top, right, bottom);
         drawOutSideArc(canvas, rectf);
@@ -97,7 +97,7 @@ public class ArcView extends View {
         p.setTextAlign(Paint.Align.CENTER);
         Typeface font = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL);
         p.setTypeface(font);
-        canvas.drawText(distance, getWidth() / 2, getHeight() / 2-100, p);
+        canvas.drawText(distance, getWidth() / 2, getHeight() / 2 - 100, p);
     }
 
     private void drawStepText(Canvas canvas) {
@@ -106,7 +106,7 @@ public class ArcView extends View {
         p.setTextSize(dip2px(18));
         p.setTextAlign(Paint.Align.CENTER);
         String content = "路程(km)";
-        canvas.drawText(content, getWidth() / 2, getHeight() / 2 , p);
+        canvas.drawText(content, getWidth() / 2, getHeight() / 2, p);
     }
 
     //    dip to px

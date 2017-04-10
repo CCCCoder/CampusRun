@@ -9,6 +9,7 @@ import android.widget.Scroller;
  */
 
 //用来设置viewpager的切换时间
+
 public class FixedSpeedScroller extends Scroller {
 
     private int mDuration = 1000;

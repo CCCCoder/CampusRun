@@ -7,7 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.R;
 
 import at.markushi.ui.CircleButton;
@@ -26,6 +29,10 @@ public class RunFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.run_frag,container,false);
+
+        ImageView bg = (ImageView) view.findViewById(R.id.bg_run_frag);
+
+        Glide.with(getActivity()).load(R.drawable.run_bg).centerCrop().into(bg);
 
         circleButton = (CircleButton) view.findViewById(R.id.circle_btn);
         circleButton.setOnClickListener(new View.OnClickListener() {
