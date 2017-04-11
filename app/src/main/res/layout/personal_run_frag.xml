@@ -13,7 +13,7 @@
         <TextView
             android:id="@+id/exec_text"
             android:clickable="true"
-            android:drawableLeft="@drawable/question"
+            android:drawableLeft="@drawable/plan_zzz"
             android:drawablePadding="5dp"
             android:textSize="16sp"
             android:layout_marginLeft="45dp"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/history_tx"
-            android:drawableLeft="@drawable/history"
+            android:drawableLeft="@drawable/history_zz"
             android:drawablePadding="5dp"
             android:clickable="true"
             android:textSize="16sp"

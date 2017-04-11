@@ -35,5 +35,6 @@
     <drawable name="header_bar_bg">#00BFFF</drawable>
     <drawable name="transparent">#00000000</drawable>
 
+    <color name="textColor">#ff6610</color>
 
 </resources>

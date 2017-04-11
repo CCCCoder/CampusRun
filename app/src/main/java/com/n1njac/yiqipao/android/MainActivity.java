@@ -131,16 +131,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             }
         });
 
-        mNavigationView.setCheckedItem(R.id.first_item);
+        mNavigationView.setCheckedItem(R.id.second_item);
         mNavigationView.setItemIconTintList(null);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
 
                 switch (item.getItemId()) {
-                    case R.id.first_item:
-                        Toast.makeText(MainActivity.this, "click aim", Toast.LENGTH_SHORT).show();
-                        break;
+
                     case R.id.second_item:
                         Intent intent1 = new Intent(MainActivity.this, ExecPlanActivity.class);
                         startActivity(intent1);

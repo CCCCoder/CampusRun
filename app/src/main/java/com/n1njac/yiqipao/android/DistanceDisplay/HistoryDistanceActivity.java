@@ -44,9 +44,7 @@ public class HistoryDistanceActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_main);
-
-        // TODO: 2017/4/10 加一个过渡动画
-
+//        addData();
         initView();
 
     }
@@ -84,7 +82,6 @@ public class HistoryDistanceActivity extends AppCompatActivity {
         mAdapter = new HistoryAdapter(HistoryDistanceActivity.this, mItemBeanList);
         mListView.setAdapter(mAdapter);
 
-
         returnBtn = (Button) findViewById(R.id.return_history_btn);
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +94,42 @@ public class HistoryDistanceActivity extends AppCompatActivity {
 //    模拟往数据库中添加数据
 
     public void addData() {
-
+        Distance distance1 = new Distance();
+        distance1.setTime("2017-4-10");
+        distance1.setTotalDistance("2.23km");
+        distance1.save();
+        Distance distance2 = new Distance();
+        distance2.setTime("2017-4-11");
+        distance2.setTotalDistance("3.2km");
+        distance2.save();
+        Distance distance3 = new Distance();
+        distance3.setTime("2017-4-12");
+        distance3.setTotalDistance("1.4km");
+        distance3.save();
+        Distance distance4 = new Distance();
+        distance4.setTime("2017-4-13");
+        distance4.setTotalDistance("2.12km");
+        distance4.save();
+        Distance distance5 = new Distance();
+        distance5.setTime("2017-4-14");
+        distance5.setTotalDistance("1.89km");
+        distance5.save();
+        Distance distance6 = new Distance();
+        distance6.setTime("2017-4-15");
+        distance6.setTotalDistance("3.41km");
+        distance6.save();
+        Distance distance7 = new Distance();
+        distance7.setTime("2017-4-16");
+        distance7.setTotalDistance("1.21km");
+        distance7.save();
+        Distance distance8 = new Distance();
+        distance8.setTime("2017-4-17");
+        distance8.setTotalDistance("3.12km");
+        distance8.save();
+        Distance distance9 = new Distance();
+        distance9.setTime("2017-4-18");
+        distance9.setTotalDistance("0.34km");
+        distance9.save();
     }
 
 
@@ -107,7 +139,6 @@ public class HistoryDistanceActivity extends AppCompatActivity {
 //        从数据库中拿数据
         new Thread(new Runnable() {
             ItemBean itemBean;
-
             @Override
             public void run() {
                 List<Distance> distanceList = DataSupport.findAll(Distance.class);

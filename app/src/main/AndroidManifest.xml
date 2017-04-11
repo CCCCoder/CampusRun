@@ -46,6 +46,9 @@
         </activity>
 
         <activity
+            android:theme="@style/AppTheme2"
+            android:name=".AboutActivity"/>
+        <activity
             android:theme="@style/AppTheme"
             android:name=".MainActivity">
         </activity>
@@ -60,7 +63,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".nearybyview.NearbyMainActivity"/>
         <activity android:name=".nearbychat.NearbyChatMainActivity"/>
-        <activity android:name=".AboutActivity"/>
+
 
         <service
             android:name="com.baidu.trace.LBSTraceService"
