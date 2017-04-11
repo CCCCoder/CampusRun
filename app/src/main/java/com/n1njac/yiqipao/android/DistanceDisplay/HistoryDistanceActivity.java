@@ -54,6 +54,9 @@ public class HistoryDistanceActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.history_lv);
         mLoadingView = (LoadingView) findViewById(R.id.loadView);
         mLoadingView.setLoadingText("拉取数据中...");
+//        for (int i = 9; i < 18; i++) {
+//            DataSupport.delete(Distance.class,i);
+//        }
 //        mProgressBar = (ProgressBar) findViewById(R.id.load_progress);
 //        FoldingCube foldingCube = new FoldingCube();
 //        foldingCube.setColor(R.color.orange);

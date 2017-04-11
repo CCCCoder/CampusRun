@@ -4,7 +4,8 @@
 
 
 
-    <permission android:protectionLevel="normal" android:name="cn.bmob.permission.push"></permission>
+    <permission android:protectionLevel="normal" android:name="cn.bmob.permission.push">
+    </permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -25,7 +26,7 @@
     <application
         android:name=".TrackApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/campusrun_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
