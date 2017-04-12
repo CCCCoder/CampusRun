@@ -58,8 +58,6 @@ public class NearbyMainActivity extends AppCompatActivity implements ViewPager.O
     private float[] distances = new float[]{2, 4, 6, 9};
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -251,22 +249,23 @@ public class NearbyMainActivity extends AppCompatActivity implements ViewPager.O
                     // TODO: 2017/4/10 号码修改
                     String phone1 = "15505514373";
                     String phone2 = "18119635150";
-                    if (phone.equals(phone1)){
+                    if (phone.equals(phone1)) {
                         installationId = meizuId;
-                    }else {
+                    } else {
                         installationId = moniqiId;
                     }
 
+                    Log.d("xyz", "installationId" + installationId);
                     BmobPushManager bmobPush = new BmobPushManager();
                     BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
                     query.addWhereEqualTo("installationId", installationId);
                     bmobPush.setQuery(query);
-                    bmobPush.pushMessage("一起跑步阿", new PushListener() {
+                    bmobPush.pushMessage("require", new PushListener() {
                         @Override
                         public void done(BmobException e) {
-                            if (e == null){
+                            if (e == null) {
                                 Toast.makeText(NearbyMainActivity.this, "已向对方发送跑步邀请", Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(NearbyMainActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
                             }
                         }
