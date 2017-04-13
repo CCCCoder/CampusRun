@@ -107,7 +107,7 @@ public class HistoryDistanceActivity extends AppCompatActivity {
         distance2.save();
         Distance distance3 = new Distance();
         distance3.setTime("2017-4-12");
-        distance3.setTotalDistance("1.4km");
+        distance3.setTotalDistance("1.15km");
         distance3.save();
         Distance distance4 = new Distance();
         distance4.setTime("2017-4-13");

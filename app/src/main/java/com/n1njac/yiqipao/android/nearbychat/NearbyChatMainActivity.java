@@ -52,10 +52,11 @@ public class NearbyChatMainActivity extends AppCompatActivity {
         // TODO: 2017/4/10 号码修改
         String phone1 = "15505514373";
         String phone2 = "18119635150";
-        if (phone.equals(phone1)) {
+        String phone3 = "18119604104";
+        if (phone.equals(phone3)) {
             callPhone = phone2;
         } else {
-            callPhone = phone1;
+            callPhone = phone3;
         }
 
         // TODO: 2017/4/9 号码处理
@@ -80,6 +81,8 @@ public class NearbyChatMainActivity extends AppCompatActivity {
                 String installationId1 = "8AC0A4524336DA27E2861D9071B03244";
                 //18119635150
                 String installationId2 = "1C04DA1CD835A7837A70E608036A9AA2";
+                //18119604104
+                String installationId3 = "349365968C7B7BFA4350A97A5F79BB55";
 
                 String phone = sf.getString("phone", null);
                 Log.d("xyz", "phone--nearbychat:" + phone);
@@ -88,10 +91,11 @@ public class NearbyChatMainActivity extends AppCompatActivity {
                 // TODO: 2017/4/10 号码修改
                 String phone1 = "15505514373";
                 String phone2 = "18119635150";
-                if (phone.equals(phone1)) {
+                String phone3 = "18119604104";
+                if (phone.equals(phone3)) {
                     installationId = installationId2;
                 } else {
-                    installationId = installationId1;
+                    installationId = installationId3;
                 }
 
                 BmobPushManager bmobPush = new BmobPushManager();
@@ -101,9 +105,9 @@ public class NearbyChatMainActivity extends AppCompatActivity {
                 bmobPush.pushMessage("refuse", new PushListener() {
                     @Override
                     public void done(BmobException e) {
-                        if (e == null){
+                        if (e == null) {
                             Toast.makeText(NearbyChatMainActivity.this, "已拒绝", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             Toast.makeText(NearbyChatMainActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -125,6 +129,8 @@ public class NearbyChatMainActivity extends AppCompatActivity {
         String objectId1 = "edfe7e04f8";
         //18119635150
         String objectId2 = "c6ddea6a46";
+        //18119604104
+        String objectId3 = "5e3a271fbb";
 
         String phone = sf.getString("phone", null);
         Log.d("xyz", "phone--nearbychat:" + phone);
@@ -133,10 +139,11 @@ public class NearbyChatMainActivity extends AppCompatActivity {
         // TODO: 2017/4/10 号码修改
         String phone1 = "15505514373";
         String phone2 = "18119635150";
-        if (phone.equals(phone1)) {
+        String phone3 = "18119604104";
+        if (phone.equals(phone3)) {
             objectId = objectId2;
         } else {
-            objectId = objectId1;
+            objectId = objectId3;
         }
 
         BmobQuery<PersonInfoBmob> query = new BmobQuery<>();

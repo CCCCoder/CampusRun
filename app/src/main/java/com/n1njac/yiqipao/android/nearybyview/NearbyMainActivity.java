@@ -240,6 +240,8 @@ public class NearbyMainActivity extends AppCompatActivity implements ViewPager.O
                     String meizuId = "1C04DA1CD835A7837A70E608036A9AA2";
 //                    15505514373
                     String moniqiId = "8AC0A4524336DA27E2861D9071B03244";
+                    //18119604104
+                    String oppoId = "349365968C7B7BFA4350A97A5F79BB55";
                     String installationId = null;
                     SharedPreferences sf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -249,10 +251,11 @@ public class NearbyMainActivity extends AppCompatActivity implements ViewPager.O
                     // TODO: 2017/4/10 号码修改
                     String phone1 = "15505514373";
                     String phone2 = "18119635150";
-                    if (phone.equals(phone1)) {
+                    String phone3 = "18119604104";
+                    if (phone.equals(phone3)) {
                         installationId = meizuId;
                     } else {
-                        installationId = moniqiId;
+                        installationId = oppoId;
                     }
 
                     Log.d("xyz", "installationId" + installationId);
