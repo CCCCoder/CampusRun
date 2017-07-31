@@ -123,7 +123,9 @@
             </intent-filter>
         </receiver>
 
-
+        <activity
+            android:theme="@style/AppTheme.TranslucentStatus"
+            android:name=".login.NewLoginActivity"/>
 
     </application>
 

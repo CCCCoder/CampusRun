@@ -11,27 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--<com.n1njac.yiqipao.android.IndexViewPager-->
-            <!--android:id="@+id/view_pager"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="1">-->
-
-        <!--</com.n1njac.yiqipao.android.IndexViewPager>-->
-
-        <!--<android.support.design.widget.TabLayout-->
-
-            <!--android:id="@+id/tab_layout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="#fff"-->
-            <!--app:tabGravity="fill"-->
-            <!--app:tabIndicatorHeight="0dp"-->
-            <!--app:tabMode="fixed"-->
-            <!--app:tabSelectedTextColor="#ff7a61">-->
-        <!--</android.support.design.widget.TabLayout>-->
-
-
 
         <FrameLayout
             android:id="@+id/frag_layout"

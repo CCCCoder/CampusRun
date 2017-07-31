@@ -3,7 +3,6 @@ package com.n1njac.yiqipao.android.distanceDisplay;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -11,8 +10,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.github.ybq.android.spinkit.style.DoubleBounce;
-import com.github.ybq.android.spinkit.style.FoldingCube;
 import com.mingle.widget.LoadingView;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.db.Distance;
@@ -29,7 +26,7 @@ import java.util.List;
 public class HistoryDistanceActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private List<ItemBean> mItemBeanList;
+    private List<com.n1njac.yiqipao.android.distanceDisplay.ItemBean> mItemBeanList;
     private BaseAdapter mAdapter;
     private Button returnBtn;
 

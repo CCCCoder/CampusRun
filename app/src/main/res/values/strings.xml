@@ -43,4 +43,11 @@
 
 
     <string name="explain">有人通过附近的人想和你一起跑步啦！快点击按钮和对方联系吧～</string>
+    <string name="history_distance">历史记录</string>
+    <string name="setting_item">设置</string>
+    <string name="switch_item">切换账号</string>
+    <string name="icon_desc">校园跑</string>
+    <string name="content_desc">一个满足你所有跑步需求的APP</string>
+    <string name="btn_register">注册</string>
+    <string name="btn_login">登陆</string>
 </resources>

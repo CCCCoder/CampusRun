@@ -26,19 +26,17 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.bumptech.glide.Glide;
+import com.n1njac.yiqipao.android.distanceDisplay.ExecPlanActivity;
 import com.n1njac.yiqipao.android.Fragment.NearbyPersonInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.PersonalInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.PersonalRunInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.RunFragment;
-import com.n1njac.yiqipao.android.bmobObject.PushBmob;
-import com.n1njac.yiqipao.android.distanceDisplay.ExecPlanActivity;
 import com.n1njac.yiqipao.android.distanceDisplay.HistoryDistanceActivity;
-import com.n1njac.yiqipao.android.nearbychat.NearbyChatMainActivity;
+import com.n1njac.yiqipao.android.login.NewLoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +44,6 @@ import java.util.List;
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
-import cn.bmob.v3.BmobPushManager;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
 
@@ -85,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -140,16 +135,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 switch (item.getItemId()) {
 
                     case R.id.second_item:
-                        Intent intent1 = new Intent(MainActivity.this, ExecPlanActivity.class);
-                        startActivity(intent1);
+                        startActivity(new Intent(MainActivity.this, ExecPlanActivity.class));
                         break;
                     case R.id.third_item:
-                        Intent intent2 = new Intent(MainActivity.this, HistoryDistanceActivity.class);
-                        startActivity(intent2);
+
+                        startActivity(new Intent(MainActivity.this, HistoryDistanceActivity.class));
                         break;
                     case R.id.about_item:
-                        Intent intent4 = new Intent(MainActivity.this, AboutActivity.class);
-                        startActivity(intent4);
+                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                        break;
+                    case R.id.switch_item:
+                        startActivity(new Intent(MainActivity.this, NewLoginActivity.class));
                         break;
                 }
                 mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -157,47 +153,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             }
         });
 
-//        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-//        mToolbar.setTitle("校园跑");
-//        setSupportActionBar(mToolbar);
-
-
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close);
-//        mDrawerLayout.addDrawerListener(toggle);
-//        toggle.syncState();
-
     }
-
-
-//    private void initTabLayoutWithFragment() {
-//
-//        mList = new ArrayList<>();
-//        PersonalRunInfoFragment personalRunInfoFragment = new PersonalRunInfoFragment();
-//        RunFragment runFragment = new RunFragment();
-//        NearbyPersonInfoFragment nearbyPersonInfoFragment = new NearbyPersonInfoFragment();
-//        PersonalInfoFragment personalInfoFragment = new PersonalInfoFragment();
-//        mList.add(personalRunInfoFragment);
-//        mList.add(runFragment);
-//        mList.add(nearbyPersonInfoFragment);
-//        mList.add(personalInfoFragment);
-//
-//        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-//        //mViewPager = (ViewPager) findViewById(R.id.view_pager);
-//        viewPager = (IndexViewPager) findViewById(R.id.view_pager);
-//
-//
-//        FragmentManager adapter = new FragmentManager(getSupportFragmentManager(), mList);
-//        //mViewPager.setAdapter(adapter);
-//        viewPager.setAdapter(adapter);
-//
-//        mTabLayout.setupWithViewPager(viewPager);
-//        TabLayout.Tab one = mTabLayout.getTabAt(0);
-//
-//        TabLayout.Tab two = mTabLayout.getTabAt(1);
-//        TabLayout.Tab three = mTabLayout.getTabAt(2);
-//        one.setIcon(R.mipmap.ic_launcher);
-//
-//    }
 
 
     //    设置底部的bar
