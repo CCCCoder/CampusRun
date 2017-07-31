@@ -67,7 +67,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private static final int TAKE_PHOTO = 1;
     private static final int CHOOSE_FROM_ALBUM = 2;
 
-    public static String pushBmobObjectId = null;
+    private int selectItem = 0;
+
+    private static final int CONSTANT_EXE_PLAN = 1001;
+    private static final int CONSTANT_HIS_DISTANCE = 1002;
+    private static final int CONSTANT_ABOUT = 1003;
+    private static final int CONSTANT_SWITCH = 1004;
 
 
     @Override
@@ -107,6 +112,43 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+                switch (selectItem){
+                    case CONSTANT_EXE_PLAN:
+                        startActivity(new Intent(MainActivity.this, ExecPlanActivity.class));
+                        break;
+                    case CONSTANT_HIS_DISTANCE:
+                        startActivity(new Intent(MainActivity.this, HistoryDistanceActivity.class));
+                        break;
+                    case CONSTANT_ABOUT:
+                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                        break;
+                    case CONSTANT_SWITCH:
+                        startActivity(new Intent(MainActivity.this, NewLoginActivity.class));
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
         View view = mNavigationView.getHeaderView(0);
@@ -135,17 +177,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 switch (item.getItemId()) {
 
                     case R.id.second_item:
-                        startActivity(new Intent(MainActivity.this, ExecPlanActivity.class));
+                        selectItem = CONSTANT_EXE_PLAN;
+
                         break;
                     case R.id.third_item:
+                        selectItem = CONSTANT_HIS_DISTANCE;
 
-                        startActivity(new Intent(MainActivity.this, HistoryDistanceActivity.class));
                         break;
                     case R.id.about_item:
-                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                        selectItem = CONSTANT_ABOUT;
+
                         break;
                     case R.id.switch_item:
-                        startActivity(new Intent(MainActivity.this, NewLoginActivity.class));
+                        selectItem = CONSTANT_SWITCH;
+
                         break;
                 }
                 mDrawerLayout.closeDrawer(GravityCompat.START);

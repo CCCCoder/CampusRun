@@ -1,84 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login_guide_frag_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/login_guide_bg_iv"
-        android:src="#e0000000"
-        android:background="@drawable/run_bg"
+    <LinearLayout
+        android:id="@+id/content_icon_desc_linear"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/description_login_tx"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/content_icon_desc_linear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/description_login_tx"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:src="@drawable/run_144px" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="@string/icon_desc"
-                android:textColor="#fff"
-                android:textSize="20sp" />
-
-        </LinearLayout>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/run_144px" />
 
         <TextView
-            android:id="@+id/description_login_tx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@string/content_desc"
-            android:textColor="#fff" />
+            android:text="@string/icon_desc"
+            android:textColor="#fff"
+            android:textSize="20sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/description_login_tx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:letterSpacing="0.3"
+        android:text="@string/content_desc"
+        android:textColor="#fff" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_guide_register"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="6dp"
-            android:orientation="horizontal">
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_register"
+            android:text="@string/btn_register"
+            android:textColor="#fff"
+            android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/btn_guide_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_register"
-                android:text="@string/btn_register"
-                android:textColor="#fff"
-                android:textSize="16sp" />
+        <Button
+            android:id="@+id/btn_guide_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_login"
+            android:text="@string/btn_login"
+            android:textColor="#fff"
+            android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/btn_guide_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_login"
-                android:text="@string/btn_login"
-                android:textColor="#fff"
-                android:textSize="16sp" />
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>
