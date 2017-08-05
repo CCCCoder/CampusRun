@@ -1,14 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
+    android:id="@+id/register_relat"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/head_relat"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/bg_transparent">
 
-    <TextView
-        android:text="text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageButton
+
+            android:id="@+id/register_back_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/return_z" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/tv_actionbar_register"
+            android:textColor="@color/text_white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/register_phone_linear"
+        android:layout_below="@+id/head_relat"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:background="@null"
+            android:id="@+id/register_phone_et"
+            android:textColor="#fff"
+            android:hint="@string/register_phone_hint_et"
+            android:textCursorDrawable ="@null"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#bfbfbf"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:drawableLeft="@drawable/et_phone"
+            android:drawablePadding="10dp"
+            android:inputType="phone" />
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="13dp"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/register_verification_linear"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/register_phone_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_marginTop="10dp"
+                android:background="@null"
+                android:id="@+id/register_verification_et"
+                android:textColor="#fff"
+                android:hint="@string/register_verification_hint_et"
+                android:textCursorDrawable ="@null"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#bfbfbf"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="125dp"
+                android:drawableLeft="@drawable/et_verification"
+                android:drawablePadding="10dp"
+                android:inputType="phone" />
+
+            <TextView
+
+                android:id="@+id/register_get_verification_code_tv"
+                android:clickable="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/btn_login"
+                android:textSize="14sp"
+                android:textColor="@color/text_white"
+                android:text="获取验证码"
+                android:gravity="center"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="13dp"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+
+    </LinearLayout>
 
 </RelativeLayout>

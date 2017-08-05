@@ -124,7 +124,7 @@
         </receiver>
 
         <activity
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme4"
             android:name=".login.NewLoginActivity"/>
 
     </application>

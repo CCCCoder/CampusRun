@@ -25,6 +25,10 @@
     <color name="bg_color_blue_press">#008B8B</color>
     <color name="bg_color_pink">#FF90A2</color>
 
+    <color name="bg_transparent">#00000000</color>
+    <color name="text_white">#FFF</color>
+
+
     <drawable name="window_bg">#fff5f5f5</drawable>
     <drawable name="divider_line">#d9d9d9</drawable>
     <drawable name="main_tab_bar_bg">#f9f9f9</drawable>

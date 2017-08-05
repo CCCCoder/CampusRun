@@ -33,6 +33,7 @@ public class LoginGuideFragment extends Fragment {
         FragmentManager fm = newLoginActivity.getSupportFragmentManager();
 
         final FragmentTransaction ft = fm.beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         final RegisterFragment registerFragment = new RegisterFragment();
         final LoginFragment loginFragment = new LoginFragment();
         register.setOnClickListener(new View.OnClickListener() {
