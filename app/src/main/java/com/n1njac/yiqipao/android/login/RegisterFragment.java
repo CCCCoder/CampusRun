@@ -89,6 +89,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 break;
             case R.id.register_submit_btn:
 
+                Log.d(TAG, "click submit");
+                // TODO: 2017/8/6 handle login
 
                 break;
             default:
@@ -104,10 +106,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() > 0) {
-
+            mSubmitBtn.setEnabled(true);
             Log.d(TAG, "length>0");
         } else {
-
+            mSubmitBtn.setEnabled(false);
             Log.d(TAG, "length=0");
         }
     }
