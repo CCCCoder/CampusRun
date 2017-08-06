@@ -99,13 +99,15 @@
 
             <TextView
 
+
                 android:id="@+id/register_get_verification_code_tv"
                 android:clickable="true"
+                android:focusable="true"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/btn_login"
                 android:textSize="14sp"
                 android:textColor="@color/text_white"
-                android:text="获取验证码"
+                android:text="@string/get_verification_code_tv"
                 android:gravity="center"
                 android:layout_marginRight="20dp"
                 android:layout_width="wrap_content"
@@ -126,5 +128,19 @@
             android:layout_height="1px" />
 
     </LinearLayout>
+
+    <Button
+        android:focusable="false"
+        android:id="@+id/register_submit_btn"
+        android:text="@string/register_btn_submit"
+        android:textColor="@color/text_white"
+        android:textSize="14sp"
+        android:background="@drawable/btn_register_submit"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/register_verification_linear"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

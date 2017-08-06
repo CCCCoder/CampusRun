@@ -53,4 +53,6 @@
     <string name="tv_actionbar_register">注册</string>
     <string name="register_phone_hint_et">请输入您的中国大陆手机号</string>
     <string name="register_verification_hint_et">请输入验证码</string>
+    <string name="register_btn_submit">下一步</string>
+    <string name="get_verification_code_tv">获取验证码</string>
 </resources>
