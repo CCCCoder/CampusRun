@@ -82,9 +82,11 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 if (!(RegularMatchUtil.matchPhoneNum(phoneNum))) {
                     Toast.makeText(getActivity(), "请输入正确的手机号码！", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "----not match");
+                }else {
+                    timeCountUtil.start();
                 }
 
-                timeCountUtil.start();
+
 
                 break;
             case R.id.register_submit_btn:
