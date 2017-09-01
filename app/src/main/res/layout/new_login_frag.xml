@@ -160,17 +160,20 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/new_login_via_qq"
             android:layout_alignParentStart="true"
             android:src="@drawable/qq"
             android:layout_width="42dp"
             android:layout_height="42dp" />
 
         <ImageView
+            android:id="@+id/new_login_via_wechat"
             android:layout_centerHorizontal="true"
             android:src="@drawable/wechat"
             android:layout_width="42dp"
             android:layout_height="42dp" />
         <ImageView
+            android:id="@+id/new_login_via_sina"
             android:layout_alignParentEnd="true"
             android:src="@drawable/sina"
             android:layout_width="42dp"

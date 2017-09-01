@@ -2,7 +2,6 @@ package com.n1njac.yiqipao.android.login;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,7 +24,7 @@ public class LoginGuideFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.new_guide_login_frag, container, false);
+        View view = inflater.inflate(R.layout.new_guide_login_or_register_frag, container, false);
         Button register = (Button) view.findViewById(R.id.btn_guide_register);
         Button login = (Button) view.findViewById(R.id.btn_guide_login);
 

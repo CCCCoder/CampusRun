@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/register_relat"
-
+    android:id="@+id/new_forget_relat"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
 
     <RelativeLayout
-        android:id="@+id/head_relat"
+        android:id="@+id/forget_head_relat"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@color/bg_transparent">
 
         <ImageButton
 
-            android:id="@+id/register_back_btn"
+            android:id="@+id/forget_pwd_back_btn"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
@@ -26,22 +25,22 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="@string/tv_actionbar_register"
+            android:text="@string/tv_actionbar_forget_pwd"
             android:textColor="@color/text_white"
             android:textSize="20sp" />
 
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/register_phone_linear"
-        android:layout_below="@+id/head_relat"
+        android:id="@+id/forget_pwd_phone_linear"
+        android:layout_below="@+id/forget_head_relat"
         android:layout_marginTop="40dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
             android:background="@null"
-            android:id="@+id/register_phone_et"
+            android:id="@+id/forget_pwd_phone_et"
             android:textColor="#fff"
             android:hint="@string/register_phone_hint_et"
             android:textCursorDrawable ="@null"
@@ -67,10 +66,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/register_verification_linear"
+        android:id="@+id/forget_pwd_verification_linear"
         android:orientation="vertical"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/register_phone_linear"
+        android:layout_below="@+id/forget_pwd_phone_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -81,7 +80,7 @@
             <EditText
                 android:layout_marginTop="10dp"
                 android:background="@null"
-                android:id="@+id/register_verification_et"
+                android:id="@+id/forget_pwd_verification_et"
                 android:textColor="#fff"
                 android:hint="@string/register_verification_hint_et"
                 android:textCursorDrawable ="@null"
@@ -99,8 +98,7 @@
 
             <TextView
 
-
-                android:id="@+id/register_get_verification_code_tv"
+                android:id="@+id/forget_pwd_get_verification_code_tv"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_alignParentRight="true"
@@ -131,16 +129,17 @@
 
     <Button
         android:enabled="false"
-        android:id="@+id/register_submit_btn"
+        android:id="@+id/forget_pwd_submit_btn"
         android:text="@string/register_btn_submit"
         android:textColor="@color/text_white"
         android:textSize="14sp"
         android:background="@drawable/btn_register_submit"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/register_verification_linear"
+        android:layout_below="@+id/forget_pwd_verification_linear"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 
 </RelativeLayout>

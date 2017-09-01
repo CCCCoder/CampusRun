@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,7 +43,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.register_frag, container, false);
+        View view = inflater.inflate(R.layout.new_register_frag, container, false);
 
         relativeLayout = (RelativeLayout) view.findViewById(R.id.register_relat);
         relativeLayout.setPadding(0, SizeUtil.getStatusBarHeight(getActivity()), 0, 0);
@@ -85,8 +84,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 }else {
                     timeCountUtil.start();
                 }
-
-
 
                 break;
             case R.id.register_submit_btn:

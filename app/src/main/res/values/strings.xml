@@ -51,9 +51,12 @@
     <string name="btn_register">注册</string>
     <string name="btn_login">登陆</string>
     <string name="tv_actionbar_register">注册</string>
+    <string name="tv_actionbar_forget_pwd">忘记密码</string>
+    <string name="tv_actionbar_quick_login">快捷登录</string>
     <string name="register_phone_hint_et">请输入您的中国大陆手机号</string>
     <string name="register_verification_hint_et">请输入验证码</string>
     <string name="register_btn_submit">下一步</string>
+    <string name="quick_login_btn_submit">登录</string>
     <string name="get_verification_code_tv">获取验证码</string>
     <string name="tool_bar_login">登陆</string>
     <string name="new_login_tv">登陆</string>
