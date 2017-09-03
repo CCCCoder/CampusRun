@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/reset_tool_bar_relat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize">
+        <ImageButton
+
+            android:id="@+id/new_reset_back_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/return_z" />
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="20sp"
+                android:textColor="@color/text_white"
+                android:text="@string/tool_bar_reset_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/new_reset_content_linear"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:background="@null"
+                android:id="@+id/reset_pwd_old_et"
+                android:textColor="#fff"
+                android:hint="@string/new_reset_pwd_old"
+                android:textCursorDrawable ="@null"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#bfbfbf"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:drawableLeft="@drawable/et_password"
+                android:drawablePadding="10dp"
+                android:inputType="textPassword" />
+
+            <ImageView
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="13dp"
+                android:background="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="1px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:background="@null"
+                android:id="@+id/reset_pwd_new_et"
+                android:textColor="#fff"
+                android:hint="@string/new_reset_pwd_new"
+                android:textCursorDrawable ="@null"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#bfbfbf"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:drawableLeft="@drawable/et_password"
+                android:drawablePadding="10dp"
+                android:inputType="textPassword" />
+
+            <ImageView
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="13dp"
+                android:background="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="1px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:background="@null"
+                android:id="@+id/reset_password_new_again_et"
+                android:textColor="#fff"
+                android:hint="@string/new_reset_pwd_new_again"
+                android:textCursorDrawable ="@null"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#bfbfbf"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:drawableLeft="@drawable/et_password"
+                android:drawablePadding="10dp"
+                android:inputType="textPassword" />
+
+            <ImageView
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="13dp"
+                android:background="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="1px" />
+
+            <Button
+                android:id="@+id/new_reset_login_btn"
+                android:text="@string/new_reset_login"
+                android:textSize="14sp"
+                android:textColor="@color/text_white"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/btn_login"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

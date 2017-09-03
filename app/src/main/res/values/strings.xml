@@ -59,9 +59,14 @@
     <string name="quick_login_btn_submit">登录</string>
     <string name="get_verification_code_tv">获取验证码</string>
     <string name="tool_bar_login">登陆</string>
+    <string name="tool_bar_reset_pwd">重置密码</string>
     <string name="new_login_tv">登陆</string>
+    <string name="new_reset_login">确认修改</string>
     <string name="new_login_psd_et">请填写密码</string>
-    <string name="new_login_account_et">请输入邮箱或手机号</string>
+    <string name="new_reset_pwd_old">请输入原密码</string>
+    <string name="new_reset_pwd_new_again">请确认新密码</string>
+    <string name="new_reset_pwd_new">请输入新密码</string>
+    <string name="new_login_account_et">请输入手机号</string>
     <string name="forget_pwd_tv">登陆遇到问题？</string>
     <string name="quick_login_tv">手机号快捷登陆</string>
     <string name="goto_register_tv">立即注册</string>

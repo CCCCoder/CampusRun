@@ -127,17 +127,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             public void onDrawerClosed(View drawerView) {
 
                 switch (selectItem){
+
                     case CONSTANT_EXE_PLAN:
                         startActivity(new Intent(MainActivity.this, ExecPlanActivity.class));
+                        selectItem = 0;
                         break;
                     case CONSTANT_HIS_DISTANCE:
                         startActivity(new Intent(MainActivity.this, HistoryDistanceActivity.class));
+                        selectItem = 0;
                         break;
                     case CONSTANT_ABOUT:
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                        selectItem = 0;
                         break;
                     case CONSTANT_SWITCH:
                         startActivity(new Intent(MainActivity.this, NewLoginActivity.class));
+                        selectItem = 0;
                         break;
                 }
 
@@ -316,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             }
         }
 
-//        这里做runMianActiity返回数据的处理。
+//        这里做runMainActivity返回数据的处理。
 
     }
 

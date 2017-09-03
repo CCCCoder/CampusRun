@@ -3,6 +3,7 @@ package com.n1njac.yiqipao.android.login;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class ForgetPwdFragment extends android.support.v4.app.Fragment implement
 
     private NewLoginActivity newLoginActivity;
     private FragmentManager fm;
+    private FragmentTransaction ft;
 
     private TimeCountUtil timeCountUtil;
 
@@ -92,6 +94,13 @@ public class ForgetPwdFragment extends android.support.v4.app.Fragment implement
 
                 break;
             case R.id.forget_pwd_submit_btn:
+
+                ft = fm.beginTransaction();
+                ResetPwdFragment resetPwdFragment = new ResetPwdFragment();
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.replace(R.id.login_activity, resetPwdFragment);
+                ft.addToBackStack("reset_pwd");
+                ft.commit();
 
                 break;
         }
