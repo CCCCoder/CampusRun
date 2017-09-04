@@ -18,9 +18,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 import com.n1njac.yiqipao.android.utils.TimeCountUtil;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
+
+import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.LogInListener;
+import cn.bmob.v3.listener.QueryListener;
 
 /**
  * Created by N1njaC on 2017/7/31.
@@ -81,7 +89,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 if (!(RegularMatchUtil.matchPhoneNum(phoneNum))) {
                     Toast.makeText(getActivity(), "请输入正确的手机号码！", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "----not match");
-                }else {
+                } else {
                     timeCountUtil.start();
                 }
 
@@ -90,6 +98,32 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
                 Log.d(TAG, "click submit");
                 // TODO: 2017/8/6 handle login
+                String phone = phoneEt.getText().toString();
+
+                BmobSMS.requestSMSCode(phone, "Campus Run", new QueryListener<Integer>() {
+                    @Override
+                    public void done(Integer integer, BmobException e) {
+                        if (e == null) {
+                            ToastUtil.shortToast(getActivity(), "验证码发送成功！");
+                            Log.d(TAG, "code---->" + integer);
+                        }
+                    }
+                });
+
+                BmobUser.loginBySMSCode(phone, verificationEt.getText().toString(), new LogInListener<UserInfoBmob>() {
+                    @Override
+                    public void done(UserInfoBmob userInfoBmob, BmobException e) {
+                        if (userInfoBmob != null) {
+                            // TODO: 2017/9/4 做跳转到设置用户账号密码界面
+
+
+                        } else {
+                            ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
+                            Log.d(TAG, "login error----->" + e.getErrorCode() + "   " + e.getLocalizedMessage());
+                        }
+                    }
+                });
+
 
                 break;
             default:

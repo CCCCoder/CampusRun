@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         setContentView(R.layout.activity_main);
 
 //        初始化bmob
-        Bmob.initialize(this, "130b520015c4c581392956ec14bc86c4");
+        Bmob.initialize(this, "eca43c1e6d34df771a7fa797a7960feb");
 
 //        初始化bmob推送
         BmobInstallation.getCurrentInstallation().save();

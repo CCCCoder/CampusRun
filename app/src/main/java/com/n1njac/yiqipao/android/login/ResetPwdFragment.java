@@ -16,11 +16,15 @@ import android.widget.Toast;
 
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by N1njaC on 2017/9/3.
@@ -31,11 +35,11 @@ public class ResetPwdFragment extends Fragment {
     @BindView(R.id.new_reset_back_btn)
     ImageButton newResetBackBtn;
     @BindView(R.id.reset_pwd_old_et)
-    EditText resetPwdOldEt;
+    EditText oldPwdEt;
     @BindView(R.id.reset_pwd_new_et)
-    EditText resetPwdNewEt;
+    EditText newPwdEt;
     @BindView(R.id.reset_password_new_again_et)
-    EditText resetPasswordNewAgainEt;
+    EditText newPwdAgainEt;
     @BindView(R.id.new_reset_login_btn)
     Button newLoginBtn;
     @BindView(R.id.reset_tool_bar_relat)
@@ -73,7 +77,30 @@ public class ResetPwdFragment extends Fragment {
                 break;
             case R.id.new_reset_login_btn:
 
-                Toast.makeText(getActivity(),"修改密码",Toast.LENGTH_SHORT).show();;
+                String oldPwd = oldPwdEt.getText().toString();
+                String newPwd = newPwdEt.getText().toString();
+                String newPwdAgain = newPwdAgainEt.getText().toString();
+
+                if (oldPwd.equals(newPwd)) {
+                    ToastUtil.shortToast(getActivity(), "旧密码不能与新密码相同！");
+                    return;
+                } else if (!newPwd.equals(newPwdAgain)) {
+                    ToastUtil.shortToast(getActivity(), "两次密码不一致！");
+                    return;
+                }
+
+                BmobUser.updateCurrentUserPassword(oldPwd, newPwd, new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            ToastUtil.shortToast(getActivity(), "修改密码成功:)");
+                        } else {
+                            ToastUtil.shortToast(getActivity(), "修改密码失败:（" + e.getLocalizedMessage());
+                        }
+                    }
+                });
+
+                // TODO: 2017/9/4 跳转到主界面
 
                 break;
         }

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +19,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
+import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.LogInListener;
 
 /**
  * Created by N1njaC on 2017/7/31.
@@ -38,7 +45,7 @@ public class LoginFragment extends Fragment {
     @BindView(R.id.login_account_et)
     EditText loginAccountEt;
     @BindView(R.id.new_login_password_et)
-    EditText newLoginPasswordEt;
+    EditText passwordEt;
     @BindView(R.id.new_login_btn)
     Button newLoginBtn;
     @BindView(R.id.new_login_forget_pwd_tv)
@@ -61,7 +68,6 @@ public class LoginFragment extends Fragment {
 
     private FragmentManager fm;
     private FragmentTransaction ft;
-
 
 
     @Nullable
@@ -94,6 +100,10 @@ public class LoginFragment extends Fragment {
             case R.id.new_login_btn:
 
                 Log.d(TAG, "login click");
+                String account = loginAccountEt.getText().toString();
+                String password = passwordEt.getText().toString();
+                loginCheck(account, password);
+
 
                 break;
             case R.id.new_login_forget_pwd_tv:
@@ -109,7 +119,7 @@ public class LoginFragment extends Fragment {
                 ft = fm.beginTransaction();
                 QuickLoginFragment quickLoginFragment = new QuickLoginFragment();
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.replace(R.id.login_activity,quickLoginFragment);
+                ft.replace(R.id.login_activity, quickLoginFragment);
                 ft.addToBackStack("quick_login");
                 ft.commit();
                 break;
@@ -118,18 +128,62 @@ public class LoginFragment extends Fragment {
                 ft = fm.beginTransaction();
                 RegisterFragment registerFragment = new RegisterFragment();
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.replace(R.id.login_activity,registerFragment);
+                ft.replace(R.id.login_activity, registerFragment);
                 ft.addToBackStack("register");
                 ft.commit();
 
                 break;
             case R.id.new_login_via_qq:
+
+                // TODO: 2017/9/4 via qq
+
                 break;
             case R.id.new_login_via_wechat:
+
+                // TODO: 2017/9/4 via wechat
+
                 break;
             case R.id.new_login_via_sina:
+
+                // TODO: 2017/9/4 via sina
                 break;
         }
+    }
+
+    private void loginCheck(String account, String password) {
+        if (TextUtils.isEmpty(account)) {
+            ToastUtil.shortToast(getActivity(), "手机号不能为空！");
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            ToastUtil.shortToast(getActivity(), "密码不能为空！");
+            return;
+        }
+        if (!RegularMatchUtil.matchPhoneNum(account)) {
+            ToastUtil.shortToast(getActivity(), "手机号格式不正确，请检查重新输入！");
+            return;
+        }
+
+        login(account, password);
+
+    }
+
+    private void login(String account, String password) {
+
+        BmobUser.loginByAccount(account, password, new LogInListener<UserInfoBmob>() {
+            @Override
+            public void done(UserInfoBmob userInfoBmob, BmobException e) {
+                if (userInfoBmob != null) {
+                    // TODO: 2017/9/4 登录成功，跳转到主界面
+                    ToastUtil.shortToast(getActivity(), "登录成功");
+
+                } else {
+
+                    Log.d(TAG, "login error:---->" + e.getErrorCode() + "  " + e.getLocalizedMessage());
+                    ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
+                }
+            }
+        });
     }
 
 }

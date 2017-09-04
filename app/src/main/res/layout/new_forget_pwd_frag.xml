@@ -115,6 +115,7 @@
                 android:paddingBottom="10dp"
                 android:layout_height="wrap_content" />
 
+
         </RelativeLayout>
 
         <ImageView
@@ -125,7 +126,79 @@
             android:layout_width="match_parent"
             android:layout_height="1px" />
 
+
     </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/forget_pwd_new_pwd_linear"
+        android:layout_below="@+id/forget_pwd_verification_linear"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:background="@null"
+            android:id="@+id/forget_pwd_new_pwd_et"
+            android:textColor="#fff"
+            android:hint="@string/new_reset_pwd_new"
+            android:textCursorDrawable ="@null"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#bfbfbf"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:drawableLeft="@drawable/et_password"
+            android:drawablePadding="10dp"
+            android:inputType="textPassword" />
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="13dp"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/forget_pwd_new_pwd_again_linear"
+        android:layout_below="@+id/forget_pwd_new_pwd_linear"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:background="@null"
+            android:id="@+id/forget_pwd_new_pwd_again_et"
+            android:textColor="#fff"
+            android:hint="@string/new_reset_pwd_new_again"
+            android:textCursorDrawable ="@null"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#bfbfbf"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:drawableLeft="@drawable/et_password"
+            android:drawablePadding="10dp"
+            android:inputType="textPassword" />
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="13dp"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+    </LinearLayout>
+
 
     <Button
         android:enabled="false"
@@ -135,7 +208,7 @@
         android:textSize="14sp"
         android:background="@drawable/btn_register_submit"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/forget_pwd_verification_linear"
+        android:layout_below="@+id/forget_pwd_new_pwd_again_linear"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"

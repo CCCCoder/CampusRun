@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +18,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 import com.n1njac.yiqipao.android.utils.TimeCountUtil;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.LogInListener;
+import cn.bmob.v3.listener.QueryListener;
 
 /**
  * Created by N1njaC on 2017/9/1.
  */
 
 public class ForgetPwdFragment extends android.support.v4.app.Fragment implements TextWatcher {
+
+
+    private static final String TAG = ForgetPwdFragment.class.getSimpleName();
 
     @BindView(R.id.forget_pwd_back_btn)
     ImageButton registerBackBtn;
@@ -95,12 +106,30 @@ public class ForgetPwdFragment extends android.support.v4.app.Fragment implement
                 break;
             case R.id.forget_pwd_submit_btn:
 
-                ft = fm.beginTransaction();
-                ResetPwdFragment resetPwdFragment = new ResetPwdFragment();
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.replace(R.id.login_activity, resetPwdFragment);
-                ft.addToBackStack("reset_pwd");
-                ft.commit();
+
+                BmobSMS.requestSMSCode(phoneEt.getText().toString(), "Campus Run", new QueryListener<Integer>() {
+                    @Override
+                    public void done(Integer integer, BmobException e) {
+                        ToastUtil.shortToast(getActivity(), "验证码发送成功！");
+                        Log.d(TAG, "code---->" + integer);
+                    }
+                });
+
+
+                BmobUser.loginBySMSCode(phoneEt.getText().toString(), codeEt.getText().toString(), new LogInListener<UserInfoBmob>() {
+                    @Override
+                    public void done(UserInfoBmob userInfoBmob, BmobException e) {
+                        if (e == null){
+
+
+                        }else {
+                            ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
+                            Log.d(TAG, "login error----->" + e.getErrorCode() + "   " + e.getLocalizedMessage());
+                        }
+                    }
+                });
+
+
 
                 break;
         }
