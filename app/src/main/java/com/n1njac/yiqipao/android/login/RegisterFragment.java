@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by N1njaC on 2017/7/31.
@@ -47,6 +49,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     private TimeCountUtil timeCountUtil;
     private Button mSubmitBtn;
     private NewLoginActivity newLoginActivity;
+
+    private EditText account;
+    private EditText password;
+    private EditText passwordAgain;
 
     @Nullable
     @Override
@@ -72,6 +78,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         getVerificationCodeTv.setOnClickListener(this);
         timeCountUtil = new TimeCountUtil(60000, 1000, newLoginActivity, getVerificationCodeTv);
 
+        account = (EditText) view.findViewById(R.id.register_account_et);
+        password = (EditText) view.findViewById(R.id.register_pwd_et);
+        passwordAgain = (EditText) view.findViewById(R.id.register_pwd_again_et);
+
         return view;
     }
 
@@ -91,39 +101,62 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     Log.d(TAG, "----not match");
                 } else {
                     timeCountUtil.start();
+                    String phone = phoneEt.getText().toString();
+                    BmobSMS.requestSMSCode(phone, "Campus Run", new QueryListener<Integer>() {
+                        @Override
+                        public void done(Integer integer, BmobException e) {
+                            if (e == null) {
+                                ToastUtil.shortToast(getActivity(), "验证码发送成功！");
+                                Log.d(TAG, "code---->" + integer);
+                            }
+                        }
+                    });
                 }
 
                 break;
             case R.id.register_submit_btn:
 
                 Log.d(TAG, "click submit");
-                // TODO: 2017/8/6 handle login
-                String phone = phoneEt.getText().toString();
+                String accountStr = account.getText().toString();
+                String passwordStr = password.getText().toString();
+                String passwordAgainStr = passwordAgain.getText().toString();
+                String phoneStr = phoneEt.getText().toString();
+                String codeStr = verificationEt.getText().toString();
+                if (TextUtils.isEmpty(accountStr)) {
+                    ToastUtil.shortToast(getActivity(), "账号不能为空！");
+                    return;
+                }
 
-                BmobSMS.requestSMSCode(phone, "Campus Run", new QueryListener<Integer>() {
-                    @Override
-                    public void done(Integer integer, BmobException e) {
-                        if (e == null) {
-                            ToastUtil.shortToast(getActivity(), "验证码发送成功！");
-                            Log.d(TAG, "code---->" + integer);
-                        }
-                    }
-                });
+                if (TextUtils.isEmpty(passwordStr) || TextUtils.isEmpty(passwordAgainStr)) {
+                    ToastUtil.shortToast(getActivity(), "密码不能为空！");
+                    return;
+                }
 
-                BmobUser.loginBySMSCode(phone, verificationEt.getText().toString(), new LogInListener<UserInfoBmob>() {
+                if (!passwordStr.equals(passwordAgainStr)) {
+                    ToastUtil.shortToast(getActivity(), "两次密码不一致！");
+                    return;
+                }
+
+                UserInfoBmob userInfo = new UserInfoBmob();
+                userInfo.setMobilePhoneNumber(phoneStr);
+                userInfo.setUsername(accountStr);
+                userInfo.setPassword(passwordStr);
+                userInfo.signOrLogin(codeStr, new SaveListener<UserInfoBmob>() {
                     @Override
                     public void done(UserInfoBmob userInfoBmob, BmobException e) {
-                        if (userInfoBmob != null) {
-                            // TODO: 2017/9/4 做跳转到设置用户账号密码界面
 
+                        if (e == null) {
+                            // TODO: 2017/9/5 跳转到主界面
+
+                            ToastUtil.shortToast(getActivity(),"register success");
 
                         } else {
                             ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
                             Log.d(TAG, "login error----->" + e.getErrorCode() + "   " + e.getLocalizedMessage());
                         }
+
                     }
                 });
-
 
                 break;
             default:

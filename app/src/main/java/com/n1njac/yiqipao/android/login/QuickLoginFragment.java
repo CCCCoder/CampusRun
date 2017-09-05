@@ -98,17 +98,16 @@ public class QuickLoginFragment extends Fragment implements TextWatcher {
                     Toast.makeText(getActivity(), "请输入正确的手机号码！", Toast.LENGTH_SHORT).show();
                 } else {
                     timeCountUtil.start();
+                    BmobSMS.requestSMSCode(phoneEt.getText().toString(), "Campus Run", new QueryListener<Integer>() {
+                        @Override
+                        public void done(Integer integer, BmobException e) {
+                            ToastUtil.shortToast(getActivity(), "验证码发送成功！");
+                            Log.d(TAG, "code---->" + integer);
+                        }
+                    });
                 }
                 break;
             case R.id.quick_login_submit_btn:
-
-                BmobSMS.requestSMSCode(phoneEt.getText().toString(), "Campus Run", new QueryListener<Integer>() {
-                    @Override
-                    public void done(Integer integer, BmobException e) {
-                        ToastUtil.shortToast(getActivity(), "验证码发送成功！");
-                        Log.d(TAG, "code---->" + integer);
-                    }
-                });
 
 
                 BmobUser.loginBySMSCode(phoneEt.getText().toString(), codeEt.getText().toString(), new LogInListener<UserInfoBmob>() {
@@ -117,6 +116,7 @@ public class QuickLoginFragment extends Fragment implements TextWatcher {
                         if (e == null){
 
                             // TODO: 2017/9/4 登录成功直接跳转到主界面
+                            ToastUtil.shortToast(getActivity(),"login success");
 
 
                         }else {

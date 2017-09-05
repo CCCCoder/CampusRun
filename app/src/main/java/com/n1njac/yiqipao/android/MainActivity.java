@@ -37,15 +37,13 @@ import com.n1njac.yiqipao.android.Fragment.PersonalRunInfoFragment;
 import com.n1njac.yiqipao.android.Fragment.RunFragment;
 import com.n1njac.yiqipao.android.distanceDisplay.HistoryDistanceActivity;
 import com.n1njac.yiqipao.android.login.NewLoginActivity;
+import com.n1njac.yiqipao.android.utils.ActivityManagerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.push.BmobPush;
-import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobInstallation;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
+public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
 
 
     private TabLayout mTabLayout;
@@ -99,12 +97,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
         setContentView(R.layout.activity_main);
 
-//        初始化bmob
-        Bmob.initialize(this, "eca43c1e6d34df771a7fa797a7960feb");
 
-//        初始化bmob推送
-        BmobInstallation.getCurrentInstallation().save();
-        BmobPush.startWork(this);
 
 
 //        initTabLayoutWithFragment();
@@ -141,7 +134,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                         selectItem = 0;
                         break;
                     case CONSTANT_SWITCH:
-                        startActivity(new Intent(MainActivity.this, NewLoginActivity.class));
+                        Intent intent = new Intent(MainActivity.this,NewLoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                        startActivity(intent);
                         selectItem = 0;
                         break;
                 }
@@ -328,6 +324,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     @Override
     public void onBackPressed() {
         Log.d("xyz", "MainActivity---onBackPressed");
-        finish();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setMessage("确定退出应用吗？")
+                .setTitle("提示")
+                .setCancelable(true)
+                .setNegativeButton("取消",null)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityManagerUtil.finishAll();
+                    }
+                });
+        builder.show();
     }
 }

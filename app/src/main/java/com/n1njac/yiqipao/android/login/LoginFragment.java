@@ -159,10 +159,6 @@ public class LoginFragment extends Fragment {
             ToastUtil.shortToast(getActivity(), "密码不能为空！");
             return;
         }
-        if (!RegularMatchUtil.matchPhoneNum(account)) {
-            ToastUtil.shortToast(getActivity(), "手机号格式不正确，请检查重新输入！");
-            return;
-        }
 
         login(account, password);
 

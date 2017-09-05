@@ -17,7 +17,7 @@ import java.util.List;
  * Created by huanglei on 2017/3/25.
  */
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends BaseActivity {
 
     private CollapsingToolbarLayout ctl;
     private ImageView bg;

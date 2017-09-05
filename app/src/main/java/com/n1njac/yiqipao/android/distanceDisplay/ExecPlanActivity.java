@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.n1njac.yiqipao.android.BaseActivity;
 import com.n1njac.yiqipao.android.R;
 
 import java.text.DateFormat;
@@ -30,7 +31,7 @@ import java.util.Locale;
  * Created by huanglei on 2017/1/15.
  */
 
-public class ExecPlanActivity extends AppCompatActivity implements View.OnClickListener {
+public class ExecPlanActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText aimDistance;
     private ImageView runImage;

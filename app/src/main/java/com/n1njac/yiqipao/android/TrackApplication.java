@@ -17,6 +17,10 @@ import org.litepal.LitePal;
 
 import java.lang.ref.WeakReference;
 
+import cn.bmob.push.BmobPush;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
+
 public class TrackApplication extends Application {
 
     private Context mContext = null;
@@ -73,6 +77,14 @@ public class TrackApplication extends Application {
         client.setLocationMode(LocationMode.High_Accuracy);
 
         mHandler = new TrackHandler(this);
+
+
+        //        初始化bmob
+        Bmob.initialize(this, "eca43c1e6d34df771a7fa797a7960feb");
+
+//        初始化bmob推送
+        BmobInstallation.getCurrentInstallation().save();
+        BmobPush.startWork(this);
 
     }
 

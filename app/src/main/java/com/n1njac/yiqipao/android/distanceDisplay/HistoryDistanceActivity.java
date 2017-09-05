@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.mingle.widget.LoadingView;
+import com.n1njac.yiqipao.android.BaseActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.db.Distance;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * Created by huanglei on 2017/1/15.
  */
 
-public class HistoryDistanceActivity extends AppCompatActivity {
+public class HistoryDistanceActivity extends BaseActivity {
 
     private ListView mListView;
     private List<com.n1njac.yiqipao.android.distanceDisplay.ItemBean> mItemBeanList;

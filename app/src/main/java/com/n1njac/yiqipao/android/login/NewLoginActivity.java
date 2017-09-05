@@ -1,23 +1,29 @@
 package com.n1njac.yiqipao.android.login;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 
 
+import com.n1njac.yiqipao.android.BaseActivity;
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.utils.ActivityManagerUtil;
 
 
 /**
  * Created by N1njaC on 2017/7/31.
  */
 
-public class NewLoginActivity extends AppCompatActivity {
+public class NewLoginActivity extends BaseActivity {
+
+    private static final String TAG = NewLoginActivity.class.getSimpleName();
 
     public RegisterFragment registerFragment;
     public LoginFragment loginFragment;
@@ -42,5 +48,36 @@ public class NewLoginActivity extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.login_activity, new LoginGuideFragment());
         ft.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed()这行会自己调用finish，要拦截自己处理返回事件的时候，务必注释掉。
+//        super.onBackPressed();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setMessage("确定退出应用吗？")
+                .setTitle("提示")
+                .setCancelable(true)
+                .setNegativeButton("取消",null)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityManagerUtil.finishAll();
+                    }
+                });
+        builder.show();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG,"onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"onDestroy");
     }
 }

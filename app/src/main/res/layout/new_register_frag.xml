@@ -97,8 +97,6 @@
                 android:inputType="phone" />
 
             <TextView
-
-
                 android:id="@+id/register_get_verification_code_tv"
                 android:clickable="true"
                 android:focusable="true"
@@ -128,6 +126,112 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/register_account_linear"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/register_verification_linear"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:background="@null"
+            android:id="@+id/register_account_et"
+            android:textColor="#fff"
+            android:hint="@string/new_login_account"
+            android:textCursorDrawable ="@null"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#bfbfbf"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:drawableLeft="@drawable/et_account"
+            android:drawablePadding="10dp" />
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="13dp"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/register_pwd_linear"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/register_account_linear"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:inputType="textPassword"
+            android:background="@null"
+            android:id="@+id/register_pwd_et"
+            android:textColor="#fff"
+            android:hint="@string/new_register_pwd"
+            android:textCursorDrawable ="@null"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#bfbfbf"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:drawableLeft="@drawable/et_password"
+            android:drawablePadding="10dp" />
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="13dp"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/register_pwd_again_linear"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/register_pwd_linear"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:inputType="textPassword"
+            android:background="@null"
+            android:id="@+id/register_pwd_again_et"
+            android:textColor="#fff"
+            android:hint="@string/new_register_pwd_again"
+            android:textCursorDrawable ="@null"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#bfbfbf"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:drawableLeft="@drawable/et_password"
+            android:drawablePadding="10dp" />
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="13dp"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+    </LinearLayout>
+
     <Button
         android:enabled="false"
         android:id="@+id/register_submit_btn"
@@ -136,7 +240,7 @@
         android:textSize="14sp"
         android:background="@drawable/btn_register_submit"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/register_verification_linear"
+        android:layout_below="@+id/register_pwd_again_linear"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"

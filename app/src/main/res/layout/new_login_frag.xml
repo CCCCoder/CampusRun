@@ -56,7 +56,7 @@
                 android:background="@null"
                 android:id="@+id/login_account_et"
                 android:textColor="#fff"
-                android:hint="@string/new_login_account_et"
+                android:hint="@string/new_login_account"
                 android:textCursorDrawable ="@null"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -67,8 +67,7 @@
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="35dp"
                 android:drawableLeft="@drawable/et_account"
-                android:drawablePadding="10dp"
-                android:inputType="phone" />
+                android:drawablePadding="10dp" />
 
             <ImageView
                 android:layout_marginLeft="20dp"

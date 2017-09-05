@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.n1njac.yiqipao.android.BaseActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.PersonInfoBmob;
 import com.n1njac.yiqipao.android.nearybyview.NearbyMainActivity;
@@ -25,7 +26,7 @@ import cn.bmob.v3.listener.PushListener;
 import cn.bmob.v3.listener.QueryListener;
 
 
-public class NearbyChatMainActivity extends AppCompatActivity {
+public class NearbyChatMainActivity extends BaseActivity {
 
     private Button mContact, mRefuse;
     SharedPreferences sf;

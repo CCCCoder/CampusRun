@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.n1njac.yiqipao.android.BaseActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.PersonInfoBmob;
 import com.n1njac.yiqipao.android.nearbychat.NearbyChatMainActivity;
@@ -36,7 +37,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.PushListener;
 
-public class NearbyMainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadarViewGroup.IRadarClickListener {
+public class NearbyMainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, RadarViewGroup.IRadarClickListener {
 
     private CustomViewPager viewPager;
     private RelativeLayout relativeLayout;
