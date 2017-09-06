@@ -124,7 +124,6 @@
         </receiver>
 
         <activity
-            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme4"
             android:name=".login.NewLoginActivity"/>

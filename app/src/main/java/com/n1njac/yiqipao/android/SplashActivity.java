@@ -11,9 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.VideoView;
 
+import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
+import com.n1njac.yiqipao.android.login.NewLoginActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by huanglei on 2017/2/14.
@@ -34,11 +38,21 @@ public class SplashActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+
+                UserInfoBmob userInfoBmob = BmobUser.getCurrentUser(UserInfoBmob.class);
+                if (userInfoBmob != null) {
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(SplashActivity.this, NewLoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+
             }
-        },1500);
+        }, 1500);
 
 //        splashVv.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.guide_1));
 //        splashVv.start();
@@ -70,19 +84,20 @@ public class SplashActivity extends Activity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
+
         this.finish();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Log.d(TAG, "onStop");
         finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"onDestroy");
+        Log.d(TAG, "onDestroy");
     }
 }

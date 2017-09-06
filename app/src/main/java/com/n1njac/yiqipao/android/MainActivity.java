@@ -42,6 +42,8 @@ import com.n1njac.yiqipao.android.utils.ActivityManagerUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
+
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
 
@@ -134,10 +136,21 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                         selectItem = 0;
                         break;
                     case CONSTANT_SWITCH:
-                        Intent intent = new Intent(MainActivity.this,NewLoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                        startActivity(intent);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                                .setMessage("切换用户将会清除您的登录信息哦")
+                                .setTitle("提示")
+                                .setCancelable(true)
+                                .setNegativeButton("取消", null)
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        BmobUser.logOut();
+                                        Intent intent = new Intent(MainActivity.this,NewLoginActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                        builder.show();
                         selectItem = 0;
                         break;
                 }

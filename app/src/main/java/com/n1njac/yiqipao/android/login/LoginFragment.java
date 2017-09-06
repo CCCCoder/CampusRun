@@ -1,5 +1,7 @@
 package com.n1njac.yiqipao.android.login;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.n1njac.yiqipao.android.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
@@ -69,6 +72,8 @@ public class LoginFragment extends Fragment {
     private FragmentManager fm;
     private FragmentTransaction ft;
 
+    private ProgressDialog progressDialog;
+
 
     @Nullable
     @Override
@@ -79,7 +84,8 @@ public class LoginFragment extends Fragment {
 
         NewLoginActivity loginActivity = (NewLoginActivity) getActivity();
         fm = loginActivity.getSupportFragmentManager();
-
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("正在登录...");
 
         return view;
     }
@@ -102,6 +108,9 @@ public class LoginFragment extends Fragment {
                 Log.d(TAG, "login click");
                 String account = loginAccountEt.getText().toString();
                 String password = passwordEt.getText().toString();
+
+                progressDialog.show();
+
                 loginCheck(account, password);
 
 
@@ -169,9 +178,14 @@ public class LoginFragment extends Fragment {
         BmobUser.loginByAccount(account, password, new LogInListener<UserInfoBmob>() {
             @Override
             public void done(UserInfoBmob userInfoBmob, BmobException e) {
+
+                progressDialog.dismiss();
+
                 if (userInfoBmob != null) {
                     // TODO: 2017/9/4 登录成功，跳转到主界面
                     ToastUtil.shortToast(getActivity(), "登录成功");
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
 
                 } else {
 

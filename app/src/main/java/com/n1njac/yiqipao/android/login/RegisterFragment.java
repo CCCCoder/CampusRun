@@ -1,5 +1,7 @@
 package com.n1njac.yiqipao.android.login;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.n1njac.yiqipao.android.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
@@ -54,6 +57,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
     private EditText password;
     private EditText passwordAgain;
 
+    private ProgressDialog progressDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,6 +86,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         account = (EditText) view.findViewById(R.id.register_account_et);
         password = (EditText) view.findViewById(R.id.register_pwd_et);
         passwordAgain = (EditText) view.findViewById(R.id.register_pwd_again_et);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("正在登录...");
 
         return view;
     }
@@ -137,6 +145,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     return;
                 }
 
+                progressDialog.show();
+
                 UserInfoBmob userInfo = new UserInfoBmob();
                 userInfo.setMobilePhoneNumber(phoneStr);
                 userInfo.setUsername(accountStr);
@@ -145,10 +155,14 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     @Override
                     public void done(UserInfoBmob userInfoBmob, BmobException e) {
 
+                        progressDialog.dismiss();
+
                         if (e == null) {
                             // TODO: 2017/9/5 跳转到主界面
 
-                            ToastUtil.shortToast(getActivity(),"register success");
+                            ToastUtil.shortToast(getActivity(), "恭喜你！注册成功");
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            startActivity(intent);
 
                         } else {
                             ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());

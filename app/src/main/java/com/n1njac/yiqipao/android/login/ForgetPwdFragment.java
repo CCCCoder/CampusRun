@@ -1,5 +1,6 @@
 package com.n1njac.yiqipao.android.login;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -70,6 +71,8 @@ public class ForgetPwdFragment extends Fragment implements TextWatcher {
 
     private TimeCountUtil timeCountUtil;
 
+    private ProgressDialog progressDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +87,9 @@ public class ForgetPwdFragment extends Fragment implements TextWatcher {
 
         newLoginActivity = (NewLoginActivity) getActivity();
         fm = newLoginActivity.getSupportFragmentManager();
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("正在重置密码...");
 
         return view;
     }
@@ -135,9 +141,13 @@ public class ForgetPwdFragment extends Fragment implements TextWatcher {
                     return;
                 }
 
+                progressDialog.show();
+
                 BmobUser.resetPasswordBySMSCode(codeStr, newPwdStr, new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
+
+                        progressDialog.dismiss();
 
                         if (e == null) {
                             ToastUtil.shortToast(getActivity(), "重置密码成功");
@@ -155,9 +165,7 @@ public class ForgetPwdFragment extends Fragment implements TextWatcher {
                         }
                     }
                 });
-
-
-
+                
                 break;
         }
     }
@@ -184,6 +192,5 @@ public class ForgetPwdFragment extends Fragment implements TextWatcher {
     @Override
     public void onStop() {
         super.onStop();
-        ft.remove(this);
     }
 }

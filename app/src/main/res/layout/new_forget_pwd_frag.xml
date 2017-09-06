@@ -203,7 +203,7 @@
     <Button
         android:enabled="false"
         android:id="@+id/forget_pwd_submit_btn"
-        android:text="@string/register_btn_submit"
+        android:text="@string/forget_pwd_btn_submit"
         android:textColor="@color/text_white"
         android:textSize="14sp"
         android:background="@drawable/btn_register_submit"

@@ -1,5 +1,7 @@
 package com.n1njac.yiqipao.android.login;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.n1njac.yiqipao.android.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
@@ -60,6 +63,8 @@ public class QuickLoginFragment extends Fragment implements TextWatcher {
     private TimeCountUtil timeCountUtil;
     private FragmentManager fm;
 
+    private ProgressDialog progressDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,6 +79,9 @@ public class QuickLoginFragment extends Fragment implements TextWatcher {
 
         newLoginActivity = (NewLoginActivity) getActivity();
         fm = newLoginActivity.getSupportFragmentManager();
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("正在登录...");
 
         return view;
     }
@@ -109,17 +117,23 @@ public class QuickLoginFragment extends Fragment implements TextWatcher {
                 break;
             case R.id.quick_login_submit_btn:
 
+                progressDialog.show();
 
                 BmobUser.loginBySMSCode(phoneEt.getText().toString(), codeEt.getText().toString(), new LogInListener<UserInfoBmob>() {
                     @Override
                     public void done(UserInfoBmob userInfoBmob, BmobException e) {
-                        if (e == null){
+
+                        progressDialog.dismiss();
+
+                        if (e == null) {
 
                             // TODO: 2017/9/4 登录成功直接跳转到主界面
-                            ToastUtil.shortToast(getActivity(),"login success");
+                            ToastUtil.shortToast(getActivity(), "login success");
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            startActivity(intent);
 
 
-                        }else {
+                        } else {
                             ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
                             Log.d(TAG, "login error----->" + e.getErrorCode() + "   " + e.getLocalizedMessage());
                         }
@@ -140,7 +154,7 @@ public class QuickLoginFragment extends Fragment implements TextWatcher {
 
         if (s.length() > 0) {
             quickLoginSubmitBtn.setEnabled(true);
-        }else {
+        } else {
             quickLoginSubmitBtn.setEnabled(false);
         }
     }

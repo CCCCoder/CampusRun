@@ -1,5 +1,6 @@
 package com.n1njac.yiqipao.android.login;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
@@ -16,6 +17,8 @@ import com.n1njac.yiqipao.android.BaseActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.utils.ActivityManagerUtil;
 
+import java.util.List;
+
 
 /**
  * Created by N1njaC on 2017/7/31.
@@ -28,6 +31,8 @@ public class NewLoginActivity extends BaseActivity {
     public RegisterFragment registerFragment;
     public LoginFragment loginFragment;
     public LoginGuideFragment loginGuideFragment;
+
+    private FragmentManager fm;
 
 
     @Override
@@ -44,40 +49,46 @@ public class NewLoginActivity extends BaseActivity {
         registerFragment = new RegisterFragment();
         loginFragment = new LoginFragment();
         loginGuideFragment = new LoginGuideFragment();
-        FragmentManager fm = this.getSupportFragmentManager();
+        fm = this.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.login_activity, new LoginGuideFragment());
+        ft.replace(R.id.login_activity, new LoginGuideFragment(), "login_guide");
         ft.commit();
     }
 
     @Override
     public void onBackPressed() {
         //super.onBackPressed()这行会自己调用finish，要拦截自己处理返回事件的时候，务必注释掉。
-//        super.onBackPressed();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setMessage("确定退出应用吗？")
-                .setTitle("提示")
-                .setCancelable(true)
-                .setNegativeButton("取消",null)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityManagerUtil.finishAll();
-                    }
-                });
-        builder.show();
 
+
+        //当前fragment是LoginGuideFragment的时候，返回提示退出应用。
+        LoginGuideFragment loginGuideFragment = (LoginGuideFragment) getSupportFragmentManager().findFragmentByTag("login_guide");
+        if (loginGuideFragment != null && loginGuideFragment.isVisible()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setMessage("确定退出应用吗？")
+                    .setTitle("提示")
+                    .setCancelable(true)
+                    .setNegativeButton("取消", null)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityManagerUtil.finishAll();
+                        }
+                    });
+            builder.show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop");
+        Log.d(TAG, "onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"onDestroy");
+        Log.d(TAG, "onDestroy");
     }
 }
