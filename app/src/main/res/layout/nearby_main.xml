@@ -6,17 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.n1njac.yiqipao.android.nearybyview.RadarViewGroup
+    <com.n1njac.yiqipao.android.ui.widget.RadarViewGroup
         android:id="@+id/radar_view_group"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:layout_width="320dp"
         android:layout_height="320dp">
-        <com.n1njac.yiqipao.android.nearybyview.RadarView
+        <com.n1njac.yiqipao.android.ui.widget.RadarView
             android:id="@+id/radar_view"
             android:layout_width="320dp"
             android:layout_height="320dp" />
-    </com.n1njac.yiqipao.android.nearybyview.RadarViewGroup>
+    </com.n1njac.yiqipao.android.ui.widget.RadarViewGroup>
 
     <RelativeLayout
         android:id="@+id/rl_vp"
@@ -26,13 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.n1njac.yiqipao.android.nearybyview.CustomViewPager
+        <com.n1njac.yiqipao.android.ui.widget.CustomViewPager
             android:layout_centerInParent="true"
             android:id="@+id/view_pager"
             android:layout_width="130dp"
             android:layout_height="160dp">
 
-        </com.n1njac.yiqipao.android.nearybyview.CustomViewPager>
+        </com.n1njac.yiqipao.android.ui.widget.CustomViewPager>
     </RelativeLayout>
 
 

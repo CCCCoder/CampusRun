@@ -2,7 +2,6 @@ package com.n1njac.yiqipao.android.run.trackshow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -16,10 +15,8 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.baidu.mapapi.map.MapView;
-import com.n1njac.yiqipao.android.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.TrackApplication;
-import com.n1njac.yiqipao.android.run.RunActivity;
 
 public class RunMainActivity extends FragmentActivity implements OnClickListener {
 

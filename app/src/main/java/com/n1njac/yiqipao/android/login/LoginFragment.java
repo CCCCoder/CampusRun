@@ -20,10 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.n1njac.yiqipao.android.MainActivity;
+import com.n1njac.yiqipao.android.ui.activity.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
-import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 import com.n1njac.yiqipao.android.utils.ToastUtil;
 

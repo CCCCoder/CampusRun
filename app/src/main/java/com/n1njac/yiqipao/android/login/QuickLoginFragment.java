@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.n1njac.yiqipao.android.MainActivity;
+import com.n1njac.yiqipao.android.ui.activity.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.utils.RegularMatchUtil;

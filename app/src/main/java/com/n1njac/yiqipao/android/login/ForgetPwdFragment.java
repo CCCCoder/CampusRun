@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.n1njac.yiqipao.android.R;
-import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 import com.n1njac.yiqipao.android.utils.TimeCountUtil;
@@ -34,7 +33,6 @@ import butterknife.Unbinder;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -165,7 +163,7 @@ public class ForgetPwdFragment extends Fragment implements TextWatcher {
                         }
                     }
                 });
-                
+
                 break;
         }
     }

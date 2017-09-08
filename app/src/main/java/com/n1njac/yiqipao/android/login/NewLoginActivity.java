@@ -1,6 +1,5 @@
 package com.n1njac.yiqipao.android.login;
 
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
@@ -13,11 +12,9 @@ import android.util.Log;
 import android.view.View;
 
 
-import com.n1njac.yiqipao.android.BaseActivity;
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.ui.activity.BaseActivity;
 import com.n1njac.yiqipao.android.utils.ActivityManagerUtil;
-
-import java.util.List;
 
 
 /**

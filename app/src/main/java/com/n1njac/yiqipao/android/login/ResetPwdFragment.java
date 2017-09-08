@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.utils.SizeUtil;

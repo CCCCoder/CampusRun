@@ -20,7 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.n1njac.yiqipao.android.MainActivity;
+import com.n1njac.yiqipao.android.ui.activity.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.utils.RegularMatchUtil;
@@ -29,9 +29,7 @@ import com.n1njac.yiqipao.android.utils.TimeCountUtil;
 import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import cn.bmob.v3.BmobSMS;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 
