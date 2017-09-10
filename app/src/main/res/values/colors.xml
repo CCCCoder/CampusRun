@@ -43,4 +43,8 @@
 
     <color name="textColor">#ff6610</color>
 
+
+    <color name="startcolor">#50C81AFA</color>
+    <color name="endcolor">#907529FD</color>
+
 </resources>

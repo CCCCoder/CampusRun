@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BezierView">
+        <attr name="shader_mode">
+            <enum name="RadialGradient" value="0x10" />
+            <enum name="SweepGradient" value="0x11" />
+            <enum name="LinearGradient" value="0x12" />
+        </attr>
+
+        <attr name="shader_style">
+            <enum name="left_bottom" value="0x20" />
+            <enum name="right_bottom" value="0x21" />
+            <enum name="top_bottom" value="0x22" />
+            <enum name="center" value="0x23" />
+        </attr>
+
+        <attr name="background_style">
+            <enum name="sand" value="0x00" />
+            <enum name="cloud" value="0x01" />
+            <enum name="ripple" value="0x02" />
+            <enum name="beach" value="0x03" />
+            <enum name="shell" value="0x04" />
+        </attr>
+
+        <attr name="start_color" format="color" />
+        <attr name="end_color" format="color" />
+        <attr name="smoothness" format="float" />
+
+    </declare-styleable>
+</resources>
