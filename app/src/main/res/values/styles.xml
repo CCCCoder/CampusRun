@@ -8,9 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
 
 
-
     </style>
-
 
 
     <!-- Base application theme. -->
@@ -49,6 +47,10 @@
     </style>
 
 
+    <style name="Popupwindow" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/popup_in</item>
+        <item name="android:windowExitAnimation">@anim/popup_out</item>
+    </style>
 
 
 </resources>

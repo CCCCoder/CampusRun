@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:gravity="center"
+        android:id="@+id/popup_check_big_icon_tv"
+        android:text="查看大图"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <ImageView
+        android:background="#999"
+        android:layout_width="match_parent"
+        android:layout_height="1px" />
+    <TextView
+        android:id="@+id/popup_change_icon_tv"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:gravity="center"
+
+        android:text="更换头像"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <ImageView
+        android:background="#999"
+        android:layout_width="match_parent"
+        android:layout_height="1px" />
+    <TextView
+
+        android:id="@+id/popup_cancel_tv"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:gravity="center"
+        android:text="取消"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <ImageView
+        android:background="#999"
+        android:layout_width="match_parent"
+        android:layout_height="1px" />
+
+</LinearLayout>
