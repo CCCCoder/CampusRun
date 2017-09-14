@@ -5,16 +5,123 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.n1njac.yiqipao.android.ui.widget.BezierView
-
-        android:background="@drawable/user_info_frag_bg"
-        app:background_style="sand"
-        app:start_color="@color/startcolor"
-        app:shader_mode="LinearGradient"
-        app:end_color="@color/endcolor"
-        app:shader_style="left_bottom"
-
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
+        <com.n1njac.yiqipao.android.ui.widget.BezierView
+
+            android:id="@+id/bezier_bg"
+            android:background="@drawable/user_info_frag_bg"
+            app:background_style="sand"
+            app:shader_mode="LinearGradient"
+            app:shader_style="left_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="400dp" />
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_icon_iv"
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="3dp"
+                android:src="@drawable/icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+
+            <TextView
+                android:id="@+id/user_id_tv"
+                android:textColor="@color/text_white"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="N1njaC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textColor="@color/text_white"
+                android:id="@+id/user_signature_tv"
+                android:text="read the fucking source code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="#000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/user_run_count_tv"
+                    android:textColor="#783AFF"
+                    android:text="4"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:textColor="#783AFF"
+                    android:text="@string/user_info_run_count"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/user_info_distance_tv"
+                    android:textColor="#783AFF"
+                    android:text="12.3"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+
+                    android:text="@string/user_info_run_distance"
+                    android:textColor="#783AFF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/edit_user_info_btn"
+            android:text="@string/edit_info"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/text_white"
+            android:background="@drawable/edit_info_btn_bg"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>

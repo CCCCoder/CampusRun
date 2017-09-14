@@ -47,4 +47,7 @@
     <color name="startcolor">#50C81AFA</color>
     <color name="endcolor">#907529FD</color>
 
+    <color name="start_2">#FFFFFF</color>
+    <color name="end_2">#E3E3E3</color>
+
 </resources>

@@ -30,6 +30,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.login.NewLoginActivity;
+import com.n1njac.yiqipao.android.ui.fragment.UserInfoDisplayFragment;
 import com.n1njac.yiqipao.android.ui.widget.IndexViewPager;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.ui.fragment.NearbyPersonInfoFragment;
@@ -234,10 +235,16 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         RunFragment runFragment = new RunFragment();
         NearbyPersonInfoFragment nearbyPersonInfoFragment = new NearbyPersonInfoFragment();
         PersonalInfoFragment personalInfoFragment = new PersonalInfoFragment();
+
+        UserInfoDisplayFragment userInfoDisplayFragment = new UserInfoDisplayFragment();
+
+
         mList.add(personalRunInfoFragment);
         mList.add(runFragment);
         mList.add(nearbyPersonInfoFragment);
-        mList.add(personalInfoFragment);
+//        mList.add(personalInfoFragment);
+
+        mList.add(userInfoDisplayFragment);
 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
