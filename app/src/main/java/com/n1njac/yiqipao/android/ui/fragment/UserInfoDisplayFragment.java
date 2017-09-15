@@ -4,19 +4,21 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.transition.Fade;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.ui.widget.BezierView;
+import com.n1njac.yiqipao.android.utils.SizeUtil;
 import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import butterknife.BindView;
@@ -46,6 +48,10 @@ public class UserInfoDisplayFragment extends Fragment {
     @BindView(R.id.edit_user_info_btn)
     Button editUserInfoBtn;
     Unbinder unbinder;
+    @BindView(R.id.user_info_dis_linear)
+    LinearLayout rootView;
+    @BindView(R.id.user_info_setting_iv)
+    ImageView userInfoSettingIv;
 
     private PopupWindow mPopupWindow;
 
@@ -65,7 +71,7 @@ public class UserInfoDisplayFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.user_icon_iv, R.id.edit_user_info_btn})
+    @OnClick({R.id.user_icon_iv, R.id.edit_user_info_btn,R.id.user_info_setting_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_icon_iv:
@@ -95,17 +101,22 @@ public class UserInfoDisplayFragment extends Fragment {
 
                 ToastUtil.shortToast(getActivity(), "编辑资料");
                 break;
+
+            case R.id.user_info_setting_iv:
+                ToastUtil.shortToast(getActivity(), "更换背景");
+                break;
         }
     }
 
     //更改背景透明度
-    private void backgroundAlpha(float alpha){
+    private void backgroundAlpha(float alpha) {
 
         WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
         lp.alpha = alpha;
         getActivity().getWindow().setAttributes(lp);
 
     }
+
     private void setTvListener(View popupView) {
         TextView checkBig = (TextView) popupView.findViewById(R.id.popup_check_big_icon_tv);
         TextView changeIcon = (TextView) popupView.findViewById(R.id.popup_change_icon_tv);

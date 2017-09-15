@@ -7,12 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.ui.activity.ExecPlanActivity;
 import com.n1njac.yiqipao.android.ui.activity.HistoryDistanceActivity;
 import com.n1njac.yiqipao.android.ui.widget.DistanceDisplayArcView;
+import com.n1njac.yiqipao.android.utils.SizeUtil;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -25,12 +27,15 @@ public class PersonalRunInfoFragment extends Fragment {
     private DistanceDisplayArcView distanceDisplayArcView;
     private TextView exec, history;
     private TextView remindText;
+    private RelativeLayout root;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.personal_run_frag, container, false);
+        root = (RelativeLayout) view.findViewById(R.id.user_run_info_relat);
+        root.setPadding(0, SizeUtil.getStatusBarHeight(getActivity()),0,0);
         exec = (TextView) view.findViewById(R.id.exec_text);
         history = (TextView) view.findViewById(R.id.history_tx);
         remindText = (TextView) view.findViewById(R.id.remind_tx);

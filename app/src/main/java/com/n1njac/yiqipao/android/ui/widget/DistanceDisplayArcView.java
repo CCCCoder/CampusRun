@@ -75,6 +75,7 @@ public class DistanceDisplayArcView extends View {
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true);
+
         canvas.drawArc(rectf, startAngle, sweepAngle, false, paint);
     }
 
@@ -92,7 +93,7 @@ public class DistanceDisplayArcView extends View {
     private void drawNowDistance(Canvas canvas) {
         Paint p = new Paint();
 //        p.setColor(getResources().getColor(R.color.text2));
-        p.setColor(Color.BLACK);
+        p.setColor(Color.WHITE);
         p.setTextSize(dip2px(50));
         p.setTextAlign(Paint.Align.CENTER);
         Typeface font = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL);
