@@ -92,12 +92,13 @@ public class UserInfoDisplayFragment extends Fragment {
 
                 break;
             case R.id.edit_user_info_btn:
-                // TODO: 2017/9/14 跳转到个人信息编辑界面
+
                 ToastUtil.shortToast(getActivity(), "编辑资料");
                 break;
         }
     }
 
+    //更改背景透明度
     private void backgroundAlpha(float alpha){
 
         WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
