@@ -16,6 +16,7 @@ import com.n1njac.yiqipao.android.R;
 import at.markushi.ui.CircleButton;
 
 import com.n1njac.yiqipao.android.run.trackshow.RunMainActivity;
+import com.n1njac.yiqipao.android.ui.activity.UserRunRecordActivity;
 
 /**
  * Created by huanglei on 2017/1/12.
@@ -28,7 +29,7 @@ public class RunFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.run_frag,container,false);
+        View view = inflater.inflate(R.layout.run_frag, container, false);
 
         ImageView bg = (ImageView) view.findViewById(R.id.bg_run_frag);
 
@@ -38,14 +39,14 @@ public class RunFragment extends Fragment {
         circleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), RunMainActivity.class);
+//                Intent intent = new Intent(getActivity(), RunMainActivity.class);
+                Intent intent = new Intent(getActivity(), UserRunRecordActivity.class);
                 startActivity(intent);
             }
         });
 
         return view;
     }
-
 
 
 }
