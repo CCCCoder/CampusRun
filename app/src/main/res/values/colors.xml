@@ -50,4 +50,11 @@
     <color name="start_2">#FFFFFF</color>
     <color name="end_2">#E3E3E3</color>
 
+    <color name="gps_bg">#40858585</color>
+    <color name="white_6">#0fffffff</color>
+    <color name="gps_text">#666666</color>
+    <color name="gps_prompt">#EE5C42</color>
+
+
+
 </resources>

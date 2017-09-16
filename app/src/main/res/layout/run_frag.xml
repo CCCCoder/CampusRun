@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/run_frag_relative"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,8 +10,55 @@
         android:layout_height="match_parent" />
 
     <RelativeLayout
+        android:id="@+id/run_frag_relative"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+            <LinearLayout
+                android:layout_alignParentRight="true"
+                android:paddingLeft="9dp"
+                android:paddingRight="9dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/shape_gps_bg"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp">
+
+                <TextView
+                    android:textSize="12sp"
+                    android:text="@string/gps"
+                    android:layout_gravity="center"
+                    android:textColor="@color/gps_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/gps_iv"
+                    android:layout_marginLeft="4dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/gps_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/gps_prompt_tv"
+                android:textColor="@color/gps_prompt"
+                android:layout_marginRight="5dp"
+                android:text="@string/gps_def_prompt"
+                android:textSize="11sp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
 
         <at.markushi.ui.CircleButton
             android:id="@+id/circle_btn"

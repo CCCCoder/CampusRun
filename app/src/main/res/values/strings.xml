@@ -77,4 +77,6 @@
     <string name="user_info_run_count">累计跑步次数</string>
     <string name="user_info_run_distance">累计跑步里程</string>
     <string name="edit_info">编辑资料</string>
+    <string name="gps">GPS</string>
+    <string name="gps_def_prompt">GPS未开启，无法记录轨迹</string>
 </resources>
