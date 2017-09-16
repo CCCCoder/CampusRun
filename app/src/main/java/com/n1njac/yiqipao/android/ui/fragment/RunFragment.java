@@ -2,11 +2,8 @@ package com.n1njac.yiqipao.android.ui.fragment;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +50,7 @@ public class RunFragment extends Fragment {
 
         runFragRelative.setPadding(0, SizeUtil.getStatusBarHeight(getActivity()), 0, 0);
         Glide.with(getActivity()).load(R.drawable.run_bg).centerCrop().into(bgRunFrag);
-
+        
 
         return view;
     }
