@@ -1,12 +1,16 @@
 package com.n1njac.yiqipao.android.ui.activity;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
@@ -30,6 +34,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.login.NewLoginActivity;
+import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
 import com.n1njac.yiqipao.android.ui.fragment.UserInfoDisplayFragment;
 import com.n1njac.yiqipao.android.ui.widget.IndexViewPager;
 import com.n1njac.yiqipao.android.R;
@@ -75,17 +80,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private static final int CONSTANT_SWITCH = 1004;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        透明状态栏
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        透明导航栏
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
-
         setContentView(R.layout.activity_main);
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
@@ -93,24 +91,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             decorView.setSystemUiVisibility(option);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            Window window = getWindow();
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.setStatusBarColor(Color.TRANSPARENT);
-//            window.setNavigationBarColor(Color.TRANSPARENT);
-//        }
 
-//        initTabLayoutWithFragment();
         setBottomNavigationBar();
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -125,7 +108,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             @Override
             public void onDrawerClosed(View drawerView) {
 
-                switch (selectItem){
+                switch (selectItem) {
 
                     case CONSTANT_EXE_PLAN:
                         startActivity(new Intent(MainActivity.this, ExecPlanActivity.class));
@@ -150,7 +133,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         BmobUser.logOut();
-                                        Intent intent = new Intent(MainActivity.this,NewLoginActivity.class);
+                                        Intent intent = new Intent(MainActivity.this, NewLoginActivity.class);
                                         startActivity(intent);
                                     }
                                 });
@@ -215,6 +198,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 return true;
             }
         });
+
 
     }
 
@@ -351,7 +335,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .setMessage("确定退出应用吗？")
                 .setTitle("提示")
                 .setCancelable(true)
-                .setNegativeButton("取消",null)
+                .setNegativeButton("取消", null)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

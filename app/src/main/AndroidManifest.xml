@@ -61,12 +61,6 @@
         <activity android:name=".ui.activity.NearbyChatMainActivity"/>
 
 
-        <service
-            android:name="com.baidu.trace.LBSTraceService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-
 
         <!--Bmob push-->
 

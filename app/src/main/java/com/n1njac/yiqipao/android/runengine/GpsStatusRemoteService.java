@@ -13,13 +13,14 @@ import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.n1njac.yiqipao.android.IGpsStatusCallback;
+import com.n1njac.yiqipao.android.IGpsStatusService;
 
 import java.util.Iterator;
 
@@ -32,30 +33,33 @@ public class GpsStatusRemoteService extends Service {
 
 
     private static final String TAG = GpsStatusRemoteService.class.getSimpleName();
-    public static final int SIGNAL_FULL = 0x10;
-    public static final int SIGNAL_GOOD = 0x11;
-    public static final int SIGNAL_BAD = 0x12;
-    public static final int SIGNAL_NONE = 0x13;
+    public static final int SIGNAL_FULL = 0x01;
+    public static final int SIGNAL_GOOD = 0x02;
+    public static final int SIGNAL_BAD = 0x03;
+    public static final int SIGNAL_NONE = 0x04;
 
-
-
-    private IGpsStatusCallback mGpsStatusCallback;
 
     private LocationManager mLocationManager;
     private GpsStatus mGpsStatus;
+    private GpsListener mGpsListener;
+    private MyLocationListener mLocationListener;
 
     private static final int MAX_SATELLITE = 255;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(TAG, "onCreate");
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
+        mGpsListener = new GpsListener();
+        mLocationListener = new MyLocationListener();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        Log.d(TAG, "onStartCommand");
         initGpsStatus();
         return START_STICKY;
     }
@@ -63,14 +67,36 @@ public class GpsStatusRemoteService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return new GpsBinder();
+        Log.d(TAG, "onBind");
+//        initGpsStatus();
+        return mBinder;
     }
 
-    private class GpsBinder extends Binder {
+    private RemoteCallbackList<IGpsStatusCallback> mCallback = new RemoteCallbackList<>();
 
-        public GpsStatusRemoteService getGpsStatusService() {
-            return GpsStatusRemoteService.this;
+    private IGpsStatusService.Stub mBinder = new IGpsStatusService.Stub() {
+        @Override
+        public void registerCallback(IGpsStatusCallback callback) throws RemoteException {
+
+            mCallback.register(callback);
         }
+
+        @Override
+        public void unRegisterCallback(IGpsStatusCallback callback) throws RemoteException {
+            mCallback.unregister(callback);
+        }
+    };
+
+    private void broadcastData(int status) {
+        int length = mCallback.beginBroadcast();
+        for (int i = 0; i < length; i++) {
+            try {
+                mCallback.getBroadcastItem(i).gpsStatus(status);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        mCallback.finishBroadcast();
     }
 
 
@@ -85,8 +111,9 @@ public class GpsStatusRemoteService extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        mLocationManager.addGpsStatusListener(new GpsListener());
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 1, new MyLocationManager());
+        mGpsStatus = mLocationManager.getGpsStatus(null);
+        mLocationManager.addGpsStatusListener(mGpsListener);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 1, mLocationListener);
     }
 
     private class GpsListener implements GpsStatus.Listener {
@@ -109,25 +136,18 @@ public class GpsStatusRemoteService extends Service {
                             count++;
                             if (count > 8) {
                                 //满格信号
-                                try {
-                                    mGpsStatusCallback.gpsStatus(SIGNAL_FULL);
-                                } catch (RemoteException e) {
-                                    e.printStackTrace();
-                                }
+                                broadcastData(SIGNAL_FULL);
 
                             } else if (count >= 4) {
-                                try {
-                                    mGpsStatusCallback.gpsStatus(SIGNAL_GOOD);
-                                } catch (RemoteException e) {
-                                    e.printStackTrace();
-                                }
+
+                                //两格信号
+                                broadcastData(SIGNAL_GOOD);
+
                             } else {
                                 //一格信号
-                                try {
-                                    mGpsStatusCallback.gpsStatus(SIGNAL_BAD);
-                                } catch (RemoteException e) {
-                                    e.printStackTrace();
-                                }
+
+                                broadcastData(SIGNAL_BAD);
+
                             }
                         }
                     }
@@ -139,6 +159,7 @@ public class GpsStatusRemoteService extends Service {
 
                     Iterator<GpsSatellite> iterator2 = mGpsStatus.getSatellites().iterator();
                     int count2 = 0;
+                    Log.d(TAG, "iterator2.hasNext():" + iterator2.hasNext());
                     while (iterator2.hasNext() && count2 <= MAX_SATELLITE) {
                         GpsSatellite gpsSatellite = iterator2.next();
 
@@ -148,29 +169,25 @@ public class GpsStatusRemoteService extends Service {
                         }
                         if (count2 > 8) {
                             //满格信号
-                            try {
-                                mGpsStatusCallback.gpsStatus(SIGNAL_FULL);
-                            } catch (RemoteException e) {
-                                e.printStackTrace();
-                            }
+
+                            broadcastData(SIGNAL_FULL);
+
                         } else if (count2 >= 4) {
                             //两格信号
-                            try {
-                                mGpsStatusCallback.gpsStatus(SIGNAL_GOOD);
-                            } catch (RemoteException e) {
-                                e.printStackTrace();
-                            }
+
+                            broadcastData(SIGNAL_GOOD);
+
                         } else {
                             //一格信号
-                            try {
-                                mGpsStatusCallback.gpsStatus(SIGNAL_BAD);
-                            } catch (RemoteException e) {
-                                e.printStackTrace();
-                            }
+
+                            broadcastData(SIGNAL_BAD);
+
                         }
 
                     }
-                    Log.d("xyz", "satellite num:" + count2);
+                    //测试用
+                    broadcastData(SIGNAL_BAD);
+                    Log.d(TAG, "satellite num:" + count2);
 
                     break;
 
@@ -181,7 +198,7 @@ public class GpsStatusRemoteService extends Service {
         }
     }
 
-    private class MyLocationManager implements LocationListener {
+    private class MyLocationListener implements LocationListener {
 
         @Override
         public void onLocationChanged(Location location) {
@@ -196,23 +213,29 @@ public class GpsStatusRemoteService extends Service {
         @Override
         public void onProviderEnabled(String provider) {
 
+            Log.d(TAG, "onProviderEnabled");
 
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            Log.d(TAG, "onProviderDisabled");
             //gps未开启
 
-            try {
-                mGpsStatusCallback.gpsStatus(SIGNAL_NONE);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            broadcastData(SIGNAL_NONE);
         }
     }
 
-    public void setGpsStatusCallback(IGpsStatusCallback gpsStatusCallback) {
-        this.mGpsStatusCallback = gpsStatusCallback;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mLocationManager != null) {
+            mLocationManager.removeGpsStatusListener(mGpsListener);
+            mLocationManager.removeUpdates(mLocationListener);
+            mLocationManager = null;
+        }
+
+        Log.d(TAG, "onDestroy");
+
     }
 }
