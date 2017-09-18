@@ -60,7 +60,7 @@ public class RunFragment extends Fragment {
     @BindView(R.id.circle_btn)
     CircleButton circleBtn;
     @BindView(R.id.run_frag_relative)
-    RelativeLayout runFragRelative;
+    RelativeLayout runRoot;
     Unbinder unbinder;
 
 
@@ -188,7 +188,7 @@ public class RunFragment extends Fragment {
         View view = inflater.inflate(R.layout.run_frag, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        runFragRelative.setPadding(0, SizeUtil.getStatusBarHeight(getActivity()), 0, 0);
+        runRoot.setPadding(0, SizeUtil.getStatusBarHeight(getActivity()), 0, 0);
         Glide.with(getActivity()).load(R.drawable.run_bg).centerCrop().into(bgRunFrag);
 
         return view;
