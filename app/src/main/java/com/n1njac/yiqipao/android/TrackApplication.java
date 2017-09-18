@@ -6,12 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.trace.LBSTraceClient;
-import com.baidu.trace.LocationMode;
-import com.baidu.trace.Trace;
+
 //import org.litepal.LitePal;
 import org.litepal.LitePal;
 

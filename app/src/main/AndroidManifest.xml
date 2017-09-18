@@ -123,6 +123,10 @@
             android:name=".login.NewLoginActivity"/>
 
         <activity android:name=".ui.activity.UserRunRecordActivity" android:theme="@style/AppTheme4"/>
+
+        <service
+            android:process=":gps"
+            android:name=".runengine.GpsStatusRemoteService"/>
     </application>
 
 </manifest>
