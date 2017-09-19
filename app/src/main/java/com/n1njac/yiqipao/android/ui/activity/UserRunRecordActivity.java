@@ -184,13 +184,13 @@ public class UserRunRecordActivity extends BaseActivity {
         //减去地图图标margin right 的距离和地图图标的半径
         centerX = mWidth - SizeUtil.dp2px(this, 15) - 37;
 
-
-        goToMapIv.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "width:" + goToMapIv.getMeasuredWidth() + " height:" + goToMapIv.getMeasuredHeight());
-            }
-        });
+//        查看view的宽高
+//        goToMapIv.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d(TAG, "width:" + goToMapIv.getMeasuredWidth() + " height:" + goToMapIv.getMeasuredHeight());
+//            }
+//        });
 
         //绑定gps状态服务
         this.bindService(new Intent(UserRunRecordActivity.this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
