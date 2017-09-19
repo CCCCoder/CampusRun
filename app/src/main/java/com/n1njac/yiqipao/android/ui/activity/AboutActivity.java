@@ -26,7 +26,7 @@ public class AboutActivity extends BaseActivity {
         setContentView(R.layout.about_main);
 
         bg = (ImageView) findViewById(R.id.bg_image);
-        Glide.with(this).load(R.drawable.bg_run).into(bg);
+        Glide.with(this).load(R.drawable.bg_run_map).into(bg);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 

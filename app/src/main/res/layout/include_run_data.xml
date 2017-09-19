@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize">
+        <LinearLayout
+            android:id="@+id/gps_root_linear"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shape_gps_bg"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp">
+
+            <TextView
+                android:textSize="12sp"
+                android:text="@string/gps"
+                android:layout_gravity="center"
+                android:textColor="@color/gps_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/run_data_gps_iv"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/gps_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/run_data_gps_prompt_tv"
+            android:layout_toRightOf="@+id/gps_root_linear"
+            android:layout_centerVertical="true"
+            android:text="@string/gps_def_prompt"
+            android:textSize="11sp"
+            android:textColor="@color/text_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/go_to_map_iv"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/map_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+   <LinearLayout
+       android:layout_marginTop="120dp"
+       android:orientation="vertical"
+       android:layout_centerHorizontal="true"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+       <com.n1njac.yiqipao.android.ui.widget.RunDataTextView
+           android:id="@+id/run_data_distance_tv"
+           android:textColor="#fff"
+           android:textSize="56sp"
+           android:text="@string/run_data_km_default"
+           android:textStyle="normal"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+
+       <TextView
+           android:id="@+id/km_tv"
+           android:layout_marginTop="4dp"
+           android:textColor="@color/run_data_text"
+           android:layout_gravity="center_horizontal"
+           android:text="@string/run_data_km_unit"
+           android:textSize="14sp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+   </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/time_speed_root"
+        android:layout_marginTop="240dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_marginLeft="50dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.n1njac.yiqipao.android.ui.widget.RunDataTextView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/run_data_time_tv"
+                android:textColor="#fff"
+                android:textSize="29sp"
+                android:textStyle="normal"
+                android:text="@string/run_data_time_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/run_data_text"
+                android:text="@string/run_data_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.n1njac.yiqipao.android.ui.widget.RunDataTextView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/run_data_speed_tv"
+                android:textColor="#fff"
+                android:textSize="29sp"
+                android:text="@string/run_data_speed_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/run_data_text"
+                android:text="@string/run_data_speed_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_marginTop="80dp"
+        android:layout_below="@+id/time_speed_root"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/run_data_stop_btn"
+            android:text="@string/run_btn_text_stop"
+            android:textColor="@color/text_white"
+            android:textSize="18sp"
+            android:background="@drawable/shape_run_btn_stop"
+            android:layout_width="85dp"
+            android:layout_height="85dp" />
+        <Button
+            android:id="@+id/run_data_pause_btn"
+            android:visibility="invisible"
+            android:text="@string/run_btn_text_pause"
+            android:textSize="18sp"
+            android:textColor="@color/text_white"
+            android:background="@drawable/shape_run_btn_pause"
+            android:layout_width="85dp"
+            android:layout_height="85dp" />
+        <Button
+            android:id="@+id/run_data_start_btn"
+            android:text="@string/run_btn_text_start"
+            android:textSize="18sp"
+            android:textColor="@color/text_white"
+            android:background="@drawable/shape_run_btn_start"
+            android:layout_width="85dp"
+            android:layout_height="85dp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

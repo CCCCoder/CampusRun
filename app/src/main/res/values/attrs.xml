@@ -27,4 +27,7 @@
         <attr name="smoothness" format="float" />
 
     </declare-styleable>
+
+
+
 </resources>

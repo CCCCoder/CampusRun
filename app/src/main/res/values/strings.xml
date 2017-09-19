@@ -85,5 +85,14 @@
     <string name="gps_search_small">信号弱，记录可能不准确</string>
     <string name="gps_search_middle"></string>
     <string name="gps_search_strong"></string>
+    <string name="run_data_km_default">0.00</string>
+    <string name="run_data_km_unit">里程(公里)</string>
+    <string name="run_data_time_default">00:00:00</string>
+    <string name="run_data_time_text">时长</string>
+    <string name="run_data_speed_text">配速(分钟/公里)</string>
+    <string name="run_data_speed_default">00\'00\'\'</string>
+    <string name="run_btn_text_stop">结束</string>
+    <string name="run_btn_text_pause">暂停</string>
+    <string name="run_btn_text_start">继续</string>
 
 </resources>

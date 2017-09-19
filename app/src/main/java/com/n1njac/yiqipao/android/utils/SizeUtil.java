@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
  */
 
 public class SizeUtil {
-    public static int getStatusBarHeight(Context context){
+    public static int getStatusBarHeight(Context context) {
         Class<?> c = null;
         Object obj = null;
         Field field = null;
@@ -25,4 +25,16 @@ public class SizeUtil {
         }
         return statusBarHeight;
     }
+
+    public static int dp2px(Context context, double dpValue) {
+
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    public static int px2dp(Context context, float pxValue) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
+
 }

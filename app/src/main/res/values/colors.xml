@@ -55,6 +55,12 @@
     <color name="gps_text">#666666</color>
     <color name="gps_prompt">#EE5C42</color>
 
+    <color name="run_data_text">#9b9b9b</color>
+    <color name="run_btn_stop">#FF6A6A</color>
+    <color name="run_btn_start">#7FFF00</color>
+    <color name="run_btn_pause">#595b63</color>
+
+
 
 
 </resources>

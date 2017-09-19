@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:id="@+id/user_run_info_relat"
-    android:background="@drawable/bg_run"
+    android:background="@drawable/bg_run_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
