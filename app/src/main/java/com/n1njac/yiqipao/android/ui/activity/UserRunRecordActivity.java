@@ -17,14 +17,14 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.support.annotation.Size;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +53,8 @@ import static com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService.SIGNAL
 
 public class UserRunRecordActivity extends BaseActivity {
 
+
+    private static final String TAG = UserRunRecordActivity.class.getSimpleName();
 
     private static final int COUNT_DURATION = 1000;
 
@@ -84,10 +86,20 @@ public class UserRunRecordActivity extends BaseActivity {
     Button runDataPauseBtn;
     @BindView(R.id.run_data_start_btn)
     Button runDataStartBtn;
+    @BindView(R.id.back_to_data_btn)
+    Button backToDataBtn;
 
 
     private ArrayList<ImageView> mImageViews;
     private AnimatorSet mAnimatorSet;
+    private WindowManager mWindowManager;
+
+    private int mWidth, mHeight;
+    private float centerX, CenterY;
+    private float mRadius;
+    private Animator mCircularReveal;
+
+    private View rootRunMapLayout, rootRunDataLayout;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -157,10 +169,28 @@ public class UserRunRecordActivity extends BaseActivity {
         runDataTimeTv.setTypeface(boldTf);
         runDataSpeedTv.setTypeface(boldTf);
 
-        View rootRunDataLayout = findViewById(R.id.include_root_run_data);
+        rootRunDataLayout = findViewById(R.id.include_root_run_data);
         rootRunDataLayout.setPadding(0, SizeUtil.getStatusBarHeight(this), 0, 0);
 
+        rootRunMapLayout = findViewById(R.id.include_root_run_map);
+        rootRunMapLayout.setVisibility(View.GONE);
+
         initCountDownAnimation();
+
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        mWidth = mWindowManager.getDefaultDisplay().getWidth();
+        mHeight = mWindowManager.getDefaultDisplay().getHeight();
+        mRadius = (float) Math.sqrt(Math.pow(mWidth, 2) + Math.pow(mHeight, 2));
+        //减去地图图标margin right 的距离和地图图标的半径
+        centerX = mWidth - SizeUtil.dp2px(this, 15) - 37;
+
+
+        goToMapIv.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "width:" + goToMapIv.getMeasuredWidth() + " height:" + goToMapIv.getMeasuredHeight());
+            }
+        });
 
         //绑定gps状态服务
         this.bindService(new Intent(UserRunRecordActivity.this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
@@ -172,7 +202,6 @@ public class UserRunRecordActivity extends BaseActivity {
     private IGpsStatusCallback iGpsStatusCallback = new IGpsStatusCallback.Stub() {
         @Override
         public void gpsStatus(int status) throws RemoteException {
-
             switch (status) {
                 case SIGNAL_FULL:
 
@@ -272,10 +301,17 @@ public class UserRunRecordActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.go_to_map_iv, R.id.run_data_stop_btn, R.id.run_data_pause_btn, R.id.run_data_start_btn})
+    @OnClick({R.id.go_to_map_iv, R.id.run_data_stop_btn, R.id.run_data_pause_btn, R.id.run_data_start_btn, R.id.back_to_data_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.go_to_map_iv:
+
+                Log.d(TAG, "go to map");
+
+                mCircularReveal = ViewAnimationUtils.createCircularReveal(rootRunMapLayout, mWidth, 0, 0, mRadius);
+                mCircularReveal.setDuration(1000).start();
+//                rootRunDataLayout.setVisibility(View.GONE);
+                rootRunMapLayout.setVisibility(View.VISIBLE);
                 break;
             case R.id.run_data_stop_btn:
 
@@ -290,6 +326,35 @@ public class UserRunRecordActivity extends BaseActivity {
             case R.id.run_data_start_btn:
 
                 showPauseBtnAnimation();
+
+                break;
+            case R.id.back_to_data_btn:
+                Log.d(TAG, "back to data");
+                mCircularReveal = ViewAnimationUtils.createCircularReveal(rootRunMapLayout, mWidth, 0, mRadius, 0);
+                mCircularReveal.setDuration(1000).start();
+//                rootRunMapLayout.setVisibility(View.GONE);
+//                rootRunDataLayout.setVisibility(View.VISIBLE);
+                mCircularReveal.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        rootRunMapLayout.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
 
                 break;
         }

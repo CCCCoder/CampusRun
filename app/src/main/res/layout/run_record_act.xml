@@ -9,6 +9,10 @@
         android:id="@+id/include_root_run_data"
         layout="@layout/include_run_data"/>
 
+    <include
+        android:id="@+id/include_root_run_map"
+        layout="@layout/include_run_map"/>
+
 
     <RelativeLayout
         android:background="@color/colorPrimary"
