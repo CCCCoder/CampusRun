@@ -206,6 +206,7 @@ public class UserRunRecordActivity extends BaseActivity {
         mMapView.onCreate(savedInstanceState);
         AMap aMap = mMapView.getMap();
 
+
     }
 
     private void initRunDataLayout() {
@@ -273,7 +274,6 @@ public class UserRunRecordActivity extends BaseActivity {
                     break;
             }
 
-
         }
     };
 
@@ -289,13 +289,13 @@ public class UserRunRecordActivity extends BaseActivity {
             public void run() {
 
                 if (count < 4) {
-                    Log.d("xyz", count + "");
+                    Log.d(TAG, count + "");
                     startAnimator(count, mAnimatorSet);
                     ++count;
                     mHandler.postDelayed(this, COUNT_DURATION);
                 } else {
                     mHandler.removeCallbacks(this);
-                    Log.d("xyz", "finish");
+                    Log.d(TAG, "finish");
                     countDownRelat.setVisibility(View.GONE);
                 }
             }
