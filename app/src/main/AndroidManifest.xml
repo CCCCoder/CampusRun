@@ -23,6 +23,8 @@
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".TrackApplication"
         android:allowBackup="true"
@@ -31,6 +33,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="b765a6674e53066d16a43639ca676db4"/>
 
         <activity
             android:label="@string/app_name"

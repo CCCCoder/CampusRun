@@ -28,6 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.MapView;
 import com.n1njac.yiqipao.android.IGpsStatusCallback;
 import com.n1njac.yiqipao.android.IGpsStatusService;
 import com.n1njac.yiqipao.android.R;
@@ -103,6 +105,8 @@ public class UserRunRecordActivity extends BaseActivity {
     Button runMapPauseBtn;
     @BindView(R.id.run_map_start_btn)
     Button runMapStartBtn;
+    @BindView(R.id.run_map_mv)
+    MapView mMapView;
 
 
     private ArrayList<ImageView> mImageViews;
@@ -183,7 +187,7 @@ public class UserRunRecordActivity extends BaseActivity {
         boldTf = FontCacheUtil.getFont(this, "fonts/Avenir_Next_Condensed_demi_bold.ttf");
 
         initRunDataLayout();
-        initMapLayout();
+        initMapLayout(savedInstanceState);
         initCountDownAnimation();
 
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -193,12 +197,15 @@ public class UserRunRecordActivity extends BaseActivity {
 
     }
 
-    private void initMapLayout() {
+    private void initMapLayout(Bundle savedInstanceState) {
         rootRunMapLayout = findViewById(R.id.include_root_run_map);
         rootRunMapLayout.setVisibility(View.GONE);
         runMapDistanceTv.setTypeface(boldTf);
         runMapSpeedTv.setTypeface(boldTf);
         runMapTimeTv.setTypeface(boldTf);
+        mMapView.onCreate(savedInstanceState);
+        AMap aMap = mMapView.getMap();
+
     }
 
     private void initRunDataLayout() {
@@ -313,18 +320,6 @@ public class UserRunRecordActivity extends BaseActivity {
         set.start();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        this.unbindService(gpsConn);
-        if (mIGpsStatusService != null) {
-            try {
-                mIGpsStatusService.unRegisterCallback(iGpsStatusCallback);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     @OnClick({R.id.go_to_map_iv, R.id.run_data_stop_btn, R.id.run_data_pause_btn, R.id.run_data_start_btn, R.id.back_run_data_iv, R.id.run_map_stop_btn, R.id.run_map_pause_btn, R.id.run_map_start_btn})
     public void onViewClicked(View view) {
@@ -499,4 +494,31 @@ public class UserRunRecordActivity extends BaseActivity {
         Toast.makeText(this, "请先结束运动", Toast.LENGTH_SHORT).show();
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.unbindService(gpsConn);
+        if (mIGpsStatusService != null) {
+            try {
+                mIGpsStatusService.unRegisterCallback(iGpsStatusCallback);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        mMapView.onDestroy();
+    }
+
 }
