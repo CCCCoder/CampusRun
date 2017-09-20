@@ -158,12 +158,13 @@
             android:text="@string/run_btn_text_stop"
             android:textColor="@color/text_white"
             android:textSize="18sp"
+            android:visibility="invisible"
             android:background="@drawable/shape_run_btn_stop"
             android:layout_width="85dp"
             android:layout_height="85dp" />
         <Button
             android:id="@+id/run_data_pause_btn"
-            android:visibility="invisible"
+
             android:text="@string/run_btn_text_pause"
             android:textSize="18sp"
             android:textColor="@color/text_white"
@@ -174,6 +175,7 @@
             android:id="@+id/run_data_start_btn"
             android:text="@string/run_btn_text_start"
             android:textSize="18sp"
+            android:visibility="invisible"
             android:textColor="@color/text_white"
             android:background="@drawable/shape_run_btn_start"
             android:layout_width="85dp"

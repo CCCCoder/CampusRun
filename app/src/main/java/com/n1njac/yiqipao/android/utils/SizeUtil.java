@@ -1,6 +1,9 @@
 package com.n1njac.yiqipao.android.utils;
 
 import android.content.Context;
+import android.graphics.Rect;
+import android.view.View;
+import android.view.Window;
 
 import java.lang.reflect.Field;
 
@@ -26,6 +29,8 @@ public class SizeUtil {
         return statusBarHeight;
     }
 
+
+
     public static int dp2px(Context context, double dpValue) {
 
         float scale = context.getResources().getDisplayMetrics().density;
@@ -36,5 +41,6 @@ public class SizeUtil {
         float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
+
 
 }

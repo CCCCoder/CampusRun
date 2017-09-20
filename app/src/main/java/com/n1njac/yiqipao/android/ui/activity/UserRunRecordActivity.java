@@ -55,7 +55,6 @@ public class UserRunRecordActivity extends BaseActivity {
 
 
     private static final String TAG = UserRunRecordActivity.class.getSimpleName();
-
     private static final int COUNT_DURATION = 1000;
 
     @BindView(R.id.count_1_iv)
@@ -86,8 +85,24 @@ public class UserRunRecordActivity extends BaseActivity {
     Button runDataPauseBtn;
     @BindView(R.id.run_data_start_btn)
     Button runDataStartBtn;
-    @BindView(R.id.back_to_data_btn)
-    Button backToDataBtn;
+    @BindView(R.id.map_gps_iv)
+    ImageView mapGpsIv;
+    @BindView(R.id.map_gps_prompt_tv)
+    TextView mapGpsPromptTv;
+    @BindView(R.id.back_run_data_iv)
+    ImageView backRunDataIv;
+    @BindView(R.id.run_map_time_tv)
+    RunDataTextView runMapTimeTv;
+    @BindView(R.id.run_map_distance_tv)
+    RunDataTextView runMapDistanceTv;
+    @BindView(R.id.run_map_speed_tv)
+    RunDataTextView runMapSpeedTv;
+    @BindView(R.id.run_map_stop_btn)
+    Button runMapStopBtn;
+    @BindView(R.id.run_map_pause_btn)
+    Button runMapPauseBtn;
+    @BindView(R.id.run_map_start_btn)
+    Button runMapStartBtn;
 
 
     private ArrayList<ImageView> mImageViews;
@@ -95,11 +110,13 @@ public class UserRunRecordActivity extends BaseActivity {
     private WindowManager mWindowManager;
 
     private int mWidth, mHeight;
-    private float centerX, CenterY;
+    private float centerX, centerY;
     private float mRadius;
     private Animator mCircularReveal;
 
     private View rootRunMapLayout, rootRunDataLayout;
+
+    private Typeface boldTf;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -163,41 +180,49 @@ public class UserRunRecordActivity extends BaseActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
         ButterKnife.bind(this);
+        boldTf = FontCacheUtil.getFont(this, "fonts/Avenir_Next_Condensed_demi_bold.ttf");
 
-        Typeface boldTf = FontCacheUtil.getFont(this, "fonts/Avenir_Next_Condensed_demi_bold.ttf");
-        runDataDistanceTv.setTypeface(boldTf);
-        runDataTimeTv.setTypeface(boldTf);
-        runDataSpeedTv.setTypeface(boldTf);
-
-        rootRunDataLayout = findViewById(R.id.include_root_run_data);
-        rootRunDataLayout.setPadding(0, SizeUtil.getStatusBarHeight(this), 0, 0);
-
-        rootRunMapLayout = findViewById(R.id.include_root_run_map);
-        rootRunMapLayout.setVisibility(View.GONE);
-
+        initRunDataLayout();
+        initMapLayout();
         initCountDownAnimation();
 
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        mWidth = mWindowManager.getDefaultDisplay().getWidth();
-        mHeight = mWindowManager.getDefaultDisplay().getHeight();
-        mRadius = (float) Math.sqrt(Math.pow(mWidth, 2) + Math.pow(mHeight, 2));
-        //减去地图图标margin right 的距离和地图图标的半径
-        centerX = mWidth - SizeUtil.dp2px(this, 15) - 37;
 
-//        查看view的宽高
-//        goToMapIv.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.d(TAG, "width:" + goToMapIv.getMeasuredWidth() + " height:" + goToMapIv.getMeasuredHeight());
-//            }
-//        });
-
-        //绑定gps状态服务
         this.bindService(new Intent(UserRunRecordActivity.this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
 
 
     }
 
+    private void initMapLayout() {
+        rootRunMapLayout = findViewById(R.id.include_root_run_map);
+        rootRunMapLayout.setVisibility(View.GONE);
+        runMapDistanceTv.setTypeface(boldTf);
+        runMapSpeedTv.setTypeface(boldTf);
+        runMapTimeTv.setTypeface(boldTf);
+    }
+
+    private void initRunDataLayout() {
+        rootRunDataLayout = findViewById(R.id.include_root_run_data);
+        rootRunDataLayout.setPadding(0, SizeUtil.getStatusBarHeight(this), 0, 0);
+        runDataDistanceTv.setTypeface(boldTf);
+        runDataTimeTv.setTypeface(boldTf);
+        runDataSpeedTv.setTypeface(boldTf);
+    }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        mWidth = mWindowManager.getDefaultDisplay().getWidth();
+        mHeight = mWindowManager.getDefaultDisplay().getHeight();
+        mRadius = (float) Math.sqrt(Math.pow(mWidth, 2) + Math.pow(mHeight, 2));
+        //减去地图图标margin right 的距离和地图图标的半径
+        centerX = mWidth - SizeUtil.dp2px(this, 15) - 37;
+        //状态栏高度加actionbar的高度的一半。
+        centerY = SizeUtil.getStatusBarHeight(this) + 96 / 2;
+
+
+    }
 
     private IGpsStatusCallback iGpsStatusCallback = new IGpsStatusCallback.Stub() {
         @Override
@@ -301,39 +326,20 @@ public class UserRunRecordActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.go_to_map_iv, R.id.run_data_stop_btn, R.id.run_data_pause_btn, R.id.run_data_start_btn, R.id.back_to_data_btn})
+    @OnClick({R.id.go_to_map_iv, R.id.run_data_stop_btn, R.id.run_data_pause_btn, R.id.run_data_start_btn, R.id.back_run_data_iv, R.id.run_map_stop_btn, R.id.run_map_pause_btn, R.id.run_map_start_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.go_to_map_iv:
 
                 Log.d(TAG, "go to map");
+                Log.i(TAG, "centerX:" + centerX + " centerY:" + centerY);
 
-                mCircularReveal = ViewAnimationUtils.createCircularReveal(rootRunMapLayout, mWidth, 0, 0, mRadius);
+
+                mCircularReveal = ViewAnimationUtils.createCircularReveal(rootRunMapLayout, (int) centerX, (int) centerY, 0, mRadius);
                 mCircularReveal.setDuration(1000).start();
-//                rootRunDataLayout.setVisibility(View.GONE);
+
                 rootRunMapLayout.setVisibility(View.VISIBLE);
-                break;
-            case R.id.run_data_stop_btn:
 
-                handleRunData();
-
-                break;
-            case R.id.run_data_pause_btn:
-
-                showStartAndStopBtnAnimation();
-
-                break;
-            case R.id.run_data_start_btn:
-
-                showPauseBtnAnimation();
-
-                break;
-            case R.id.back_to_data_btn:
-                Log.d(TAG, "back to data");
-                mCircularReveal = ViewAnimationUtils.createCircularReveal(rootRunMapLayout, mWidth, 0, mRadius, 0);
-                mCircularReveal.setDuration(1000).start();
-//                rootRunMapLayout.setVisibility(View.GONE);
-//                rootRunDataLayout.setVisibility(View.VISIBLE);
                 mCircularReveal.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -342,7 +348,7 @@ public class UserRunRecordActivity extends BaseActivity {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        rootRunMapLayout.setVisibility(View.GONE);
+                        rootRunDataLayout.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -355,17 +361,76 @@ public class UserRunRecordActivity extends BaseActivity {
 
                     }
                 });
+                break;
+            case R.id.run_data_stop_btn:
+
+                handleRunData(runDataDistanceTv);
 
                 break;
+            case R.id.run_data_pause_btn:
+
+                showStartAndStopBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
+                showStartAndStopBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
+                break;
+            case R.id.run_data_start_btn:
+
+                showPauseBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
+                showPauseBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
+                break;
+
+
+            case R.id.run_map_stop_btn:
+                handleRunData(runMapDistanceTv);
+
+                break;
+            case R.id.run_map_pause_btn:
+                showStartAndStopBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
+                showStartAndStopBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
+                break;
+            case R.id.run_map_start_btn:
+                showPauseBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
+                showPauseBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
+                break;
+
+            case R.id.back_run_data_iv:
+                Log.d(TAG, "back to data");
+                mCircularReveal = ViewAnimationUtils.createCircularReveal(rootRunMapLayout, (int) centerX, (int) centerY, mRadius, 0);
+                mCircularReveal.setDuration(1000).start();
+//                rootRunMapLayout.setVisibility(View.GONE);
+                rootRunDataLayout.setVisibility(View.VISIBLE);
+                mCircularReveal.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        rootRunMapLayout.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                break;
+
+
         }
     }
 
     //隐藏继续和结束按钮，开始计时跑步
-    private void showPauseBtnAnimation() {
+    private void showPauseBtnAnimation(final View startBtn, final View stopBtn, final View pauseBtn) {
 
         AnimatorSet set = new AnimatorSet();
-        ObjectAnimator startBtnAnimation = ObjectAnimator.ofFloat(runDataStartBtn, "translationX", 0, -SizeUtil.dp2px(getApplication(), 85));
-        ObjectAnimator stopBtnAnimation = ObjectAnimator.ofFloat(runDataStopBtn, "translationX", 0, SizeUtil.dp2px(getApplication(), 85));
+        ObjectAnimator startBtnAnimation = ObjectAnimator.ofFloat(startBtn, "translationX", 0, -SizeUtil.dp2px(getApplication(), 85));
+        ObjectAnimator stopBtnAnimation = ObjectAnimator.ofFloat(stopBtn, "translationX", 0, SizeUtil.dp2px(getApplication(), 85));
         set.setDuration(500);
         set.playTogether(startBtnAnimation, stopBtnAnimation);
         set.start();
@@ -377,9 +442,9 @@ public class UserRunRecordActivity extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                runDataStartBtn.setVisibility(View.INVISIBLE);
-                runDataStopBtn.setVisibility(View.INVISIBLE);
-                runDataPauseBtn.setVisibility(View.VISIBLE);
+                startBtn.setVisibility(View.INVISIBLE);
+                stopBtn.setVisibility(View.INVISIBLE);
+                pauseBtn.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -396,20 +461,20 @@ public class UserRunRecordActivity extends BaseActivity {
     }
 
     //隐藏暂停按钮，暂停跑步
-    private void showStartAndStopBtnAnimation() {
-        runDataPauseBtn.setVisibility(View.INVISIBLE);
-        runDataStartBtn.setVisibility(View.VISIBLE);
-        runDataStopBtn.setVisibility(View.VISIBLE);
+    private void showStartAndStopBtnAnimation(View startBtn, View stopBtn, View pauseBtn) {
+        pauseBtn.setVisibility(View.INVISIBLE);
+        startBtn.setVisibility(View.VISIBLE);
+        stopBtn.setVisibility(View.VISIBLE);
         AnimatorSet set = new AnimatorSet();
-        ObjectAnimator startBtnAnimation = ObjectAnimator.ofFloat(runDataStartBtn, "translationX", -SizeUtil.dp2px(getApplication(), 85), 0);
-        ObjectAnimator stopBtnAnimation = ObjectAnimator.ofFloat(runDataStopBtn, "translationX", SizeUtil.dp2px(getApplication(), 85), 0);
+        ObjectAnimator startBtnAnimation = ObjectAnimator.ofFloat(startBtn, "translationX", -SizeUtil.dp2px(getApplication(), 85), 0);
+        ObjectAnimator stopBtnAnimation = ObjectAnimator.ofFloat(stopBtn, "translationX", SizeUtil.dp2px(getApplication(), 85), 0);
         set.playTogether(startBtnAnimation, stopBtnAnimation);
         set.setDuration(500);
         set.start();
     }
 
-    private void handleRunData() {
-        String distance = runDataDistanceTv.getText().toString();
+    private void handleRunData(TextView distanceTv) {
+        String distance = distanceTv.getText().toString();
         float totalDistance = Float.parseFloat(distance);
 
         if (totalDistance < 0.1) {

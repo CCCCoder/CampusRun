@@ -60,6 +60,10 @@
     <color name="run_btn_start">#7FFF00</color>
     <color name="run_btn_pause">#595b63</color>
 
+    <color name="run_data_map_white_bg">#aaffffff</color>
+    <color name="run_map_line">#eeeeee</color>
+
+
 
 
 
