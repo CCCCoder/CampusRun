@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +30,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.trace.LBSTraceClient;
+import com.amap.api.trace.TraceListener;
+import com.amap.api.trace.TraceLocation;
+import com.amap.api.trace.TraceStatusListener;
 import com.n1njac.yiqipao.android.IGpsStatusCallback;
 import com.n1njac.yiqipao.android.IGpsStatusService;
 import com.n1njac.yiqipao.android.R;
@@ -39,6 +48,7 @@ import com.n1njac.yiqipao.android.utils.FontCacheUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +63,7 @@ import static com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService.SIGNAL
  * Created by N1njaC on 2017/9/16.
  */
 
-public class UserRunRecordActivity extends BaseActivity {
+public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLocationChangeListener, TraceListener {
 
 
     private static final String TAG = UserRunRecordActivity.class.getSimpleName();
@@ -149,6 +159,8 @@ public class UserRunRecordActivity extends BaseActivity {
     private int count = 0;
     private int currentStatus = 0;
 
+    private AMap aMap;
+
 
     private IGpsStatusService mIGpsStatusService;
 
@@ -204,8 +216,7 @@ public class UserRunRecordActivity extends BaseActivity {
         runMapSpeedTv.setTypeface(boldTf);
         runMapTimeTv.setTypeface(boldTf);
         mMapView.onCreate(savedInstanceState);
-        AMap aMap = mMapView.getMap();
-
+        initMap();
 
     }
 
@@ -215,6 +226,70 @@ public class UserRunRecordActivity extends BaseActivity {
         runDataDistanceTv.setTypeface(boldTf);
         runDataTimeTv.setTypeface(boldTf);
         runDataSpeedTv.setTypeface(boldTf);
+    }
+
+    //地图相关属性
+    private void initMap() {
+        aMap = mMapView.getMap();
+        //初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
+        // 连续定位、且将视角移动到地图中心点，并且会跟随设备移动。
+        MyLocationStyle locationStyle = new MyLocationStyle();
+        locationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);
+        locationStyle.interval(2000);
+        locationStyle.strokeColor(Color.argb(0, 0, 0, 0));
+        locationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
+        aMap.setMyLocationStyle(locationStyle);
+        aMap.setMyLocationEnabled(true);
+        aMap.setOnMyLocationChangeListener(this);
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+
+        //开始记录轨迹，每2s记录一次轨迹，每隔5个点合并请求一次纠偏并回调
+//        LBSTraceClient lbsTraceClient = LBSTraceClient.getInstance(this);
+//        lbsTraceClient.startTrace(new TraceStatusListener() {
+//            @Override
+//            public void onTraceStatus(List<TraceLocation> list, List<LatLng> list1, String s) {
+//
+//
+//                Log.d(TAG,"-------------->onTraceStatus "+s);
+////                for (LatLng l : list1) {
+////                    Log.d(TAG, "轨迹纠偏:" + "latitude:" + l.latitude + " longitude:" + l.longitude);
+////                }
+//
+//            }
+//        });
+
+    }
+
+    private List<LatLng> latLngs = new ArrayList<>();
+    private List<TraceLocation> traces = new ArrayList<>();
+
+    private LBSTraceClient mLBSTraceClient = new LBSTraceClient(getApplicationContext());
+
+    //定位信息回调
+    @Override
+    public void onMyLocationChange(Location location) {
+
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        float bear = location.getBearing();
+        float speed = location.getSpeed();
+        long time = location.getTime();
+
+        LatLng latLng = new LatLng(latitude, longitude);
+        latLngs.add(latLng);
+
+        //用一个list将traceLocation数据装，每隔3s请求一次轨迹纠偏以获得已跑的路程。
+        TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);
+        traces.add(traceLocation);
+
+        mLBSTraceClient.queryProcessedTrace(1, traces, LBSTraceClient.TYPE_AMAP, this);
+
+        Log.i(TAG, "latitude:" + latitude + " longitude:" + longitude);
+        Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
+
+        aMap.addPolyline(new PolylineOptions().addAll(latLngs).width(10).color(Color.argb(255, 255, 20, 147)));
+
     }
 
 
@@ -521,4 +596,18 @@ public class UserRunRecordActivity extends BaseActivity {
         mMapView.onDestroy();
     }
 
+    @Override
+    public void onRequestFailed(int i, String s) {
+
+    }
+
+    @Override
+    public void onTraceProcessing(int i, int i1, List<LatLng> list) {
+
+    }
+
+    @Override
+    public void onFinished(int i, List<LatLng> list, int i1, int i2) {
+
+    }
 }
