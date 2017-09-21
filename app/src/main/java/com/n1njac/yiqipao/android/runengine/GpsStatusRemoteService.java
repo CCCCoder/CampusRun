@@ -186,7 +186,7 @@ public class GpsStatusRemoteService extends Service {
 
                     }
                     //测试用
-                    broadcastData(SIGNAL_BAD);
+//                    broadcastData(SIGNAL_BAD);
                     Log.d(TAG, "satellite num:" + count2);
 
                     break;

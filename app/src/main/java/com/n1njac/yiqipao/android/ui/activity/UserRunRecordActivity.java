@@ -160,6 +160,7 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
     private int currentStatus = 0;
 
     private AMap aMap;
+    private LBSTraceClient mLBSTraceClient;
 
 
     private IGpsStatusService mIGpsStatusService;
@@ -231,41 +232,28 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
     //地图相关属性
     private void initMap() {
         aMap = mMapView.getMap();
+        mLBSTraceClient = LBSTraceClient.getInstance(this);
         //初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
         // 连续定位、且将视角移动到地图中心点，并且会跟随设备移动。
         MyLocationStyle locationStyle = new MyLocationStyle();
         locationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);
-        locationStyle.interval(2000);
+        locationStyle.interval(3000);
         locationStyle.strokeColor(Color.argb(0, 0, 0, 0));
         locationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         aMap.setMyLocationStyle(locationStyle);
         aMap.setMyLocationEnabled(true);
+
         aMap.setOnMyLocationChangeListener(this);
         aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-
-        //开始记录轨迹，每2s记录一次轨迹，每隔5个点合并请求一次纠偏并回调
-//        LBSTraceClient lbsTraceClient = LBSTraceClient.getInstance(this);
-//        lbsTraceClient.startTrace(new TraceStatusListener() {
-//            @Override
-//            public void onTraceStatus(List<TraceLocation> list, List<LatLng> list1, String s) {
-//
-//
-//                Log.d(TAG,"-------------->onTraceStatus "+s);
-////                for (LatLng l : list1) {
-////                    Log.d(TAG, "轨迹纠偏:" + "latitude:" + l.latitude + " longitude:" + l.longitude);
-////                }
-//
-//            }
-//        });
 
     }
 
     private List<LatLng> latLngs = new ArrayList<>();
     private List<TraceLocation> traces = new ArrayList<>();
 
-    private LBSTraceClient mLBSTraceClient = new LBSTraceClient(getApplicationContext());
 
     //定位信息回调
+    // 三秒钟轨迹纠正一次，回传结果绘制轨迹和计算路程。暂停的话 轨迹不绘制，定位照常。
     @Override
     public void onMyLocationChange(Location location) {
 
@@ -279,19 +267,36 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         LatLng latLng = new LatLng(latitude, longitude);
         latLngs.add(latLng);
 
-        //用一个list将traceLocation数据装，每隔3s请求一次轨迹纠偏以获得已跑的路程。
+        //用一个list将traceLocation保存，每隔3s请求一次轨迹纠偏以获得已跑的路程。
         TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);
         traces.add(traceLocation);
-
-        mLBSTraceClient.queryProcessedTrace(1, traces, LBSTraceClient.TYPE_AMAP, this);
-
         Log.i(TAG, "latitude:" + latitude + " longitude:" + longitude);
         Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
+        //轨迹纠正,开始的时候调用此方法开始绘制并计算轨迹，暂停则
+        mLBSTraceClient.queryProcessedTrace(1, traces, LBSTraceClient.TYPE_AMAP, this);
 
-        aMap.addPolyline(new PolylineOptions().addAll(latLngs).width(10).color(Color.argb(255, 255, 20, 147)));
+
+//
 
     }
 
+    //TraceListener回调
+    @Override
+    public void onRequestFailed(int lineID, String errorInfo) {
+
+        Log.d(TAG, "onRequestFailed------->轨迹纠偏error:" + errorInfo);
+    }
+
+    @Override
+    public void onTraceProcessing(int lineID, int index, List<LatLng> segments) {
+        Log.d(TAG, "onTraceProcessing");
+    }
+
+    @Override
+    public void onFinished(int lineID, List<LatLng> linePoints, int distance, int waitingTime) {
+        Log.d(TAG, "onFinished" + " distance:" + distance + "linePoints size:" + linePoints.size());
+        aMap.addPolyline(new PolylineOptions().addAll(linePoints).width(10).color(Color.argb(255, 255, 20, 147)));
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -454,6 +459,7 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
 
                 break;
             case R.id.run_map_pause_btn:
+                mLBSTraceClient.destroy();
                 showStartAndStopBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
                 showStartAndStopBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
                 break;
@@ -596,18 +602,5 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         mMapView.onDestroy();
     }
 
-    @Override
-    public void onRequestFailed(int i, String s) {
 
-    }
-
-    @Override
-    public void onTraceProcessing(int i, int i1, List<LatLng> list) {
-
-    }
-
-    @Override
-    public void onFinished(int i, List<LatLng> list, int i1, int i2) {
-
-    }
 }
