@@ -130,8 +130,11 @@
             android:name=".runengine.GpsStatusRemoteService"/>
 
         <service
-            android:process=":running"
+            android:process=":gps"
             android:name=".runengine.RunningCoreRemoteService"/>
+        <service
+            android:process=":gps"
+            android:name="com.amap.api.location.APSService"/>
     </application>
 
 </manifest>

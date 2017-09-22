@@ -234,8 +234,6 @@ public class GpsStatusRemoteService extends Service {
             mLocationManager.removeUpdates(mLocationListener);
             mLocationManager = null;
         }
-
         Log.d(TAG, "onDestroy");
-
     }
 }

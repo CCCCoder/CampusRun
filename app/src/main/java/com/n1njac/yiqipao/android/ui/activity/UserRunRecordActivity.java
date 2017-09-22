@@ -48,6 +48,7 @@ import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
 import com.n1njac.yiqipao.android.runengine.RunningCoreRemoteService;
 import com.n1njac.yiqipao.android.ui.widget.RunDataTextView;
 import com.n1njac.yiqipao.android.utils.FontCacheUtil;
+import com.n1njac.yiqipao.android.utils.ParseUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ import static com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService.SIGNAL
  * Created by N1njaC on 2017/9/16.
  */
 
-public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLocationChangeListener, TraceListener {
+public class UserRunRecordActivity extends BaseActivity {
 
 
     private static final String TAG = UserRunRecordActivity.class.getSimpleName();
@@ -167,11 +168,14 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
     private IGpsStatusService mIGpsStatusService;
     private IRunDataService mIRunDataService;
 
+    //跑步路程
+    private double mKM;
+
 
     private ServiceConnection gpsConn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
+            Log.d(TAG, "gps onServiceConnected");
             mIGpsStatusService = IGpsStatusService.Stub.asInterface(service);
             try {
                 mIGpsStatusService.registerCallback(iGpsStatusCallback);
@@ -188,9 +192,12 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         }
     };
 
+
     private ServiceConnection runDataConn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+
+            Log.d(TAG, "run data onServiceConnected");
             mIRunDataService = IRunDataService.Stub.asInterface(service);
             try {
                 mIRunDataService.registerRunDataCallback(iRunDataCallback);
@@ -230,6 +237,15 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
 
     }
 
+
+    private void initRunDataLayout() {
+        rootRunDataLayout = findViewById(R.id.include_root_run_data);
+        rootRunDataLayout.setPadding(0, SizeUtil.getStatusBarHeight(this), 0, 0);
+        runDataDistanceTv.setTypeface(boldTf);
+        runDataTimeTv.setTypeface(boldTf);
+        runDataSpeedTv.setTypeface(boldTf);
+    }
+
     private void initMapLayout(Bundle savedInstanceState) {
         rootRunMapLayout = findViewById(R.id.include_root_run_map);
         rootRunMapLayout.setVisibility(View.GONE);
@@ -238,15 +254,6 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         runMapTimeTv.setTypeface(boldTf);
         mMapView.onCreate(savedInstanceState);
         initMap();
-
-    }
-
-    private void initRunDataLayout() {
-        rootRunDataLayout = findViewById(R.id.include_root_run_data);
-        rootRunDataLayout.setPadding(0, SizeUtil.getStatusBarHeight(this), 0, 0);
-        runDataDistanceTv.setTypeface(boldTf);
-        runDataTimeTv.setTypeface(boldTf);
-        runDataSpeedTv.setTypeface(boldTf);
     }
 
     //地图相关属性
@@ -268,53 +275,52 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
 
     }
 
-    private List<LatLng> latLngs = new ArrayList<>();
-    private List<TraceLocation> traces = new ArrayList<>();
+//    private List<LatLng> latLngs = new ArrayList<>();
+//    private List<TraceLocation> traces = new ArrayList<>();
+//
+//
+//    //定位信息回调
+//    // 三秒钟轨迹纠正一次，回传结果绘制轨迹和计算路程。暂停的话 轨迹不绘制，定位照常。(调整到服务中实现)
+//    @Override
+//    public void onMyLocationChange(Location location) {
+//
+//        double latitude = location.getLatitude();
+//        double longitude = location.getLongitude();
+//
+//        float bear = location.getBearing();
+//        float speed = location.getSpeed();
+//        long time = location.getTime();
+//
+//        LatLng latLng = new LatLng(latitude, longitude);
+//        latLngs.add(latLng);
+//
+//        //用一个list将traceLocation保存，每隔3s请求一次轨迹纠偏以获得已跑的路程。
+//        TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);
+//        traces.add(traceLocation);
+//        Log.i(TAG, "latitude:" + latitude + " longitude:" + longitude);
+//        Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
+//        //轨迹纠正,开始的时候调用此方法开始绘制并计算轨迹，暂停则
+//        mLBSTraceClient.queryProcessedTrace(1, traces, LBSTraceClient.TYPE_AMAP, this);
+//
+//    }
 
-
-    //定位信息回调
-    // 三秒钟轨迹纠正一次，回传结果绘制轨迹和计算路程。暂停的话 轨迹不绘制，定位照常。(调整到服务中实现)
-    @Override
-    public void onMyLocationChange(Location location) {
-
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-
-        float bear = location.getBearing();
-        float speed = location.getSpeed();
-        long time = location.getTime();
-
-        LatLng latLng = new LatLng(latitude, longitude);
-        latLngs.add(latLng);
-
-        //用一个list将traceLocation保存，每隔3s请求一次轨迹纠偏以获得已跑的路程。
-        TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);
-        traces.add(traceLocation);
-        Log.i(TAG, "latitude:" + latitude + " longitude:" + longitude);
-        Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
-        //轨迹纠正,开始的时候调用此方法开始绘制并计算轨迹，暂停则
-        mLBSTraceClient.queryProcessedTrace(1, traces, LBSTraceClient.TYPE_AMAP, this);
-
-
-    }
-
-    //TraceListener回调
-    @Override
-    public void onRequestFailed(int lineID, String errorInfo) {
-
-        Log.d(TAG, "onRequestFailed------->轨迹纠偏error:" + errorInfo);
-    }
-
-    @Override
-    public void onTraceProcessing(int lineID, int index, List<LatLng> segments) {
-        Log.d(TAG, "onTraceProcessing");
-    }
-
-    @Override
-    public void onFinished(int lineID, List<LatLng> linePoints, int distance, int waitingTime) {
-        Log.d(TAG, "onFinished" + " distance:" + distance + "linePoints size:" + linePoints.size());
-        aMap.addPolyline(new PolylineOptions().addAll(linePoints).width(10).color(Color.argb(255, 255, 20, 147)));
-    }
+//    //TraceListener回调
+//    @Override
+//    public void onRequestFailed(int lineID, String errorInfo) {
+//
+//        Log.d(TAG, "onRequestFailed------->轨迹纠偏error:" + errorInfo);
+//    }
+//
+//    @Override
+//    public void onTraceProcessing(int lineID, int index, List<LatLng> segments) {
+//        Log.d(TAG, "onTraceProcessing");
+//    }
+//
+//    @Override
+//    public void onFinished(int lineID, List<LatLng> linePoints, int distance, int waitingTime) {
+//        Log.d(TAG, "onFinished" + " distance:" + distance + "linePoints size:" + linePoints.size());
+//        aMap.addPolyline(new PolylineOptions().addAll(linePoints).width(10).color(Color.argb(255, 255, 20, 147)));
+//    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -336,16 +342,28 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         @Override
         public void onDistanceChange(int distance) throws RemoteException {
 
+            //单位：米(转换为公里 1公里 = 1000米)
+            Log.d(TAG, "onDistanceChange---->" + distance);
+
+            mKM = distance / 1000;
+
+
         }
 
         @Override
         public void onSpeedChange(float speed) throws RemoteException {
 
+            //单位：米\秒
+            Log.d(TAG, "onSpeedChange--->" + speed);
         }
 
         @Override
         public void onLocationChange(List<LocationBean> locations) throws RemoteException {
 
+            Log.d(TAG, "onLocationChange--->size:" + locations.size());
+
+            List<LatLng> linePoints = ParseUtil.parseBean2LatLng(locations);
+            aMap.addPolyline(new PolylineOptions().addAll(linePoints).width(10).color(Color.argb(255, 255, 20, 147)));
         }
     };
 
@@ -478,34 +496,72 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
                 break;
             case R.id.run_data_stop_btn:
 
-                handleRunData(runDataDistanceTv);
+                handleRunData(mKM);
 
                 break;
             case R.id.run_data_pause_btn:
 
                 showStartAndStopBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
                 showStartAndStopBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
+
+                if (mIRunDataService != null) {
+                    try {
+                        mIRunDataService.stopRun();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
                 break;
             case R.id.run_data_start_btn:
 
                 showPauseBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
                 showPauseBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
+
+                if (mIRunDataService != null) {
+                    try {
+                        mIRunDataService.startRun();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
                 break;
 
-
             case R.id.run_map_stop_btn:
-                handleRunData(runMapDistanceTv);
+                handleRunData(mKM);
 
                 break;
             case R.id.run_map_pause_btn:
-                mLBSTraceClient.destroy();
+
                 showStartAndStopBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
                 showStartAndStopBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
+
+                if (mIRunDataService != null) {
+                    try {
+                        mIRunDataService.stopRun();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
                 break;
             case R.id.run_map_start_btn:
                 showPauseBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
                 showPauseBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
-                break;
+
+                if (mIRunDataService != null) {
+                    try {
+                        mIRunDataService.startRun();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+
 
             case R.id.back_run_data_iv:
                 Log.d(TAG, "back to data");
@@ -588,11 +644,9 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         set.start();
     }
 
-    private void handleRunData(TextView distanceTv) {
-        String distance = distanceTv.getText().toString();
-        float totalDistance = Float.parseFloat(distance);
+    private void handleRunData(double distance) {
 
-        if (totalDistance < 0.1) {
+        if (distance < 0.1) {
             new AlertDialog.Builder(this)
                     .setTitle("温馨提示")
                     .setMessage("此次运动距离过短,无法保存记录")
@@ -600,6 +654,15 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
+                            if (mIRunDataService != null) {
+                                try {
+                                    mIRunDataService.stopRun();
+                                } catch (RemoteException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
                             finish();
                         }
                     })
@@ -631,6 +694,7 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
     protected void onDestroy() {
         super.onDestroy();
         this.unbindService(gpsConn);
+        this.unbindService(runDataConn);
 
         if (mIGpsStatusService != null) {
             try {

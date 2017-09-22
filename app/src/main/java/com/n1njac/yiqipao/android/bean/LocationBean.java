@@ -15,6 +15,8 @@ public class LocationBean implements Parcelable {
     private float speed;
     private long time;
 
+    public LocationBean(){}
+
     protected LocationBean(Parcel in) {
         latitude = in.readDouble();
         longitude = in.readDouble();
