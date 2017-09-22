@@ -38,11 +38,14 @@ import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.trace.LBSTraceClient;
 import com.amap.api.trace.TraceListener;
 import com.amap.api.trace.TraceLocation;
-import com.amap.api.trace.TraceStatusListener;
 import com.n1njac.yiqipao.android.IGpsStatusCallback;
 import com.n1njac.yiqipao.android.IGpsStatusService;
+import com.n1njac.yiqipao.android.IRunDataCallback;
+import com.n1njac.yiqipao.android.IRunDataService;
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.bean.LocationBean;
 import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
+import com.n1njac.yiqipao.android.runengine.RunningCoreRemoteService;
 import com.n1njac.yiqipao.android.ui.widget.RunDataTextView;
 import com.n1njac.yiqipao.android.utils.FontCacheUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
@@ -161,9 +164,9 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
 
     private AMap aMap;
     private LBSTraceClient mLBSTraceClient;
-
-
     private IGpsStatusService mIGpsStatusService;
+    private IRunDataService mIRunDataService;
+
 
     private ServiceConnection gpsConn = new ServiceConnection() {
         @Override
@@ -182,6 +185,23 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         public void onServiceDisconnected(ComponentName name) {
 
             mIGpsStatusService = null;
+        }
+    };
+
+    private ServiceConnection runDataConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mIRunDataService = IRunDataService.Stub.asInterface(service);
+            try {
+                mIRunDataService.registerRunDataCallback(iRunDataCallback);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mIRunDataService = null;
         }
     };
 
@@ -206,7 +226,7 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
         this.bindService(new Intent(UserRunRecordActivity.this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
-
+        this.bindService(new Intent(UserRunRecordActivity.this, RunningCoreRemoteService.class), runDataConn, Context.BIND_AUTO_CREATE);
 
     }
 
@@ -242,9 +262,9 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         locationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         aMap.setMyLocationStyle(locationStyle);
         aMap.setMyLocationEnabled(true);
-
-        aMap.setOnMyLocationChangeListener(this);
         aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+//        aMap.setOnMyLocationChangeListener(this);
+
 
     }
 
@@ -253,7 +273,7 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
 
 
     //定位信息回调
-    // 三秒钟轨迹纠正一次，回传结果绘制轨迹和计算路程。暂停的话 轨迹不绘制，定位照常。
+    // 三秒钟轨迹纠正一次，回传结果绘制轨迹和计算路程。暂停的话 轨迹不绘制，定位照常。(调整到服务中实现)
     @Override
     public void onMyLocationChange(Location location) {
 
@@ -275,8 +295,6 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
         //轨迹纠正,开始的时候调用此方法开始绘制并计算轨迹，暂停则
         mLBSTraceClient.queryProcessedTrace(1, traces, LBSTraceClient.TYPE_AMAP, this);
 
-
-//
 
     }
 
@@ -312,6 +330,27 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
 
     }
 
+    //远程跑步数据回调
+    private IRunDataCallback iRunDataCallback = new IRunDataCallback.Stub() {
+
+        @Override
+        public void onDistanceChange(int distance) throws RemoteException {
+
+        }
+
+        @Override
+        public void onSpeedChange(float speed) throws RemoteException {
+
+        }
+
+        @Override
+        public void onLocationChange(List<LocationBean> locations) throws RemoteException {
+
+        }
+    };
+
+
+    //远程GPS回调
     private IGpsStatusCallback iGpsStatusCallback = new IGpsStatusCallback.Stub() {
         @Override
         public void gpsStatus(int status) throws RemoteException {
@@ -592,6 +631,7 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
     protected void onDestroy() {
         super.onDestroy();
         this.unbindService(gpsConn);
+
         if (mIGpsStatusService != null) {
             try {
                 mIGpsStatusService.unRegisterCallback(iGpsStatusCallback);
@@ -599,6 +639,15 @@ public class UserRunRecordActivity extends BaseActivity implements AMap.OnMyLoca
                 e.printStackTrace();
             }
         }
+
+        if (mIRunDataService != null) {
+            try {
+                mIRunDataService.unRegisterRunDataCallback(iRunDataCallback);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
         mMapView.onDestroy();
     }
 
