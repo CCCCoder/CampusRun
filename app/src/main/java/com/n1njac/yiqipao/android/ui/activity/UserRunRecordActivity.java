@@ -275,8 +275,7 @@ public class UserRunRecordActivity extends BaseActivity {
 
     }
 
-//    private List<LatLng> latLngs = new ArrayList<>();
-//    private List<TraceLocation> traces = new ArrayList<>();
+
 //
 //
 //    //定位信息回调
