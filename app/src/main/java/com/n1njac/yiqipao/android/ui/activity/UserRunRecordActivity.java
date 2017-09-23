@@ -44,19 +44,26 @@ import com.n1njac.yiqipao.android.IRunDataCallback;
 import com.n1njac.yiqipao.android.IRunDataService;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bean.LocationBean;
+import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
 import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
 import com.n1njac.yiqipao.android.runengine.RunningCoreRemoteService;
 import com.n1njac.yiqipao.android.ui.widget.RunDataTextView;
 import com.n1njac.yiqipao.android.utils.FontCacheUtil;
 import com.n1njac.yiqipao.android.utils.ParseUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
+import com.n1njac.yiqipao.android.utils.TimeUtil;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 import static com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService.SIGNAL_BAD;
 import static com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService.SIGNAL_FULL;
@@ -144,16 +151,30 @@ public class UserRunRecordActivity extends BaseActivity {
             switch (status) {
                 case SIGNAL_FULL:
 
+                    runDataGpsIv.setImageResource(R.drawable.gps_3);
+                    mapGpsIv.setImageResource(R.drawable.gps_3);
+                    runDataGpsPromptTv.setText("");
+                    mapGpsPromptTv.setText("");
 
                     break;
                 case SIGNAL_GOOD:
 
+                    runDataGpsIv.setImageResource(R.drawable.gps_2);
+                    mapGpsIv.setImageResource(R.drawable.gps_2);
+                    runDataGpsPromptTv.setText("");
+                    mapGpsPromptTv.setText("");
                     break;
                 case SIGNAL_BAD:
-
+                    runDataGpsIv.setImageResource(R.drawable.gps_1);
+                    mapGpsIv.setImageResource(R.drawable.gps_1);
+                    runDataGpsPromptTv.setText(R.string.gps_search_small);
+                    mapGpsPromptTv.setText(R.string.gps_search_small);
                     break;
                 case SIGNAL_NONE:
-
+                    runDataGpsIv.setImageResource(R.drawable.gps_0);
+                    mapGpsIv.setImageResource(R.drawable.gps_0);
+                    runDataGpsPromptTv.setText(R.string.gps_def_prompt);
+                    mapGpsPromptTv.setText(R.string.gps_def_prompt);
                     break;
                 default:
                     break;
@@ -170,7 +191,17 @@ public class UserRunRecordActivity extends BaseActivity {
 
     //跑步路程
     private double mKM;
+    //跑步轨迹点
+    private List<LatLng> mPoints;
+    //平均配速
+    private float mAvSpeed;
+    //开始跑步时间
+    private long mStartRunTime;
 
+    //跑步计数器
+    private Timer mTimer;
+    private boolean isPause = false;
+    private int timeCount = 1;
 
     private ServiceConnection gpsConn = new ServiceConnection() {
         @Override
@@ -230,13 +261,43 @@ public class UserRunRecordActivity extends BaseActivity {
         initMapLayout(savedInstanceState);
         initCountDownAnimation();
 
+        mStartRunTime = System.currentTimeMillis();
+
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        //计时器
+        mTimer = new Timer();
+        mTimer.schedule(runCountTask, 1000, 1000);
 
         this.bindService(new Intent(UserRunRecordActivity.this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
         this.bindService(new Intent(UserRunRecordActivity.this, RunningCoreRemoteService.class), runDataConn, Context.BIND_AUTO_CREATE);
 
     }
 
+
+    //计时器
+    private TimerTask runCountTask = new TimerTask() {
+        @Override
+        public void run() {
+            if (!isPause) {
+                timeCount++;
+
+                String hour = String.valueOf(count / 3600);
+                String minute = String.valueOf(count / 60);
+                String second = String.valueOf(count % 60);
+
+                String secondStr = second.length() == 1 ? "0" + second : second;
+                String minuteStr = minute.length() == 1 ? "0" + minute : minute;
+                String hourStr = hour.length() == 1 ? "0" + hour : hour;
+
+                String countTime = hourStr + ":" + minuteStr + ":" + secondStr;
+
+                runDataTimeTv.setText(countTime);
+                runMapTimeTv.setText(countTime);
+
+            }
+        }
+    };
 
     private void initRunDataLayout() {
         rootRunDataLayout = findViewById(R.id.include_root_run_data);
@@ -343,10 +404,11 @@ public class UserRunRecordActivity extends BaseActivity {
 
             //单位：米(转换为公里 1公里 = 1000米)
             Log.d(TAG, "onDistanceChange---->" + distance);
-
             mKM = distance / 1000;
 
-
+            String kmStr = String.valueOf(mKM);
+            runDataDistanceTv.setText(kmStr);
+            runMapDistanceTv.setText(kmStr);
         }
 
         @Override
@@ -354,6 +416,9 @@ public class UserRunRecordActivity extends BaseActivity {
 
             //单位：米\秒
             Log.d(TAG, "onSpeedChange--->" + speed);
+            String speedStr = String.valueOf(speed);
+            runDataSpeedTv.setText(speedStr);
+            runMapSpeedTv.setText(speedStr);
         }
 
         @Override
@@ -362,7 +427,13 @@ public class UserRunRecordActivity extends BaseActivity {
             Log.d(TAG, "onLocationChange--->size:" + locations.size());
 
             List<LatLng> linePoints = ParseUtil.parseBean2LatLng(locations);
+            mPoints = linePoints;
             aMap.addPolyline(new PolylineOptions().addAll(linePoints).width(10).color(Color.argb(255, 255, 20, 147)));
+        }
+
+        @Override
+        public void onAvSpeedChange(float avSpeed) throws RemoteException {
+            mAvSpeed = avSpeed;
         }
     };
 
@@ -495,13 +566,16 @@ public class UserRunRecordActivity extends BaseActivity {
                 break;
             case R.id.run_data_stop_btn:
 
-                handleRunData(mKM);
+                handleRunData(mKM, mPoints, mAvSpeed);
 
                 break;
             case R.id.run_data_pause_btn:
 
                 showStartAndStopBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
                 showStartAndStopBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
+
+                //计时器暂停
+                isPause = true;
 
                 if (mIRunDataService != null) {
                     try {
@@ -518,6 +592,9 @@ public class UserRunRecordActivity extends BaseActivity {
                 showPauseBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
                 showPauseBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
 
+                //计时器继续
+                isPause = false;
+
                 if (mIRunDataService != null) {
                     try {
                         mIRunDataService.startRun();
@@ -530,13 +607,17 @@ public class UserRunRecordActivity extends BaseActivity {
                 break;
 
             case R.id.run_map_stop_btn:
-                handleRunData(mKM);
+
+                handleRunData(mKM, mPoints, mAvSpeed);
 
                 break;
             case R.id.run_map_pause_btn:
 
                 showStartAndStopBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
                 showStartAndStopBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
+
+                //计时器暂停
+                isPause = true;
 
                 if (mIRunDataService != null) {
                     try {
@@ -551,6 +632,9 @@ public class UserRunRecordActivity extends BaseActivity {
             case R.id.run_map_start_btn:
                 showPauseBtnAnimation(runMapStartBtn, runMapStopBtn, runMapPauseBtn);
                 showPauseBtnAnimation(runDataStartBtn, runDataStopBtn, runDataPauseBtn);
+
+                //计时器继续
+                isPause = false;
 
                 if (mIRunDataService != null) {
                     try {
@@ -643,9 +727,9 @@ public class UserRunRecordActivity extends BaseActivity {
         set.start();
     }
 
-    private void handleRunData(double distance) {
+    private void handleRunData(double distance, List<LatLng> points, float avSpeed) {
 
-        if (distance < 0.1) {
+        if (distance < 0.01) {
             new AlertDialog.Builder(this)
                     .setTitle("温馨提示")
                     .setMessage("此次运动距离过短,无法保存记录")
@@ -667,7 +751,47 @@ public class UserRunRecordActivity extends BaseActivity {
                     })
                     .show();
         } else {
-            // TODO: 2017/9/19 记录跑步数据，然后退出。
+            // TODO: 2017/9/19 记录跑步数据，然后退出。上传服务器
+            //1.精确时间 2.公里数 3.点坐标 4.平均配速
+
+            String runTime = TimeUtil.parseTimeFormat(mStartRunTime);
+            String km = String.valueOf(distance);
+            String avSpeedStr = String.valueOf(avSpeed);
+            List<LocationBean> pointsBean = ParseUtil.parseLatLng2Bean(points);
+            RunDataBmob runDataBmob = new RunDataBmob();
+            runDataBmob.setRunStartTime(runTime);
+            runDataBmob.setRunDistance(km);
+            runDataBmob.setAvSpeed(avSpeedStr);
+            runDataBmob.setPoints(pointsBean);
+            runDataBmob.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e != null) {
+                        ToastUtil.shortToast(getApplicationContext(), e.getMessage());
+                        Log.d(TAG, "上传数据库------->error code:" + e.getErrorCode() + " error:" + e.getMessage());
+                    }
+                }
+            });
+
+            new AlertDialog.Builder(this)
+                    .setTitle("温馨提示")
+                    .setMessage("是否前往查看此次跑步信息？")
+                    .setNegativeButton("不了", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setPositiveButton("前往", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+
+
+                        }
+                    })
+                    .show();
+
         }
     }
 
@@ -713,6 +837,5 @@ public class UserRunRecordActivity extends BaseActivity {
 
         mMapView.onDestroy();
     }
-
 
 }

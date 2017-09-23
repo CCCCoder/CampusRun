@@ -125,6 +125,10 @@
 
         <activity android:name=".ui.activity.UserRunRecordActivity" android:theme="@style/AppTheme4"/>
 
+        <activity
+            android:theme="@style/AppTheme4"
+            android:name=".ui.activity.RunDataHistoryRecordActivity"/>
+
         <service
             android:process=":gps"
             android:name=".runengine.GpsStatusRemoteService"/>

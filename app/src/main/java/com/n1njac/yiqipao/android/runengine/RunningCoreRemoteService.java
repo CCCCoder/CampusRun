@@ -39,6 +39,10 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
 
     private float mSpeed;
 
+    private boolean isFirstCallback = true;
+
+    private float avSpeed;
+
 
     @Override
     public void onCreate() {
@@ -71,9 +75,19 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
         float bear = aMapLocation.getBearing();
         float speed = aMapLocation.getSpeed();
         long time = aMapLocation.getTime();
+        float lastSpeed = 0;
+
+        if (isFirstCallback) {
+            lastSpeed = speed;
+            isFirstCallback = false;
+        } else {
+            //平均配速
+            avSpeed = (lastSpeed + speed) / 2;
+            lastSpeed = avSpeed;
+        }
+
 
         mSpeed = speed;
-
         int gpsStatus = aMapLocation.getGpsAccuracyStatus();
         int satellites = aMapLocation.getSatellites();
 
@@ -121,6 +135,8 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
                 mCallback.getBroadcastItem(i).onLocationChange(locationBeanList);
                 mCallback.getBroadcastItem(i).onDistanceChange(distance);
                 mCallback.getBroadcastItem(i).onSpeedChange(speed);
+                mCallback.getBroadcastItem(i).onAvSpeedChange(avSpeed);
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
