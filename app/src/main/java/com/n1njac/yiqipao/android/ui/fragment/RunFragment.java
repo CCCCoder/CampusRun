@@ -1,6 +1,5 @@
 package com.n1njac.yiqipao.android.ui.fragment;
 
-import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,14 +21,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.IGpsStatusCallback;
 import com.n1njac.yiqipao.android.IGpsStatusService;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
-import com.n1njac.yiqipao.android.ui.activity.UserRunRecordActivity;
+import com.n1njac.yiqipao.android.ui.activity.UserRunActivity;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 
 import at.markushi.ui.CircleButton;
@@ -214,7 +212,7 @@ public class RunFragment extends Fragment {
                     .setPositiveButton("毅然开跑", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getActivity(), UserRunRecordActivity.class);
+                            Intent intent = new Intent(getActivity(), UserRunActivity.class);
                             startActivity(intent);
                         }
                     })
@@ -237,7 +235,7 @@ public class RunFragment extends Fragment {
                     .show();
 
         } else {
-            Intent intent = new Intent(getActivity(), UserRunRecordActivity.class);
+            Intent intent = new Intent(getActivity(), UserRunActivity.class);
             startActivity(intent);
         }
     }

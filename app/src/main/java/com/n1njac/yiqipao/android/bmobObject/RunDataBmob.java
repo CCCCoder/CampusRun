@@ -12,6 +12,13 @@ import cn.bmob.v3.BmobObject;
 
 public class RunDataBmob extends BmobObject {
 
+
+    //每一条数据需携带指定用户的objectid
+
+    private Long createTime;
+
+
+
     private String runStartTime;
     private String runDistance;
     private String avSpeed;
@@ -47,5 +54,12 @@ public class RunDataBmob extends BmobObject {
 
     public void setPoints(List<LocationBean> points) {
         this.points = points;
+    }
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 }

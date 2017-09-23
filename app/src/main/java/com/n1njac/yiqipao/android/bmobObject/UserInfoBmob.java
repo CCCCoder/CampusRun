@@ -15,6 +15,25 @@ public class UserInfoBmob extends BmobUser {
     private String pWeight;
     private String pHobby;
 
+    private String userInfoObjectId;
+    private String runDataObjectId;
+
+    public String getUserInfoObjectId() {
+        return userInfoObjectId;
+    }
+
+    public void setUserInfoObjectId(String userInfoObjectId) {
+        this.userInfoObjectId = userInfoObjectId;
+    }
+
+    public String getRunDataObjectId() {
+        return runDataObjectId;
+    }
+
+    public void setRunDataObjectId(String runDataObjectId) {
+        this.runDataObjectId = runDataObjectId;
+    }
+
     public String getpNickName() {
         return pNickName;
     }

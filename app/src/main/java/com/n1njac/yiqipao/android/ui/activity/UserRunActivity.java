@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,8 +35,6 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.trace.LBSTraceClient;
-import com.amap.api.trace.TraceListener;
-import com.amap.api.trace.TraceLocation;
 import com.n1njac.yiqipao.android.IGpsStatusCallback;
 import com.n1njac.yiqipao.android.IGpsStatusService;
 import com.n1njac.yiqipao.android.IRunDataCallback;
@@ -74,10 +71,10 @@ import static com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService.SIGNAL
  * Created by N1njaC on 2017/9/16.
  */
 
-public class UserRunRecordActivity extends BaseActivity {
+public class UserRunActivity extends BaseActivity {
 
 
-    private static final String TAG = UserRunRecordActivity.class.getSimpleName();
+    private static final String TAG = UserRunActivity.class.getSimpleName();
     private static final int COUNT_DURATION = 1000;
 
     @BindView(R.id.count_1_iv)
@@ -201,7 +198,7 @@ public class UserRunRecordActivity extends BaseActivity {
     //跑步计数器
     private Timer mTimer;
     private boolean isPause = false;
-    private int timeCount = 1;
+    private int timeCount = -4;
 
     private ServiceConnection gpsConn = new ServiceConnection() {
         @Override
@@ -269,8 +266,8 @@ public class UserRunRecordActivity extends BaseActivity {
         mTimer = new Timer();
         mTimer.schedule(runCountTask, 1000, 1000);
 
-        this.bindService(new Intent(UserRunRecordActivity.this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
-        this.bindService(new Intent(UserRunRecordActivity.this, RunningCoreRemoteService.class), runDataConn, Context.BIND_AUTO_CREATE);
+        this.bindService(new Intent(UserRunActivity.this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
+        this.bindService(new Intent(UserRunActivity.this, RunningCoreRemoteService.class), runDataConn, Context.BIND_AUTO_CREATE);
 
     }
 
@@ -281,19 +278,25 @@ public class UserRunRecordActivity extends BaseActivity {
         public void run() {
             if (!isPause) {
                 timeCount++;
-
-                String hour = String.valueOf(count / 3600);
-                String minute = String.valueOf(count / 60);
-                String second = String.valueOf(count % 60);
+                Log.d(TAG, "time count:" + timeCount);
+                String hour = String.valueOf(timeCount / 3600);
+                String minute = String.valueOf(timeCount / 60);
+                String second = String.valueOf(timeCount % 60);
 
                 String secondStr = second.length() == 1 ? "0" + second : second;
                 String minuteStr = minute.length() == 1 ? "0" + minute : minute;
                 String hourStr = hour.length() == 1 ? "0" + hour : hour;
 
-                String countTime = hourStr + ":" + minuteStr + ":" + secondStr;
+                final String countTime = hourStr + ":" + minuteStr + ":" + secondStr;
 
-                runDataTimeTv.setText(countTime);
-                runMapTimeTv.setText(countTime);
+                Log.d(TAG, "count time:" + countTime);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        runDataTimeTv.setText(countTime);
+                        runMapTimeTv.setText(countTime);
+                    }
+                });
 
             }
         }
@@ -406,9 +409,14 @@ public class UserRunRecordActivity extends BaseActivity {
             Log.d(TAG, "onDistanceChange---->" + distance);
             mKM = distance / 1000;
 
-            String kmStr = String.valueOf(mKM);
-            runDataDistanceTv.setText(kmStr);
-            runMapDistanceTv.setText(kmStr);
+            final String kmStr = String.valueOf(mKM);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    runDataDistanceTv.setText(kmStr);
+                    runMapDistanceTv.setText(kmStr);
+                }
+            });
         }
 
         @Override
@@ -416,9 +424,14 @@ public class UserRunRecordActivity extends BaseActivity {
 
             //单位：米\秒
             Log.d(TAG, "onSpeedChange--->" + speed);
-            String speedStr = String.valueOf(speed);
-            runDataSpeedTv.setText(speedStr);
-            runMapSpeedTv.setText(speedStr);
+            final String speedStr = String.valueOf(speed);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    runDataSpeedTv.setText(speedStr);
+                    runMapSpeedTv.setText(speedStr);
+                }
+            });
         }
 
         @Override
@@ -785,7 +798,6 @@ public class UserRunRecordActivity extends BaseActivity {
                     .setPositiveButton("前往", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
 
 
                         }

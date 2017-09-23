@@ -149,6 +149,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 userInfo.setMobilePhoneNumber(phoneStr);
                 userInfo.setUsername(accountStr);
                 userInfo.setPassword(passwordStr);
+                userInfo.setpSex("男");
                 userInfo.signOrLogin(codeStr, new SaveListener<UserInfoBmob>() {
                     @Override
                     public void done(UserInfoBmob userInfoBmob, BmobException e) {

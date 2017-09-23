@@ -33,6 +33,7 @@ import butterknife.Unbinder;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by N1njaC on 2017/7/31.
@@ -181,10 +182,13 @@ public class LoginFragment extends Fragment {
                 progressDialog.dismiss();
 
                 if (userInfoBmob != null) {
+
                     // TODO: 2017/9/4 登录成功，跳转到主界面
                     ToastUtil.shortToast(getActivity(), "登录成功");
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
+
+                    Log.d(TAG, "objectId:" + userInfoBmob.getObjectId());
 
                 } else {
 
@@ -193,6 +197,7 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
+
     }
 
 }

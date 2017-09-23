@@ -9,7 +9,7 @@ import com.n1njac.yiqipao.android.R;
  * Created by N1njaC on 2017/9/23.
  */
 
-public class RunDataHistoryRecordActivity extends BaseActivity {
+public class HistoryRecordListActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

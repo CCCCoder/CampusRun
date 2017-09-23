@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.TrackApplication;
+import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.ui.activity.ExecPlanActivity;
 import com.n1njac.yiqipao.android.ui.activity.HistoryDistanceActivity;
 import com.n1njac.yiqipao.android.ui.widget.DistanceDisplayArcView;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -24,6 +33,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class PersonalRunInfoFragment extends Fragment {
 
+    private static final String TAG = PersonalRunInfoFragment.class.getSimpleName();
     private DistanceDisplayArcView distanceDisplayArcView;
     private TextView exec, history;
     private TextView remindText;
@@ -35,7 +45,7 @@ public class PersonalRunInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.personal_run_frag, container, false);
         root = (RelativeLayout) view.findViewById(R.id.user_run_info_relat);
-        root.setPadding(0, SizeUtil.getStatusBarHeight(getActivity()),0,0);
+        root.setPadding(0, SizeUtil.getStatusBarHeight(getActivity()), 0, 0);
         exec = (TextView) view.findViewById(R.id.exec_text);
         history = (TextView) view.findViewById(R.id.history_tx);
         remindText = (TextView) view.findViewById(R.id.remind_tx);
@@ -44,7 +54,7 @@ public class PersonalRunInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ExecPlanActivity.class);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
         history.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +66,7 @@ public class PersonalRunInfoFragment extends Fragment {
         });
         distanceDisplayArcView = (DistanceDisplayArcView) view.findViewById(R.id.arc_view);
 
-        distanceDisplayArcView.setNowDistance(10,4.7);
+        distanceDisplayArcView.setNowDistance(10, 4.7);
 
         return view;
     }
@@ -66,10 +76,10 @@ public class PersonalRunInfoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             String content = data.getStringExtra("distance");
             double distance = Double.parseDouble(content);
-            distanceDisplayArcView.setNowDistance(distance,4.7);
+            distanceDisplayArcView.setNowDistance(distance, 4.7);
         }
     }
 }
