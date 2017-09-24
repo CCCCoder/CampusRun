@@ -334,7 +334,7 @@ public class UserRunActivity extends BaseActivity {
         aMap.setMyLocationStyle(locationStyle);
         aMap.setMyLocationEnabled(true);
         aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-//        aMap.setOnMyLocationChangeListener(this);
+
 
 
     }
