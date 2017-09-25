@@ -3,9 +3,10 @@
     package="com.n1njac.yiqipao.android">
 
 
+    <permission
+        android:name="cn.bmob.permission.push"
+        android:protectionLevel="normal"></permission>
 
-    <permission android:protectionLevel="normal" android:name="cn.bmob.permission.push">
-    </permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -37,11 +38,11 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="b765a6674e53066d16a43639ca676db4"/>
+            android:value="b765a6674e53066d16a43639ca676db4" />
 
         <activity
-            android:label="@string/app_name"
             android:name=".ui.activity.SplashActivity"
+            android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,12 +51,11 @@
         </activity>
 
         <activity
-            android:theme="@style/AppTheme2"
-            android:name=".ui.activity.AboutActivity"/>
+            android:name=".ui.activity.AboutActivity"
+            android:theme="@style/AppTheme2" />
         <activity
-            android:theme="@style/AppTheme"
-            android:name=".ui.activity.MainActivity">
-        </activity>
+            android:name=".ui.activity.MainActivity"
+            android:theme="@style/AppTheme"></activity>
 
         <activity
             android:name=".ui.activity.ExecPlanActivity"
@@ -63,32 +63,30 @@
         <activity android:name=".ui.activity.HistoryDistanceActivity" />
 
         <activity
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:name=".ui.activity.NearbyMainActivity"/>
-        <activity android:name=".ui.activity.NearbyChatMainActivity"/>
-
+            android:name=".ui.activity.NearbyMainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".ui.activity.NearbyChatMainActivity" />
 
 
         <!--Bmob push-->
 
         <service
-            android:label="PushService"
             android:name="cn.bmob.push.lib.service.PushService"
-            android:process=":bmobpush"
-            android:exported="true">
+            android:exported="true"
+            android:label="PushService"
+            android:process=":bmobpush">
             <intent-filter>
-                <action android:name="cn.bmob.push.lib.service.PushService"/>
+                <action android:name="cn.bmob.push.lib.service.PushService" />
             </intent-filter>
         </service>
 
         <!-- 用于进程保活 -->
         <service
             android:name="cn.bmob.push.lib.service.PushNotifyService"
-            android:process=":bmobpush" >
-        </service>
+            android:process=":bmobpush"></service>
 
 
-        <receiver android:name="cn.bmob.push.PushReceiver" >
+        <receiver android:name="cn.bmob.push.PushReceiver">
             <intent-filter>
                 <!-- 系统启动完成后会调用 -->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -101,15 +99,15 @@
 
         <!-- 第四部中创建的消息接收器，在这里进行注册 -->
         <receiver android:name=".receiver.PushMessageReceiver">
-            <intent-filter >
-                <action android:name="cn.bmob.push.action.MESSAGE"/>
+            <intent-filter>
+                <action android:name="cn.bmob.push.action.MESSAGE" />
             </intent-filter>
         </receiver>
 
         <!-- 接收心跳和唤醒的广播，要和PushService运行在同个进程 -->
         <receiver
             android:name="cn.bmob.push.PushNotifyReceiver"
-            android:process=":bmobpush" >
+            android:process=":bmobpush">
             <intent-filter>
                 <!-- 接收心跳广播的action -->
                 <action android:name="cn.bmob.push.action.HEARTBEAT" />
@@ -119,26 +117,32 @@
         </receiver>
 
         <activity
-            android:windowSoftInputMode="adjustResize"
+            android:name=".login.NewLoginActivity"
             android:theme="@style/AppTheme4"
-            android:name=".login.NewLoginActivity"/>
-
-        <activity android:name=".ui.activity.UserRunActivity" android:theme="@style/AppTheme4"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:theme="@style/AppTheme4"
-            android:name=".ui.activity.HistoryRecordListActivity"/>
+            android:name=".ui.activity.UserRunActivity"
+            android:theme="@style/AppTheme4" />
+
+        <activity
+            android:name=".ui.activity.HistoryRecordListActivity"
+            android:theme="@style/AppTheme4" />
+
+        <activity
+            android:name=".ui.activity.HistoryRunRecordActivity"
+            android:theme="@style/AppTheme4" />
 
         <service
-            android:process=":gps"
-            android:name=".runengine.GpsStatusRemoteService"/>
+            android:name=".runengine.GpsStatusRemoteService"
+            android:process=":gps" />
 
         <service
-            android:process=":gps"
-            android:name=".runengine.RunningCoreRemoteService"/>
+            android:name=".runengine.RunningCoreRemoteService"
+            android:process=":gps" />
         <service
-            android:process=":gps"
-            android:name="com.amap.api.location.APSService"/>
+            android:name="com.amap.api.location.APSService"
+            android:process=":gps" />
     </application>
 
 </manifest>

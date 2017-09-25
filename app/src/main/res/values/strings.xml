@@ -94,5 +94,10 @@
     <string name="run_btn_text_stop">结束</string>
     <string name="run_btn_text_pause">暂停</string>
     <string name="run_btn_text_start">继续</string>
+    <string name="history_distance_str">历史路程</string>
+    <string name="def_date">2017年9月\n21日18:20</string>
+    <string name="his_text_distance">公里</string>
+    <string name="dis_time_def">用时</string>
+    <string name="his_speed_text">配速</string>
 
 </resources>

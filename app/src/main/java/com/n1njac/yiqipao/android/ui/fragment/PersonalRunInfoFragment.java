@@ -16,6 +16,7 @@ import com.n1njac.yiqipao.android.TrackApplication;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.ui.activity.ExecPlanActivity;
 import com.n1njac.yiqipao.android.ui.activity.HistoryDistanceActivity;
+import com.n1njac.yiqipao.android.ui.activity.HistoryRecordListActivity;
 import com.n1njac.yiqipao.android.ui.widget.DistanceDisplayArcView;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 
@@ -60,7 +61,8 @@ public class PersonalRunInfoFragment extends Fragment {
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), HistoryDistanceActivity.class);
+//                Intent intent = new Intent(getActivity(), HistoryDistanceActivity.class);
+                Intent intent = new Intent(getActivity(), HistoryRecordListActivity.class);
                 startActivity(intent);
             }
         });

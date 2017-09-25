@@ -6,8 +6,11 @@ import cn.bmob.v3.BmobObject;
 
 /**
  * Created by huanglei on 2017/3/11.
+ * 此方法已废弃。不再使用
  */
 
+
+@Deprecated
 public class PersonInfoBmob extends BmobObject {
 
 

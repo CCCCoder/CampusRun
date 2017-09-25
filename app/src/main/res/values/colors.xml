@@ -19,7 +19,7 @@
     <color name="orange">#FFA500</color>
     <color name="blue">#1E90FF</color>
     <color name="green">#ADFF2F</color>
-    <color name="gray">	#BEBEBE</color>
+    <color name="gray">#BEBEBE</color>
 
     <color name="bg_color_blue">#43D5FF</color>
     <color name="bg_color_blue_press">#008B8B</color>
@@ -62,6 +62,7 @@
 
     <color name="run_data_map_white_bg">#eeffffff</color>
     <color name="run_map_line">#eeeeee</color>
+    <color name="text_gray">#CCCCCC</color>
 
 
 

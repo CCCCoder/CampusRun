@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/map_relat"
+        android:background="#999"
+        android:layout_marginBottom="223dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:background="#87d"
+        android:layout_marginTop="-223dp"
+        android:layout_below="@+id/map_relat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

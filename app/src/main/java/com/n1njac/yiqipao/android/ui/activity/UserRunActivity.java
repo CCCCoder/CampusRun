@@ -42,6 +42,7 @@ import com.n1njac.yiqipao.android.IRunDataService;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bean.LocationBean;
 import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
+import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
 import com.n1njac.yiqipao.android.runengine.RunningCoreRemoteService;
 import com.n1njac.yiqipao.android.ui.widget.RunDataTextView;
@@ -59,6 +60,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -194,6 +196,8 @@ public class UserRunActivity extends BaseActivity {
     private float mAvSpeed;
     //开始跑步时间
     private long mStartRunTime;
+    //跑步用时
+    private String mDurationTime;
 
     //跑步计数器
     private Timer mTimer;
@@ -289,6 +293,7 @@ public class UserRunActivity extends BaseActivity {
 
                 final String countTime = hourStr + ":" + minuteStr + ":" + secondStr;
 
+                mDurationTime = countTime;
                 Log.d(TAG, "count time:" + countTime);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -334,8 +339,6 @@ public class UserRunActivity extends BaseActivity {
         aMap.setMyLocationStyle(locationStyle);
         aMap.setMyLocationEnabled(true);
         aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-
-
 
     }
 
@@ -763,28 +766,68 @@ public class UserRunActivity extends BaseActivity {
                         }
                     })
                     .show();
+
+            //test
+//            List<LocationBean> locationBeanList = new ArrayList<>();
+//            UserInfoBmob user = BmobUser.getCurrentUser(UserInfoBmob.class);
+//            String objectId = user.getObjectId();
+//            Log.d(TAG, "object id:" + objectId);
+//
+//
+//            RunDataBmob runDataBmob = new RunDataBmob();
+//            runDataBmob.setRunStartTime("2017年09月\n22日08:20");
+//            runDataBmob.setRunDistance("3.21");
+//            runDataBmob.setAvSpeed("10'48''");
+//            runDataBmob.setPoints(locationBeanList);
+//            runDataBmob.setRunDurationTime("00:14:23");
+//            runDataBmob.setpUserObjectId("f9fc6b9a2a");
+//
+//            runDataBmob.save(new SaveListener<String>() {
+//                @Override
+//                public void done(String s, BmobException e) {
+//                    Log.d(TAG, s);
+//                    if (e != null) {
+//                        ToastUtil.shortToast(getApplicationContext(), e.getMessage());
+//                        Log.d(TAG, "上传数据库------->error code:" + e.getErrorCode() + " error:" + e.getMessage());
+//                    }
+//                }
+//            });
+
+
         } else {
             // TODO: 2017/9/19 记录跑步数据，然后退出。上传服务器
-            //1.精确时间 2.公里数 3.点坐标 4.平均配速
 
+            UserInfoBmob user = BmobUser.getCurrentUser(UserInfoBmob.class);
+            String objectId = user.getObjectId();
+
+            //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时
             String runTime = TimeUtil.parseTimeFormat(mStartRunTime);
             String km = String.valueOf(distance);
             String avSpeedStr = String.valueOf(avSpeed);
             List<LocationBean> pointsBean = ParseUtil.parseLatLng2Bean(points);
-            RunDataBmob runDataBmob = new RunDataBmob();
-            runDataBmob.setRunStartTime(runTime);
-            runDataBmob.setRunDistance(km);
-            runDataBmob.setAvSpeed(avSpeedStr);
-            runDataBmob.setPoints(pointsBean);
-            runDataBmob.save(new SaveListener<String>() {
-                @Override
-                public void done(String s, BmobException e) {
-                    if (e != null) {
-                        ToastUtil.shortToast(getApplicationContext(), e.getMessage());
-                        Log.d(TAG, "上传数据库------->error code:" + e.getErrorCode() + " error:" + e.getMessage());
+            String duration = mDurationTime;
+
+            if (objectId != null) {
+                RunDataBmob runDataBmob = new RunDataBmob();
+                runDataBmob.setRunStartTime(runTime);
+                runDataBmob.setRunDistance(km);
+                runDataBmob.setAvSpeed(avSpeedStr);
+                runDataBmob.setPoints(pointsBean);
+                runDataBmob.setRunDurationTime(duration);
+                runDataBmob.setpUserObjectId(objectId);
+
+                runDataBmob.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String s, BmobException e) {
+                        if (e != null) {
+                            ToastUtil.shortToast(getApplicationContext(), e.getMessage());
+                            Log.d(TAG, "上传数据库------->error code:" + e.getErrorCode() + " error:" + e.getMessage());
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                ToastUtil.shortToast(getApplicationContext(), "Access token is null.Try login again");
+            }
 
             new AlertDialog.Builder(this)
                     .setTitle("温馨提示")
@@ -799,6 +842,7 @@ public class UserRunActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
+                            // TODO: 2017/9/25 跳转到具体跑步界面
 
                         }
                     })

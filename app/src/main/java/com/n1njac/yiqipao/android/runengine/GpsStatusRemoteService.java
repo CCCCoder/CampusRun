@@ -151,7 +151,7 @@ public class GpsStatusRemoteService extends Service {
                             }
                         }
                     }
-                    Log.d("xyz", "satellite num:" + count);
+                    Log.d(TAG, "satellite num:" + count);
                     break;
 
                 case GpsStatus.GPS_EVENT_STARTED:
@@ -186,7 +186,7 @@ public class GpsStatusRemoteService extends Service {
 
                     }
                     //测试用
-//                    broadcastData(SIGNAL_BAD);
+                    broadcastData(SIGNAL_BAD);
                     Log.d(TAG, "satellite num:" + count2);
 
                     break;
