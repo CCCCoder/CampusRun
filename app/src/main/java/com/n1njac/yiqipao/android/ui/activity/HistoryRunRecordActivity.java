@@ -18,5 +18,6 @@ public class HistoryRunRecordActivity extends BaseActivity {
         setContentView(R.layout.his_run_record_act);
         RunDataBmob runData = (RunDataBmob) getIntent().getSerializableExtra("run_data");
 
+        //利用一个和下滑布局一样的布局来实现。
     }
 }
