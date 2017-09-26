@@ -3,8 +3,8 @@ package com.n1njac.yiqipao.android.ui.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,13 +17,28 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.GroundOverlayOptions;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.PolygonOptions;
+import com.amap.api.maps.model.PolylineOptions;
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.bean.LocationBean;
 import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
 import com.n1njac.yiqipao.android.ui.widget.RunDataTextView;
+import com.n1njac.yiqipao.android.utils.FontCacheUtil;
+import com.n1njac.yiqipao.android.utils.ParseUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 
-import butterknife.ButterKnife;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -73,6 +88,8 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
     RelativeLayout hisContentRoot;
     @BindView(R.id.his_tool_bar_title)
     TextView hisToolBarTitle;
+    @BindView(R.id.his_detail_map)
+    MapView mMapView;
 
     private static final String TAG = HistoryRunRecordActivity.class.getSimpleName();
     private static final int FLING_MIN_DISTANCE = 50;
@@ -91,7 +108,7 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
 
     private boolean isBigContent = false;
 
-    private int count = 0;
+    private AMap mAMap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,10 +116,89 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         setContentView(R.layout.his_run_record_act);
         ButterKnife.bind(this);
         RunDataBmob runData = (RunDataBmob) getIntent().getSerializableExtra("run_data");
+        Typeface boldTf = FontCacheUtil.getFont(this, "fonts/Avenir_Next_Condensed_demi_bold.ttf");
+        initLayout(runData, boldTf);
+        initMap(savedInstanceState, runData);
+
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         mDetector = new GestureDetector(this, this);
         hisContentRoot.setLongClickable(true);
         hisContentRoot.setOnTouchListener(this);
+
+    }
+
+    private void initMap(Bundle savedInstanceState, RunDataBmob runData) {
+        mMapView.onCreate(savedInstanceState);
+        List<LocationBean> pointsBean = runData.getPoints();
+        List<LatLng> points = ParseUtil.parseBean2LatLng(pointsBean);
+        List<Integer> colorList = new ArrayList<>();
+        colorList.add(R.color.end_color);
+        colorList.add(R.color.center_color);
+        colorList.add(R.color.start_color);
+        setStartAndEndMarker(points);
+        setMapHalfTransparentBg(new LatLng(points.get(0).latitude, points.get(0).longitude), R.drawable.his_map_bg);
+        if (mAMap == null) mAMap = mMapView.getMap();
+        mAMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+        //去掉高德地图右下角隐藏的缩放按钮
+        mAMap.getUiSettings().setZoomControlsEnabled(false);
+        mAMap.addPolyline(new PolylineOptions().addAll(points).width(10).useGradient(true).colorValues(colorList));
+
+    }
+
+    //设置半透明的背景
+    private void setMapHalfTransparentBg(LatLng latLng, int bg) {
+        mAMap.addGroundOverlay(new GroundOverlayOptions()
+                .position(latLng, 2 * 1000 * 1000, 2 * 1000 * 2000)
+                .image(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), bg))));
+    }
+
+    private void setStartAndEndMarker(List<LatLng> points) {
+        LatLng startPoint = new LatLng(points.get(0).latitude, points.get(0).longitude);
+        LatLng endPoint = new LatLng(points.get(points.size() - 1).latitude, points.get(points.size() - 1).longitude);
+        
+
+    }
+
+    private void addMarker(LatLng latLng, int icon) {
+        MarkerOptions mo = new MarkerOptions();
+        mo.position(latLng);
+        mo.zIndex(5);
+        mo.draggable(true);
+        mo.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), icon)));
+        mAMap.addMarker(mo);
+    }
+
+    private void initLayout(RunDataBmob runData, Typeface typeface) {
+
+        String avSpeed = runData.getAvSpeed();
+        String distance = runData.getRunDistance();
+        String duration = runData.getRunDurationTime();
+
+
+        hisDetailAvspeedTv.setTypeface(typeface);
+        hisDetailAvspeedTv.setText(avSpeed);
+        bigHisDetailAvspeedTv.setTypeface(typeface);
+        bigHisDetailAvspeedTv.setText(avSpeed);
+
+        hisDetailDistanceTv.setTypeface(typeface);
+        hisDetailDistanceTv.setText(distance);
+        bigHisDetailDistanceTv.setTypeface(typeface);
+        bigHisDetailDistanceTv.setText(distance);
+
+        hisDetailDurationTv.setTypeface(typeface);
+        hisDetailDurationTv.setText(duration);
+        bigHisDetailDurationTv.setTypeface(typeface);
+        bigHisDetailDurationTv.setText(duration);
+
+        hisDetailSlowestSpeedTv.setTypeface(typeface);
+        hisDetailFastSpeedTv.setTypeface(typeface);
+
+        bigHisDetailSlowestSpeedTv.setTypeface(typeface);
+        bigHisDetailFastSpeedTv.setTypeface(typeface);
+
+        hisDetailCalorieTv.setTypeface(typeface);
+        bigHisDetailCalorieTv.setTypeface(typeface);
+
 
     }
 
@@ -129,6 +225,7 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         mContentHeight = SizeUtil.dp2px(this, 223);
         mHeight = height;
     }
+
 
     @OnClick({R.id.his_detail_back_iv, R.id.his_detail_delete_iv, R.id.his_detail_share_iv})
     public void onViewClicked(View view) {
@@ -241,11 +338,10 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
 
     @Override
     public void onBackPressed() {
-        count++;
         if (isBigContent) {
             isBigContent = false;
             setToolBarTransparent();
-            Log.d(TAG, "count:" + count);
+
             ObjectAnimator animator = ObjectAnimator.ofFloat(bigHisRoot, "translationY", 0, mHeight - mContentHeight - mStatusBarHeight - mActionBarHeight);
 
             animator.setDuration(1000);
@@ -275,5 +371,23 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
     }
 }

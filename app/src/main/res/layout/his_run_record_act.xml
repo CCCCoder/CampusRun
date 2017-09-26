@@ -7,11 +7,16 @@
         android:id="@+id/map_relat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="223dp"
-        android:background="#999">
+        android:layout_marginBottom="223dp">
+        <com.amap.api.maps.MapView
+            android:id="@+id/his_detail_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
 
     </RelativeLayout>
 
+    <!--小布局-->
     <RelativeLayout
 
         android:background="#fff"
@@ -198,7 +203,6 @@
         </LinearLayout>
 
     </RelativeLayout>
-
 
     <!--滑动后的整个大布局-->
     <RelativeLayout

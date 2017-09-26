@@ -66,7 +66,10 @@
 
     <color name="record_text">#4a4a4a</color>
 
-
+    <!--渐变色-->
+    <color name="start_color">#ff3f3f</color>
+    <color name="center_color">#ffe400</color>
+    <color name="end_color">#0de600</color>
 
 
 </resources>
