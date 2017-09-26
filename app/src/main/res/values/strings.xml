@@ -99,5 +99,16 @@
     <string name="his_text_distance">公里</string>
     <string name="dis_time_def">用时</string>
     <string name="his_speed_text">配速</string>
+    <string name="his_avspeed_text">平均配速</string>
+    <string name="def_calorie">0</string>
+    <string name="def_calorie_text">大卡</string>
+    <string name="def_his_distance">0.00</string>
+    <string name="def_his_detail_distance">00:00:00</string>
+    <string name="his_slow_speed_text">最慢配速:</string>
+    <string name="his_fast_speed_text">最快配速:</string>
+    <string name="his_title">运动详情</string>
+    <string name="his_distance_text">公里</string>
+    <string name="his_def_prompt">还没完成今天的任务哦：）继续加油</string>
+
 
 </resources>

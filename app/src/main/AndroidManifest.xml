@@ -131,7 +131,7 @@
 
         <activity
             android:name=".ui.activity.HistoryRunRecordActivity"
-            android:theme="@style/AppTheme4" />
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".runengine.GpsStatusRemoteService"
