@@ -4,11 +4,13 @@ package com.n1njac.yiqipao.android.ui.widget;
  *    email:aiai173cc@gmail.com 
  */
 
+import android.animation.Animator;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
@@ -41,7 +43,7 @@ public class RecordPathView extends View {
 
     private float mAnimValue;
 
-    private int currentPathIndex;
+    private int currentPathIndex = 0;
 
     private PathMeasure mDstPathMeasure;
 
@@ -112,6 +114,29 @@ public class RecordPathView extends View {
             }
         });
 
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.start();
+
     }
 
     private void calculateAnimData() {
@@ -136,11 +161,41 @@ public class RecordPathView extends View {
         mDstPathMeasure = new PathMeasure(mDstPath, false);
         //将mDstPath的末尾的坐标放到mDstPathPoint中
         mDstPathMeasure.getPosTan(mDstPathMeasure.getLength(), mDstPathPoint, null);
-        
 
     }
 
-    class DstPathEvaluator implements TypeEvaluator {
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mTotalPathList == null || mTotalPathList.size() == 0) return;
+        if (currentPathIndex > 0) {
+
+            for (int i = 0; i < currentPathIndex; i++) {
+                RecordPathUtil.RecordPathBean recordPathBean = mTotalPathList.get(i);
+                mLinePaint.setStrokeWidth(10);
+                mLinePaint.setStyle(Paint.Style.STROKE);
+                mLinePaint.setColor(recordPathBean.getEndColor());
+                mLinePaint.setShader(recordPathBean.getShader());
+                canvas.drawPath(recordPathBean.getPath(), mLinePaint);
+                mLinePaint.setShader(null);
+                mLinePaint.setStrokeWidth(1);
+                mLinePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                canvas.drawCircle(recordPathBean.getEndPoint().x, recordPathBean.getEndPoint().y, 5, mLinePaint);
+            }
+
+        }
+
+        mLinePaint.setShader(mTotalPathList.get(currentPathIndex).getShader());
+        canvas.drawPath(mDstPath, mLinePaint);
+        canvas.drawBitmap(mStartIcon, mStartPathPoint[0] - mStartIcon.getWidth() / 2, mStartPathPoint[1] - mStartIcon.getHeight() / 2, mIConPaint);
+        if (mAnimValue >= 1) {
+            canvas.drawBitmap(mEndIcon, mEndPathPoint[0] - mEndIcon.getWidth() / 2, mEndPathPoint[1] - mEndIcon.getHeight() / 2, mIConPaint);
+        } else {
+            canvas.drawBitmap(mMidIcon, mDstPathPoint[0] - mMidIcon.getWidth() / 2, mDstPathPoint[1] - mMidIcon.getHeight() / 2, mIConPaint);
+        }
+    }
+
+    private class DstPathEvaluator implements TypeEvaluator {
 
         @Override
         public Object evaluate(float fraction, Object startValue, Object endValue) {
