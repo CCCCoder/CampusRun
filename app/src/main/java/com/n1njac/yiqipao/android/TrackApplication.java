@@ -21,6 +21,9 @@ public class TrackApplication extends Application {
     private Context mContext = null;
 
 
+    public static Context getContext(){
+        return TrackApplication.getContext();
+    }
     @Override
     public void onCreate() {
         // TODO Auto-generated method stub
