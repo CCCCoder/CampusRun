@@ -100,6 +100,10 @@ public class RecordPathUtil {
         return mTotalPathList;
     }
 
+    public long getTotalAnimationTime() {
+        return mTotalAnimationTime;
+    }
+
     //用来存储每一段path的相关属性
     public class RecordPathBean {
 
