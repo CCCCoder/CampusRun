@@ -94,7 +94,7 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
         Log.i(TAG, "onLocationChanged-->" + "latitude:" + latitude + " longitude:" + longitude);
         Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
         Log.i(TAG, "error info:" + aMapLocation.getErrorInfo() + " error code:" + aMapLocation.getErrorCode());
-        Log.i(TAG, "error info:" + aMapLocation.getErrorInfo() + " error code:" + aMapLocation.getErrorCode());
+
 
 
         TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);

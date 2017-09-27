@@ -129,16 +129,26 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
 
     private void initMap(Bundle savedInstanceState, RunDataBmob runData) {
         mMapView.onCreate(savedInstanceState);
+        if (mAMap == null) mAMap = mMapView.getMap();
         List<LocationBean> pointsBean = runData.getPoints();
         List<LatLng> points = ParseUtil.parseBean2LatLng(pointsBean);
+
+        Log.d(TAG, "points size:" + points.size());
+//        for (LatLng l :
+//                points) {
+//            Log.d(TAG, "lat:" + l.latitude + " lo:" + l.longitude);
+//        }
+
         List<Integer> colorList = new ArrayList<>();
         colorList.add(R.color.end_color);
         colorList.add(R.color.center_color);
         colorList.add(R.color.start_color);
+
+        LatLng startPoint = new LatLng(points.get(0).latitude, points.get(0).longitude);
+        setMapHalfTransparentBg(startPoint, R.drawable.his_map_bg);
         setStartAndEndMarker(points);
-        setMapHalfTransparentBg(new LatLng(points.get(0).latitude, points.get(0).longitude), R.drawable.his_map_bg);
-        if (mAMap == null) mAMap = mMapView.getMap();
-        mAMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+//        mAMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+        mAMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint, 17));
         //去掉高德地图右下角隐藏的缩放按钮
         mAMap.getUiSettings().setZoomControlsEnabled(false);
         mAMap.addPolyline(new PolylineOptions().addAll(points).width(10).useGradient(true).colorValues(colorList));
@@ -155,7 +165,9 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
     private void setStartAndEndMarker(List<LatLng> points) {
         LatLng startPoint = new LatLng(points.get(0).latitude, points.get(0).longitude);
         LatLng endPoint = new LatLng(points.get(points.size() - 1).latitude, points.get(points.size() - 1).longitude);
-        
+
+        addMarker(startPoint, R.drawable.start_point_icon);
+        addMarker(endPoint, R.drawable.end_point_icon);
 
     }
 
@@ -198,7 +210,6 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
 
         hisDetailCalorieTv.setTypeface(typeface);
         bigHisDetailCalorieTv.setTypeface(typeface);
-
 
     }
 
@@ -272,8 +283,10 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        if (e1.getY() - e2.getY() > FLING_MIN_DISTANCE && Math.abs(velocityY) > FLING_MIN_VELOCITY) {
+        if (!isBigContent && e1.getY() - e2.getY() > FLING_MIN_DISTANCE && Math.abs(velocityY) > FLING_MIN_VELOCITY) {
             Log.d(TAG, "上滑");
+
+            //当布局被覆盖的时候 不允许滑动
 
             isBigContent = true;
 

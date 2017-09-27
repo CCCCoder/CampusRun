@@ -3,11 +3,13 @@ package com.n1njac.yiqipao.android.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by N1njaC on 2017/9/22.
  */
 
-public class LocationBean implements Parcelable {
+public class LocationBean implements Parcelable,Serializable {
 
     private double latitude;
     private double longitude;

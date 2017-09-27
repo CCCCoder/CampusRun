@@ -46,6 +46,7 @@ import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
 import com.n1njac.yiqipao.android.runengine.RunningCoreRemoteService;
 import com.n1njac.yiqipao.android.ui.widget.RunDataTextView;
+import com.n1njac.yiqipao.android.utils.CalculateUtil;
 import com.n1njac.yiqipao.android.utils.FontCacheUtil;
 import com.n1njac.yiqipao.android.utils.ParseUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
@@ -409,10 +410,14 @@ public class UserRunActivity extends BaseActivity {
         public void onDistanceChange(int distance) throws RemoteException {
 
             //单位：米(转换为公里 1公里 = 1000米)
-            Log.d(TAG, "onDistanceChange---->" + distance);
-            mKM = distance / 1000;
+            Log.d(TAG, "onDistanceChange---->distance" + distance);
+
+            mKM = CalculateUtil.div(distance, 1000, 2);
+
+            Log.d(TAG, "onDistanceChange---->mKm:" + mKM);
 
             final String kmStr = String.valueOf(mKM);
+            Log.d(TAG, "onDistanceChange---->kmStr:" + kmStr);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -744,6 +749,8 @@ public class UserRunActivity extends BaseActivity {
     }
 
     private void handleRunData(double distance, List<LatLng> points, float avSpeed) {
+
+        Log.d(TAG, "equal distance:" + distance);
 
         if (distance < 0.01) {
             new AlertDialog.Builder(this)
