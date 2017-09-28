@@ -27,6 +27,7 @@ import com.n1njac.yiqipao.android.IRunDataService;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bean.LocationBean;
 import com.n1njac.yiqipao.android.ui.activity.UserRunActivity;
+import com.n1njac.yiqipao.android.utils.DistanceUtil;
 import com.n1njac.yiqipao.android.utils.ParseUtil;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.List;
  * Created by N1njaC on 2017/9/22.
  */
 
-public class RunningCoreRemoteService extends Service implements AMapLocationListener, TraceListener {
+public class RunningCoreRemoteService extends Service implements AMapLocationListener {
 
     private static final String TAG = RunningCoreRemoteService.class.getSimpleName();
 
@@ -51,6 +52,10 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
     private float avSpeed;
 
     private PowerManager.WakeLock mWakeLock;
+
+    private boolean debug = true;
+
+    private List<LatLng> mLinePoints;
 
 
     @Override
@@ -74,6 +79,8 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
         mLBSTraceClient = LBSTraceClient.getInstance(this);
 
         mTraceLocations = new ArrayList<>();
+
+        mLinePoints = new ArrayList<>();
 
         //设置为前台服务
         Intent intent = new Intent(this, UserRunActivity.class);
@@ -110,6 +117,9 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
         }
     }
 
+    private double lastLatitude, lastLongitude;
+    private double totalDistance = 0;
+
 
     //定位结果回调
     @Override
@@ -118,6 +128,8 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
 
         double latitude = aMapLocation.getLatitude();
         double longitude = aMapLocation.getLongitude();
+        LatLng latLng = new LatLng(latitude, longitude);
+        mLinePoints.add(latLng);
 
         float bear = aMapLocation.getBearing();
         float speed = aMapLocation.getSpeed();
@@ -127,54 +139,71 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
         if (isFirstCallback) {
             lastSpeed = speed;
             isFirstCallback = false;
+
+            lastLatitude = latitude;
+            lastLongitude = longitude;
+            Log.d(TAG, "first");
+
         } else {
             //平均配速
             avSpeed = (lastSpeed + speed) / 2;
             lastSpeed = avSpeed;
+            //累计路程计算
+
+            if (debug) {
+                Log.d(TAG, "---------------------------------------------------------");
+                Log.d(TAG, "last lat:" + lastLatitude + " last lon:" + lastLongitude);
+                Log.d(TAG, "current lat:" + latitude + "current lon" + longitude);
+                Log.d(TAG, "---------------------------------------------------------");
+            }
+
+            totalDistance += DistanceUtil.getDistance(lastLatitude, lastLongitude, latitude, longitude);
+            Log.d(TAG, "total distance:" + totalDistance);
         }
 
 
-        mSpeed = speed;
-        int gpsStatus = aMapLocation.getGpsAccuracyStatus();
-        int satellites = aMapLocation.getSatellites();
+        if (debug) {
+            Log.i(TAG, "onLocationChanged-->" + "latitude:" + latitude + " longitude:" + longitude);
+            Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
+            Log.i(TAG, "error info:" + aMapLocation.getErrorInfo() + " error code:" + aMapLocation.getErrorCode());
+        }
 
-        Log.i(TAG, "onLocationChanged-->" + "latitude:" + latitude + " longitude:" + longitude);
-        Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
-        Log.i(TAG, "error info:" + aMapLocation.getErrorInfo() + " error code:" + aMapLocation.getErrorCode());
+        //分发结果
+        List<LocationBean> locationBeanList = ParseUtil.parseLatLng2Bean(mLinePoints);
+        broadcastResult(locationBeanList, totalDistance, speed);
 
-
-        TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);
-        mTraceLocations.add(traceLocation);
-
-        mLBSTraceClient.queryProcessedTrace(1, mTraceLocations, LBSTraceClient.TYPE_AMAP, this);
+//        TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);
+//        mTraceLocations.add(traceLocation);
+//
+//        mLBSTraceClient.queryProcessedTrace(1, mTraceLocations, LBSTraceClient.TYPE_AMAP, this);
 
     }
 
 
     //轨迹纠偏回调
-    @Override
-    public void onRequestFailed(int lineID, String errorInfo) {
-
-        Log.d(TAG, "onRequestFailed---->" + errorInfo);
-    }
-
-    @Override
-    public void onTraceProcessing(int lineID, int index, List<LatLng> segments) {
-        Log.d(TAG, "onTraceProcessing");
-    }
-
-    @Override
-    public void onFinished(int lineID, List<LatLng> linePoints, int distance, int waitingTime) {
-
-        Log.d(TAG, "onFinished------>" + " distance:" + distance + "linePoints size:" + linePoints.size());
-
-        List<LocationBean> locationBeanList = ParseUtil.parseLatLng2Bean(linePoints);
-        broadcastResult(locationBeanList, distance, mSpeed);
-    }
+//    @Override
+//    public void onRequestFailed(int lineID, String errorInfo) {
+//
+//        Log.d(TAG, "onRequestFailed---->" + errorInfo);
+//    }
+//
+//    @Override
+//    public void onTraceProcessing(int lineID, int index, List<LatLng> segments) {
+//        Log.d(TAG, "onTraceProcessing");
+//    }
+//
+//    @Override
+//    public void onFinished(int lineID, List<LatLng> linePoints, int distance, int waitingTime) {
+//
+//        Log.d(TAG, "onFinished------>" + " distance:" + distance + "linePoints size:" + linePoints.size());
+//
+//        List<LocationBean> locationBeanList = ParseUtil.parseLatLng2Bean(linePoints);
+//        broadcastResult(locationBeanList, distance, mSpeed);
+//    }
 
 
     //分发纠偏后的结果（经纬度，路程，速度）
-    private void broadcastResult(List<LocationBean> locationBeanList, int distance, float speed) {
+    private void broadcastResult(List<LocationBean> locationBeanList, double distance, float speed) {
         int length = mCallback.beginBroadcast();
         for (int i = 0; i < length; i++) {
             try {

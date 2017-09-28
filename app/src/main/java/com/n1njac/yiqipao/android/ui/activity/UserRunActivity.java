@@ -199,6 +199,9 @@ public class UserRunActivity extends BaseActivity {
     private long mStartRunTime;
     //跑步用时
     private String mDurationTime;
+    //最大配速和最小配速
+    private float mMaxSpeed = 0;
+    private float mMinSpeed = 9999;
 
     //跑步计数器
     private Timer mTimer;
@@ -248,7 +251,7 @@ public class UserRunActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"-------------------------onCreate-----------------------");
+        Log.d(TAG, "-------------------------onCreate-----------------------");
         setContentView(R.layout.run_record_act);
         //放在ButterKnife前面
         if (Build.VERSION.SDK_INT >= 21) {
@@ -280,19 +283,19 @@ public class UserRunActivity extends BaseActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.d(TAG,"-------------------------onRestart-----------------------");
+        Log.d(TAG, "-------------------------onRestart-----------------------");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG,"-------------------------onStart-----------------------");
+        Log.d(TAG, "-------------------------onStart-----------------------");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG,"-------------------------onStop-----------------------");
+        Log.d(TAG, "-------------------------onStop-----------------------");
     }
 
     //计时器
@@ -361,52 +364,6 @@ public class UserRunActivity extends BaseActivity {
 
     }
 
-
-//
-//
-//    //定位信息回调
-//    // 三秒钟轨迹纠正一次，回传结果绘制轨迹和计算路程。暂停的话 轨迹不绘制，定位照常。(调整到服务中实现)
-//    @Override
-//    public void onMyLocationChange(Location location) {
-//
-//        double latitude = location.getLatitude();
-//        double longitude = location.getLongitude();
-//
-//        float bear = location.getBearing();
-//        float speed = location.getSpeed();
-//        long time = location.getTime();
-//
-//        LatLng latLng = new LatLng(latitude, longitude);
-//        latLngs.add(latLng);
-//
-//        //用一个list将traceLocation保存，每隔3s请求一次轨迹纠偏以获得已跑的路程。
-//        TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);
-//        traces.add(traceLocation);
-//        Log.i(TAG, "latitude:" + latitude + " longitude:" + longitude);
-//        Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
-//        //轨迹纠正,开始的时候调用此方法开始绘制并计算轨迹，暂停则
-//        mLBSTraceClient.queryProcessedTrace(1, traces, LBSTraceClient.TYPE_AMAP, this);
-//
-//    }
-
-//    //TraceListener回调
-//    @Override
-//    public void onRequestFailed(int lineID, String errorInfo) {
-//
-//        Log.d(TAG, "onRequestFailed------->轨迹纠偏error:" + errorInfo);
-//    }
-//
-//    @Override
-//    public void onTraceProcessing(int lineID, int index, List<LatLng> segments) {
-//        Log.d(TAG, "onTraceProcessing");
-//    }
-//
-//    @Override
-//    public void onFinished(int lineID, List<LatLng> linePoints, int distance, int waitingTime) {
-//        Log.d(TAG, "onFinished" + " distance:" + distance + "linePoints size:" + linePoints.size());
-//        aMap.addPolyline(new PolylineOptions().addAll(linePoints).width(10).color(Color.argb(255, 255, 20, 147)));
-//    }
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -418,14 +375,13 @@ public class UserRunActivity extends BaseActivity {
         //状态栏高度加actionbar的高度的一半。
         centerY = SizeUtil.getStatusBarHeight(this) + 96 / 2;
 
-
     }
 
     //远程跑步数据回调
     private IRunDataCallback iRunDataCallback = new IRunDataCallback.Stub() {
 
         @Override
-        public void onDistanceChange(int distance) throws RemoteException {
+        public void onDistanceChange(double distance) throws RemoteException {
 
             //单位：米(转换为公里 1公里 = 1000米)
             Log.d(TAG, "onDistanceChange---->distance" + distance);
@@ -447,6 +403,14 @@ public class UserRunActivity extends BaseActivity {
 
         @Override
         public void onSpeedChange(float speed) throws RemoteException {
+
+            if (speed > mMaxSpeed) {
+                mMaxSpeed = speed;
+            }
+
+            if (speed < mMinSpeed) {
+                mMinSpeed = speed;
+            }
 
             //单位：米\秒
             Log.d(TAG, "onSpeedChange--->" + speed);
@@ -605,7 +569,7 @@ public class UserRunActivity extends BaseActivity {
                 break;
             case R.id.run_data_stop_btn:
 
-                handleRunData(mKM, mPoints, mAvSpeed);
+                handleRunData(mKM, mPoints, mAvSpeed, mMaxSpeed, mMinSpeed);
 
                 break;
             case R.id.run_data_pause_btn:
@@ -647,7 +611,7 @@ public class UserRunActivity extends BaseActivity {
 
             case R.id.run_map_stop_btn:
 
-                handleRunData(mKM, mPoints, mAvSpeed);
+                handleRunData(mKM, mPoints, mAvSpeed, mMaxSpeed, mMinSpeed);
 
                 break;
             case R.id.run_map_pause_btn:
@@ -766,7 +730,7 @@ public class UserRunActivity extends BaseActivity {
         set.start();
     }
 
-    private void handleRunData(final double distance, final List<LatLng> points, final float avSpeed) {
+    private void handleRunData(final double distance, final List<LatLng> points, final float avSpeed, final float maxSpeed, final float minSpeed) {
 
         Log.d(TAG, "equal distance:" + distance);
 
@@ -837,7 +801,8 @@ public class UserRunActivity extends BaseActivity {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
 
-                                            uploadRunData(distance, points, avSpeed);
+                                            uploadRunData(distance, points, avSpeed, maxSpeed, minSpeed);
+
                                         }
                                     })
                                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -854,7 +819,7 @@ public class UserRunActivity extends BaseActivity {
                         public void onClick(DialogInterface dialog, int which) {
 
                             // TODO: 2017/9/19 记录跑步数据，然后退出。上传服务器
-                            uploadRunData(distance, points, avSpeed);
+                            uploadRunData(distance, points, avSpeed, maxSpeed, minSpeed);
 
                         }
                     })
@@ -864,16 +829,18 @@ public class UserRunActivity extends BaseActivity {
     }
 
 
-    private void uploadRunData(final double distance, final List<LatLng> points, final float avSpeed) {
+    private void uploadRunData(final double distance, final List<LatLng> points, final float avSpeed, final float maxSpeed, final float minSpeed) {
         UserInfoBmob user = BmobUser.getCurrentUser(UserInfoBmob.class);
         String objectId = user.getObjectId();
 
-        //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时
+        //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时 6.最小和最大配速
         String runTime = TimeUtil.parseTimeFormat(mStartRunTime);
         String km = String.valueOf(distance);
         String avSpeedStr = String.valueOf(avSpeed);
         List<LocationBean> pointsBean = ParseUtil.parseLatLng2Bean(points);
         String duration = mDurationTime;
+        String maxSpeedStr = String.valueOf(maxSpeed);
+        String minSpeedStr = String.valueOf(minSpeed);
 
         if (objectId != null) {
             RunDataBmob runDataBmob = new RunDataBmob();
@@ -883,6 +850,8 @@ public class UserRunActivity extends BaseActivity {
             runDataBmob.setPoints(pointsBean);
             runDataBmob.setRunDurationTime(duration);
             runDataBmob.setpUserObjectId(objectId);
+            runDataBmob.setMaxSpeed(maxSpeedStr);
+            runDataBmob.setMinSpeed(minSpeedStr);
 
             runDataBmob.save(new SaveListener<String>() {
                 @Override
@@ -890,6 +859,8 @@ public class UserRunActivity extends BaseActivity {
                     if (e != null) {
                         ToastUtil.shortToast(getApplicationContext(), e.getMessage());
                         Log.d(TAG, "上传数据库------->error code:" + e.getErrorCode() + " error:" + e.getMessage());
+                    } else {
+                        finish();
                     }
                 }
             });
@@ -907,21 +878,21 @@ public class UserRunActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG,"-------------------------onResume-----------------------");
+        Log.d(TAG, "-------------------------onResume-----------------------");
         mMapView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG,"-------------------------onPause-----------------------");
+        Log.d(TAG, "-------------------------onPause-----------------------");
         mMapView.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"-------------------------onDestroy-----------------------");
+        Log.d(TAG, "-------------------------onDestroy-----------------------");
         this.unbindService(gpsConn);
         this.unbindService(runDataConn);
 

@@ -5,7 +5,7 @@ import com.n1njac.yiqipao.android.bean.LocationBean;
 
 interface IRunDataCallback {
 
-    void onDistanceChange(int distance);
+    void onDistanceChange(double distance);
     void onSpeedChange(float speed);
     void onLocationChange(in List<LocationBean> locations);
     //平均配速
