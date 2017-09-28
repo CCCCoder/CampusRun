@@ -413,6 +413,7 @@ public class UserRunActivity extends BaseActivity {
             }
 
             //单位：米\秒
+            //配速：时间除以路程，一般时间单位用分，路程单位用千米。比如20分钟跑了3千米，那配速就是20/3=6.66，也就是6分40秒每公里，一般说成640的配速。
             Log.d(TAG, "onSpeedChange--->" + speed);
             final String speedStr = String.valueOf(speed);
             runOnUiThread(new Runnable() {
