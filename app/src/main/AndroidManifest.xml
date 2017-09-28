@@ -5,7 +5,9 @@
 
     <permission
         android:name="cn.bmob.permission.push"
-        android:protectionLevel="normal"></permission>
+        android:protectionLevel="normal"/>
+
+
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -55,7 +57,7 @@
             android:theme="@style/AppTheme2" />
         <activity
             android:name=".ui.activity.MainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name=".ui.activity.ExecPlanActivity"
@@ -122,6 +124,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:launchMode="singleTask"
             android:name=".ui.activity.UserRunActivity"
             android:theme="@style/AppTheme4" />
 

@@ -1,8 +1,13 @@
 package com.n1njac.yiqipao.android.runengine;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.IntDef;
@@ -19,7 +24,9 @@ import com.amap.api.trace.TraceListener;
 import com.amap.api.trace.TraceLocation;
 import com.n1njac.yiqipao.android.IRunDataCallback;
 import com.n1njac.yiqipao.android.IRunDataService;
+import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bean.LocationBean;
+import com.n1njac.yiqipao.android.ui.activity.UserRunActivity;
 import com.n1njac.yiqipao.android.utils.ParseUtil;
 
 import java.util.ArrayList;
@@ -43,11 +50,16 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
 
     private float avSpeed;
 
+    private PowerManager.WakeLock mWakeLock;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
+        //申请设备电源锁
+        acquireWakeLock(this);
+
         mAMapLocationClient = new AMapLocationClient(getApplicationContext());
         mAMapLocationClient.setLocationListener(this);
         AMapLocationClientOption locationClientOption = new AMapLocationClientOption();
@@ -62,7 +74,42 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
         mLBSTraceClient = LBSTraceClient.getInstance(this);
 
         mTraceLocations = new ArrayList<>();
+
+        //设置为前台服务
+        Intent intent = new Intent(this, UserRunActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
+        Notification.Builder builder = new Notification.Builder(this)
+                .setContentTitle("一起跑")
+                .setContentText("跑步中")
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.campusrun_icon))
+                .setSmallIcon(R.drawable.campusrun_icon)
+                .setContentIntent(pi);
+        Notification notification = builder.build();
+        startForeground(100, notification);
+
+
     }
+
+
+    private void acquireWakeLock(Context context) {
+
+        if (mWakeLock == null) {
+            PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "wake");
+            if (mWakeLock != null) {
+                mWakeLock.acquire();
+            }
+        }
+
+    }
+
+    private void releaseWakeLock() {
+        if (mWakeLock != null) {
+            mWakeLock.release();
+            mWakeLock = null;
+        }
+    }
+
 
     //定位结果回调
     @Override
@@ -94,7 +141,6 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
         Log.i(TAG, "onLocationChanged-->" + "latitude:" + latitude + " longitude:" + longitude);
         Log.i(TAG, "bear:" + bear + " speed:" + speed + " time:" + time);
         Log.i(TAG, "error info:" + aMapLocation.getErrorInfo() + " error code:" + aMapLocation.getErrorCode());
-
 
 
         TraceLocation traceLocation = new TraceLocation(latitude, longitude, speed, bear, time);
@@ -219,5 +265,7 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
             mAMapLocationClient.onDestroy();
             mAMapLocationClient = null;
         }
+        stopForeground(true);
+        releaseWakeLock();
     }
 }

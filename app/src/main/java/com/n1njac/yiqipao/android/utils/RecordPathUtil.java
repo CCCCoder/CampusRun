@@ -32,7 +32,7 @@ public class RecordPathUtil {
 
     public RecordPathUtil() {
         mTotalPathList = new ArrayList<>();
-        mScreenWidth = SizeUtil.getScreenWidth(TrackApplication.getContext());
+        mScreenWidth = SizeUtil.getScreenWidth(TrackApplication.getInstance());
     }
 
 

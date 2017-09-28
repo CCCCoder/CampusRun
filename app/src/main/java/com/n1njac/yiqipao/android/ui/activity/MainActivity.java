@@ -53,6 +53,7 @@ import cn.bmob.v3.BmobUser;
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
 
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private IndexViewPager viewPager;
@@ -79,6 +80,19 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private static final int CONSTANT_ABOUT = 1003;
     private static final int CONSTANT_SWITCH = 1004;
 
+
+    private ServiceConnection gpsConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+
+        }
+    };
 
 
     @Override
@@ -115,7 +129,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                         selectItem = 0;
                         break;
                     case CONSTANT_HIS_DISTANCE:
-                        startActivity(new Intent(MainActivity.this, HistoryDistanceActivity.class));
+                        startActivity(new Intent(MainActivity.this, HistoryRecordListActivity.class));
                         selectItem = 0;
                         break;
                     case CONSTANT_ABOUT:
@@ -198,6 +212,15 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 return true;
             }
         });
+
+
+        //启动绑定gps服务
+
+//        Intent intent = new Intent(this, GpsStatusRemoteService.class);
+//        intent.setComponent(new ComponentName("com.n1njac.yiqipao.android", "com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService"));
+//        startService(intent);
+//
+//        bindService(new Intent(this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
 
 
     }

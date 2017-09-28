@@ -14,6 +14,11 @@
             android:layout_height="match_parent"/>
 
 
+        <com.n1njac.yiqipao.android.ui.widget.RecordPathView
+            android:id="@+id/map_record_path_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </RelativeLayout>
 
     <!--小布局-->

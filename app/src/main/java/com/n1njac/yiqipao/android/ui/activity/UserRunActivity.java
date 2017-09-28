@@ -248,6 +248,7 @@ public class UserRunActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"-------------------------onCreate-----------------------");
         setContentView(R.layout.run_record_act);
         //放在ButterKnife前面
         if (Build.VERSION.SDK_INT >= 21) {
@@ -276,6 +277,23 @@ public class UserRunActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG,"-------------------------onRestart-----------------------");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG,"-------------------------onStart-----------------------");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG,"-------------------------onStop-----------------------");
+    }
 
     //计时器
     private TimerTask runCountTask = new TimerTask() {
@@ -748,12 +766,13 @@ public class UserRunActivity extends BaseActivity {
         set.start();
     }
 
-    private void handleRunData(double distance, List<LatLng> points, float avSpeed) {
+    private void handleRunData(final double distance, final List<LatLng> points, final float avSpeed) {
 
         Log.d(TAG, "equal distance:" + distance);
 
         if (distance < 0.01) {
             new AlertDialog.Builder(this)
+                    .setCancelable(false)
                     .setTitle("温馨提示")
                     .setMessage("此次运动距离过短,无法保存记录")
                     .setNegativeButton("取消", null)
@@ -802,59 +821,80 @@ public class UserRunActivity extends BaseActivity {
 
 
         } else {
-            // TODO: 2017/9/19 记录跑步数据，然后退出。上传服务器
-
-            UserInfoBmob user = BmobUser.getCurrentUser(UserInfoBmob.class);
-            String objectId = user.getObjectId();
-
-            //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时
-            String runTime = TimeUtil.parseTimeFormat(mStartRunTime);
-            String km = String.valueOf(distance);
-            String avSpeedStr = String.valueOf(avSpeed);
-            List<LocationBean> pointsBean = ParseUtil.parseLatLng2Bean(points);
-            String duration = mDurationTime;
-
-            if (objectId != null) {
-                RunDataBmob runDataBmob = new RunDataBmob();
-                runDataBmob.setRunStartTime(runTime);
-                runDataBmob.setRunDistance(km);
-                runDataBmob.setAvSpeed(avSpeedStr);
-                runDataBmob.setPoints(pointsBean);
-                runDataBmob.setRunDurationTime(duration);
-                runDataBmob.setpUserObjectId(objectId);
-
-                runDataBmob.save(new SaveListener<String>() {
-                    @Override
-                    public void done(String s, BmobException e) {
-                        if (e != null) {
-                            ToastUtil.shortToast(getApplicationContext(), e.getMessage());
-                            Log.d(TAG, "上传数据库------->error code:" + e.getErrorCode() + " error:" + e.getMessage());
-                        }
-                    }
-                });
-            } else {
-                ToastUtil.shortToast(getApplicationContext(), "Access token is null.Try login again");
-            }
 
             new AlertDialog.Builder(this)
                     .setTitle("温馨提示")
-                    .setMessage("是否前往查看此次跑步信息？")
-                    .setNegativeButton("不了", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setPositiveButton("前往", new DialogInterface.OnClickListener() {
+                    .setMessage("是否保存此次跑步信息？")
+                    .setCancelable(false)
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            // TODO: 2017/9/25 跳转到具体跑步界面
+                            new AlertDialog.Builder(getApplicationContext())
+                                    .setTitle("提示")
+                                    .setMessage("取消意味着此次跑步信息将全部丢失，您确定吗？")
+                                    .setNegativeButton("点错了，我要保存", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            uploadRunData(distance, points, avSpeed);
+                                        }
+                                    })
+                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            finish();
+                                        }
+                                    }).show();
+
+                        }
+                    })
+                    .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            // TODO: 2017/9/19 记录跑步数据，然后退出。上传服务器
+                            uploadRunData(distance, points, avSpeed);
 
                         }
                     })
                     .show();
 
+        }
+    }
+
+
+    private void uploadRunData(final double distance, final List<LatLng> points, final float avSpeed) {
+        UserInfoBmob user = BmobUser.getCurrentUser(UserInfoBmob.class);
+        String objectId = user.getObjectId();
+
+        //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时
+        String runTime = TimeUtil.parseTimeFormat(mStartRunTime);
+        String km = String.valueOf(distance);
+        String avSpeedStr = String.valueOf(avSpeed);
+        List<LocationBean> pointsBean = ParseUtil.parseLatLng2Bean(points);
+        String duration = mDurationTime;
+
+        if (objectId != null) {
+            RunDataBmob runDataBmob = new RunDataBmob();
+            runDataBmob.setRunStartTime(runTime);
+            runDataBmob.setRunDistance(km);
+            runDataBmob.setAvSpeed(avSpeedStr);
+            runDataBmob.setPoints(pointsBean);
+            runDataBmob.setRunDurationTime(duration);
+            runDataBmob.setpUserObjectId(objectId);
+
+            runDataBmob.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e != null) {
+                        ToastUtil.shortToast(getApplicationContext(), e.getMessage());
+                        Log.d(TAG, "上传数据库------->error code:" + e.getErrorCode() + " error:" + e.getMessage());
+                    }
+                }
+            });
+        } else {
+            ToastUtil.shortToast(getApplicationContext(), "Access token is null.Try login again");
         }
     }
 
@@ -867,18 +907,21 @@ public class UserRunActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG,"-------------------------onResume-----------------------");
         mMapView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG,"-------------------------onPause-----------------------");
         mMapView.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG,"-------------------------onDestroy-----------------------");
         this.unbindService(gpsConn);
         this.unbindService(runDataConn);
 

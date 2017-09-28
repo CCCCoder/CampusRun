@@ -18,17 +18,18 @@ import cn.bmob.v3.BmobInstallation;
 
 public class TrackApplication extends Application {
 
-    private Context mContext = null;
+    private static TrackApplication instance;
 
 
-    public static Context getContext(){
-        return TrackApplication.getContext();
+    public static TrackApplication getInstance() {
+        return instance;
     }
+
     @Override
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
-        mContext = getApplicationContext();
+        instance = this;
         LitePal.initialize(this);
         Bmob.initialize(this, "eca43c1e6d34df771a7fa797a7960feb");
         BmobInstallation.getCurrentInstallation().save();

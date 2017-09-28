@@ -16,6 +16,8 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
@@ -26,6 +28,8 @@ import com.n1njac.yiqipao.android.utils.RecordPathUtil;
 import java.util.List;
 
 public class RecordPathView extends View {
+
+    private static final String TAG = RecordPathView.class.getSimpleName();
 
     private Paint mLinePaint, mIConPaint;
     private Bitmap mStartIcon, mEndIcon, mMidIcon;
@@ -48,17 +52,26 @@ public class RecordPathView extends View {
     private PathMeasure mDstPathMeasure;
 
 
+    private onAnimCallback mCallback;
+
+
     public RecordPathView(Context context) {
-        super(context);
+        this(context, null);
+
     }
 
     public RecordPathView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
+
     }
 
     public RecordPathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
+    }
+
+    public void setAnimCallback(onAnimCallback callback) {
+        this.mCallback = callback;
     }
 
     private void init(Context context) {
@@ -87,6 +100,7 @@ public class RecordPathView extends View {
         if (!isDrawingPath) {
             isDrawingPath = true;
             mAllPathLength = recordPathUtil.getAllPathLength();
+            Log.d(TAG, "mAllPathLength:" + mAllPathLength);
             mDurationTime = recordPathUtil.getTotalAnimationTime();
             mTotalPathList = recordPathUtil.getTotalPathList();
             mWholePath = recordPathUtil.getWholePath();
@@ -103,12 +117,14 @@ public class RecordPathView extends View {
     private void startAnim() {
 
         ValueAnimator animator = ValueAnimator.ofObject(new DstPathEvaluator(), 0, mWholePathMeasure.getLength());
+        Log.d(TAG, "mWholePathMeasure.getLength():" + mWholePathMeasure.getLength());
         animator.setDuration(mDurationTime);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 mAnimValue = (float) animation.getAnimatedValue();
+                Log.d(TAG, "value:" + mAnimValue);
                 calculateAnimData();
                 invalidate();
             }
@@ -122,6 +138,10 @@ public class RecordPathView extends View {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+
+                if (mCallback != null) {
+                    mCallback.onAnimFinish();
+                }
 
             }
 
@@ -141,12 +161,14 @@ public class RecordPathView extends View {
 
     private void calculateAnimData() {
         float length = mAnimValue * mAllPathLength;
+        Log.d(TAG, "length:" + length);
         //需要多少段的path的长度
         float needPathLength = 0;
         //当某段前面所有的长度刚好大于动画计算所需的长度，这一段肯定有剩余长度，表示为offsetLength
         float offsetLength = 0;
         for (int i = 0; i < mTotalPathList.size(); i++) {
             needPathLength += mTotalPathList.get(i).getPathLength();
+            Log.d(TAG, "needPathLength:" + needPathLength);
             if (needPathLength > length) {
                 //这一段path有剩余，记录下标
                 currentPathIndex = i;
@@ -154,7 +176,10 @@ public class RecordPathView extends View {
                 break;
             }
         }
-        mDstPath.reset();
+        if (mDstPath != null) {
+            mDstPath.reset();
+        }
+        Log.d(TAG, "currentPathIndex:" + currentPathIndex);
         PathMeasure pathMeasure = new PathMeasure(mTotalPathList.get(currentPathIndex).getPath(), false);
         //将这一有剩余段的前部分（需要绘制的部分）提取出来放到mDstPath中
         pathMeasure.getSegment(0, mTotalPathList.get(currentPathIndex).getPathLength() - offsetLength, mDstPath, true);
@@ -201,5 +226,38 @@ public class RecordPathView extends View {
         public Object evaluate(float fraction, Object startValue, Object endValue) {
             return fraction;
         }
+    }
+
+    public interface onAnimCallback {
+        void onAnimFinish();
+    }
+
+    private float x, y;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+
+                x = event.getX();
+                y = event.getY();
+                break;
+
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_CANCEL:
+
+                if (Math.abs(x - event.getX()) > 0 || Math.abs(y - event.getY()) > 0) {
+                    if (mCallback != null) {
+                        mCallback.onAnimFinish();
+                    }
+                }
+
+                break;
+
+        }
+
+        return true;
     }
 }

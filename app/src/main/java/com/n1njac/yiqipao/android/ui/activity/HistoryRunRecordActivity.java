@@ -3,7 +3,10 @@ package com.n1njac.yiqipao.android.ui.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,15 +27,17 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.GroundOverlayOptions;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.PolygonOptions;
 import com.amap.api.maps.model.PolylineOptions;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bean.LocationBean;
 import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
+import com.n1njac.yiqipao.android.ui.widget.RecordPathView;
 import com.n1njac.yiqipao.android.ui.widget.RunDataTextView;
 import com.n1njac.yiqipao.android.utils.FontCacheUtil;
 import com.n1njac.yiqipao.android.utils.ParseUtil;
+import com.n1njac.yiqipao.android.utils.RecordPathUtil;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +50,7 @@ import butterknife.OnClick;
  * Created by N1njaC on 2017/9/25.
  */
 
-public class HistoryRunRecordActivity extends BaseActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
+public class HistoryRunRecordActivity extends BaseActivity implements View.OnTouchListener, GestureDetector.OnGestureListener, AMap.OnMapLoadedListener {
     @BindView(R.id.map_relat)
     RelativeLayout mapRelat;
     @BindView(R.id.his_detail_distance_tv)
@@ -90,10 +95,13 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
     TextView hisToolBarTitle;
     @BindView(R.id.his_detail_map)
     MapView mMapView;
+    @BindView(R.id.map_record_path_view)
+    RecordPathView mapRecordPathView;
 
     private static final String TAG = HistoryRunRecordActivity.class.getSimpleName();
     private static final int FLING_MIN_DISTANCE = 50;
     private static final int FLING_MIN_VELOCITY = 200;
+
 
     //屏幕高度
     private int mHeight;
@@ -110,6 +118,15 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
 
     private AMap mAMap;
 
+    private List<LatLng> mPoints;
+
+    private RecordPathUtil mRecordPathUtil;
+
+    private List<Integer> mColorList;
+
+    private Bitmap mStartIcon, mEndIcon;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,33 +142,38 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         hisContentRoot.setLongClickable(true);
         hisContentRoot.setOnTouchListener(this);
 
+        mColorList = new ArrayList<>();
+        mColorList.add(Color.rgb(0, 255, 127));
+        mColorList.add(Color.rgb(255, 255, 0));
+
+        mStartIcon = BitmapFactory.decodeResource(getResources(), R.drawable.start_point_icon);
+        mEndIcon = BitmapFactory.decodeResource(getResources(), R.drawable.end_point_icon);
+
     }
 
     private void initMap(Bundle savedInstanceState, RunDataBmob runData) {
         mMapView.onCreate(savedInstanceState);
         if (mAMap == null) mAMap = mMapView.getMap();
         List<LocationBean> pointsBean = runData.getPoints();
-        List<LatLng> points = ParseUtil.parseBean2LatLng(pointsBean);
+        mPoints = ParseUtil.parseBean2LatLng(pointsBean);
 
-        Log.d(TAG, "points size:" + points.size());
+        Log.d(TAG, "points size:" + mPoints.size());
 //        for (LatLng l :
 //                points) {
 //            Log.d(TAG, "lat:" + l.latitude + " lo:" + l.longitude);
 //        }
 
-        List<Integer> colorList = new ArrayList<>();
-        colorList.add(R.color.end_color);
-        colorList.add(R.color.center_color);
-        colorList.add(R.color.start_color);
+        if (mPoints != null && mPoints.size() > 0) {
+            LatLng startPoint = new LatLng(mPoints.get(0).latitude, mPoints.get(0).longitude);
+            setMapHalfTransparentBg(startPoint, R.drawable.his_map_bg);
+            mAMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint, 17));
+        } else {
+            ToastUtil.shortToast(this, "点集合为空!");
+        }
 
-        LatLng startPoint = new LatLng(points.get(0).latitude, points.get(0).longitude);
-        setMapHalfTransparentBg(startPoint, R.drawable.his_map_bg);
-        setStartAndEndMarker(points);
-//        mAMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-        mAMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint, 17));
         //去掉高德地图右下角隐藏的缩放按钮
         mAMap.getUiSettings().setZoomControlsEnabled(false);
-        mAMap.addPolyline(new PolylineOptions().addAll(points).width(10).useGradient(true).colorValues(colorList));
+        mAMap.setOnMapLoadedListener(this);
 
     }
 
@@ -162,23 +184,6 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
                 .image(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), bg))));
     }
 
-    private void setStartAndEndMarker(List<LatLng> points) {
-        LatLng startPoint = new LatLng(points.get(0).latitude, points.get(0).longitude);
-        LatLng endPoint = new LatLng(points.get(points.size() - 1).latitude, points.get(points.size() - 1).longitude);
-
-        addMarker(startPoint, R.drawable.start_point_icon);
-        addMarker(endPoint, R.drawable.end_point_icon);
-
-    }
-
-    private void addMarker(LatLng latLng, int icon) {
-        MarkerOptions mo = new MarkerOptions();
-        mo.position(latLng);
-        mo.zIndex(5);
-        mo.draggable(true);
-        mo.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), icon)));
-        mAMap.addMarker(mo);
-    }
 
     private void initLayout(RunDataBmob runData, Typeface typeface) {
 
@@ -237,6 +242,59 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         mHeight = height;
     }
 
+
+    //地图加载完成回调
+    @Override
+    public void onMapLoaded() {
+        Log.d(TAG, "onMapLoaded");
+        mRecordPathUtil = new RecordPathUtil();
+        addPoints2path();
+        mapRecordPathView.setPath(mRecordPathUtil);
+        mapRecordPathView.setAnimCallback(new RecordPathView.onAnimCallback() {
+            @Override
+            public void onAnimFinish() {
+                //当轨迹绘制完成之后或者在绘制过程中用户移动了地图，替换为高德api绘制的轨迹
+
+                mapRecordPathView.setVisibility(View.GONE);
+                mAMap.addPolyline(new PolylineOptions().addAll(mPoints).width(10).useGradient(true).colorValues(mColorList));
+                LatLng start = new LatLng(mPoints.get(0).latitude, mPoints.get(0).longitude);
+                LatLng end = new LatLng(mPoints.get(mPoints.size() - 1).latitude, mPoints.get(mPoints.size() - 1).longitude);
+                addMarker(start, mStartIcon);
+                addMarker(end, mEndIcon);
+            }
+        });
+
+    }
+
+    private void addPoints2path() {
+        Log.d(TAG, "points size" + mPoints.size());
+        for (int i = 0; i < mPoints.size() - 1; i++) {
+
+            LatLng startLatLng = mPoints.get(i);
+            LatLng endLatLng = mPoints.get(i + 1);
+            Point startPoint = mAMap.getProjection().toScreenLocation(startLatLng);
+            Point endPoint = mAMap.getProjection().toScreenLocation(endLatLng);
+
+            Log.d(TAG, "start point x:" + startPoint.x + "  y:" + startPoint.y);
+            Log.d(TAG, "end point x:" + endPoint.x + "  y:" + endPoint.y);
+            Log.d(TAG, "---------------------------------------------------");
+
+            mRecordPathUtil.addPath(startPoint, endPoint, Color.rgb(0, 255, 127), Color.rgb(255, 255, 0));
+        }
+    }
+
+    private void addMarker(LatLng latLng, Bitmap bitmap) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+        markerOptions.setFlat(true);
+
+        //设置Marker覆盖物的锚点比例。锚点是marker 图标接触地图平面的点。
+        float x = (float) 0.5;
+        float y = (float) 0.5;
+        markerOptions.anchor(x, y);
+        mAMap.addMarker(markerOptions);
+    }
 
     @OnClick({R.id.his_detail_back_iv, R.id.his_detail_delete_iv, R.id.his_detail_share_iv})
     public void onViewClicked(View view) {
@@ -382,6 +440,7 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
             });
             animator.start();
         } else {
+            mRecordPathUtil = null;
             finish();
         }
     }
@@ -403,4 +462,6 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         super.onDestroy();
         mMapView.onDestroy();
     }
+
+
 }

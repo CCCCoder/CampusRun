@@ -62,7 +62,7 @@ public class RunFragment extends Fragment {
     Unbinder unbinder;
 
 
-    private int currentStatus = 0;
+    private int currentStatus = SIGNAL_NONE;
 
 
     //可能造成内存泄漏。待处理
@@ -202,6 +202,7 @@ public class RunFragment extends Fragment {
     @OnClick(R.id.circle_btn)
     public void onViewClicked() {
 
+        Log.d(TAG, "current status:" + currentStatus);
 
         if (currentStatus == SIGNAL_BAD) {
 
