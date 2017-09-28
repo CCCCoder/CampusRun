@@ -795,7 +795,7 @@ public class UserRunActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            new AlertDialog.Builder(getApplicationContext())
+                            new AlertDialog.Builder(UserRunActivity.this)
                                     .setTitle("提示")
                                     .setMessage("取消意味着此次跑步信息将全部丢失，您确定吗？")
                                     .setNegativeButton("点错了，我要保存", new DialogInterface.OnClickListener() {

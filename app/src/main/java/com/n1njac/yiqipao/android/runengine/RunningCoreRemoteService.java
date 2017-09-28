@@ -157,7 +157,11 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
                 Log.d(TAG, "---------------------------------------------------------");
             }
 
-            totalDistance += DistanceUtil.getDistance(lastLatitude, lastLongitude, latitude, longitude);
+            if (!(lastLatitude == latitude && lastLongitude == longitude)) {
+                totalDistance += DistanceUtil.getDistance(lastLatitude, lastLongitude, latitude, longitude);
+            }
+            lastLatitude = latitude;
+            lastLongitude = longitude;
             Log.d(TAG, "total distance:" + totalDistance);
         }
 
