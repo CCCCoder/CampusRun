@@ -904,7 +904,7 @@ public class UserRunActivity extends BaseActivity {
 
         if (objectId != null) {
             RunDataBmob runDataBmob = new RunDataBmob();
-            
+
             runDataBmob.setRunStartTime(runTime);
             runDataBmob.setRunDistance(km);
             runDataBmob.setAvSpeed(avSpeedStr);
