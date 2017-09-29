@@ -13,7 +13,7 @@ import cn.bmob.v3.BmobObject;
 public class RunDataBmob extends BmobObject {
 
 
-    //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时 6.最大最小配速
+    //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时 6.最大最小速度 7.最大最小配速 8.平均配速
     //每一条数据需携带指定用户的objectid,目的是通过此特定的用户id来查询此用户的跑步信息数据。
 
     private String runStartTime;
@@ -25,6 +25,35 @@ public class RunDataBmob extends BmobObject {
 
     private String maxSpeed;
     private String minSpeed;
+
+    private String maxPace;
+    private String minPace;
+
+    private String avPace;
+
+    public String getAvPace() {
+        return avPace;
+    }
+
+    public void setAvPace(String avPace) {
+        this.avPace = avPace;
+    }
+
+    public String getMaxPace() {
+        return maxPace;
+    }
+
+    public void setMaxPace(String maxPace) {
+        this.maxPace = maxPace;
+    }
+
+    public String getMinPace() {
+        return minPace;
+    }
+
+    public void setMinPace(String minPace) {
+        this.minPace = minPace;
+    }
 
     public String getMaxSpeed() {
         return maxSpeed;

@@ -16,6 +16,7 @@ import com.n1njac.yiqipao.android.adapter.HistoryDataAdapter;
 import com.n1njac.yiqipao.android.bean.LocationBean;
 import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import java.util.List;
 
@@ -89,6 +90,7 @@ public class HistoryRecordListActivity extends BaseActivity {
                     }));
                 } else {
                     Log.d(TAG, "error------>" + e.getErrorCode() + " " + e.getLocalizedMessage());
+                    ToastUtil.shortToast(HistoryRecordListActivity.this, e.getLocalizedMessage());
                 }
 
             }

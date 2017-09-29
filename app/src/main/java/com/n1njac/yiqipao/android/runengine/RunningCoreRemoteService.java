@@ -74,7 +74,7 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
         locationClientOption.setMockEnable(true);
         mAMapLocationClient.setLocationListener(this);
         mAMapLocationClient.setLocationOption(locationClientOption);
-        mAMapLocationClient.startLocation();
+//        mAMapLocationClient.startLocation();
 
         mLBSTraceClient = LBSTraceClient.getInstance(this);
 

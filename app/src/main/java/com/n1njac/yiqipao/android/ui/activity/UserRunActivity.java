@@ -208,6 +208,16 @@ public class UserRunActivity extends BaseActivity {
     private boolean isPause = false;
     private int timeCount = -4;
 
+    private int minCount = 0;
+    //实时配速
+    private String mCurrentPace;
+    //平均配速
+    private double mAvPace;
+    //最大配速
+    private String mMaxPace;
+    //最小配速
+    private String mMinPace;
+
     private ServiceConnection gpsConn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -237,6 +247,7 @@ public class UserRunActivity extends BaseActivity {
             mIRunDataService = IRunDataService.Stub.asInterface(service);
             try {
                 mIRunDataService.registerRunDataCallback(iRunDataCallback);
+                mIRunDataService.startRun();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -299,6 +310,7 @@ public class UserRunActivity extends BaseActivity {
     }
 
     //计时器
+    //时间需重新处理，当分钟满60的时候有bug
     private TimerTask runCountTask = new TimerTask() {
         @Override
         public void run() {
@@ -306,8 +318,11 @@ public class UserRunActivity extends BaseActivity {
                 timeCount++;
                 Log.d(TAG, "time count:" + timeCount);
                 String hour = String.valueOf(timeCount / 3600);
-                String minute = String.valueOf(timeCount / 60);
+                String minute = String.valueOf(CalculateUtil.parseMinute(timeCount));
                 String second = String.valueOf(timeCount % 60);
+
+
+                minCount = timeCount / 60;
 
                 String secondStr = second.length() == 1 ? "0" + second : second;
                 String minuteStr = minute.length() == 1 ? "0" + minute : minute;
@@ -390,6 +405,26 @@ public class UserRunActivity extends BaseActivity {
 
             Log.d(TAG, "onDistanceChange---->mKm:" + mKM);
 
+            double paceDouble = CalculateUtil.getPaceDouble(minCount, mKM);
+            mCurrentPace = CalculateUtil.getPaceResult(paceDouble, minCount, mKM);
+
+            Log.d(TAG, "onDistanceChange---->paceDouble:" + paceDouble);
+            Log.d(TAG, "onDistanceChange---->mCurrentPace:" + mCurrentPace);
+
+            double maxPace = 0.0;
+            double minPace = 9999.0;
+
+            if (paceDouble > maxPace) {
+                maxPace = paceDouble;
+                mMaxPace = CalculateUtil.getPaceResult(maxPace, minCount, mKM);
+
+            }
+            if (paceDouble < minPace) {
+                minPace = paceDouble;
+                mMinPace = CalculateUtil.getPaceResult(minPace, minCount, mKM);
+            }
+
+
             final String kmStr = String.valueOf(mKM);
             Log.d(TAG, "onDistanceChange---->kmStr:" + kmStr);
             runOnUiThread(new Runnable() {
@@ -397,6 +432,8 @@ public class UserRunActivity extends BaseActivity {
                 public void run() {
                     runDataDistanceTv.setText(kmStr);
                     runMapDistanceTv.setText(kmStr);
+                    runDataSpeedTv.setText(mCurrentPace);
+                    runMapSpeedTv.setText(mCurrentPace);
                 }
             });
         }
@@ -414,15 +451,16 @@ public class UserRunActivity extends BaseActivity {
 
             //单位：米\秒
             //配速：时间除以路程，一般时间单位用分，路程单位用千米。比如20分钟跑了3千米，那配速就是20/3=6.66，也就是6分40秒每公里，一般说成640的配速。
+
             Log.d(TAG, "onSpeedChange--->" + speed);
             final String speedStr = String.valueOf(speed);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    runDataSpeedTv.setText(speedStr);
-                    runMapSpeedTv.setText(speedStr);
-                }
-            });
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    runDataSpeedTv.setText(speedStr);
+//                    runMapSpeedTv.setText(speedStr);
+//                }
+//            });
         }
 
         @Override
@@ -581,13 +619,7 @@ public class UserRunActivity extends BaseActivity {
                 //计时器暂停
                 isPause = true;
 
-                if (mIRunDataService != null) {
-                    try {
-                        mIRunDataService.stopRun();
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                }
+                pauseRunning();
 
 
                 break;
@@ -599,14 +631,7 @@ public class UserRunActivity extends BaseActivity {
                 //计时器继续
                 isPause = false;
 
-                if (mIRunDataService != null) {
-                    try {
-                        mIRunDataService.startRun();
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-
-                }
+                continueRunning();
 
                 break;
 
@@ -623,13 +648,7 @@ public class UserRunActivity extends BaseActivity {
                 //计时器暂停
                 isPause = true;
 
-                if (mIRunDataService != null) {
-                    try {
-                        mIRunDataService.stopRun();
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                }
+                pauseRunning();
 
 
                 break;
@@ -640,14 +659,7 @@ public class UserRunActivity extends BaseActivity {
                 //计时器继续
                 isPause = false;
 
-                if (mIRunDataService != null) {
-                    try {
-                        mIRunDataService.startRun();
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                }
+                continueRunning();
 
 
             case R.id.back_run_data_iv:
@@ -735,7 +747,7 @@ public class UserRunActivity extends BaseActivity {
 
         Log.d(TAG, "equal distance:" + distance);
 
-        if (distance < 0.01) {
+        if (distance < 0.03) {
             new AlertDialog.Builder(this)
                     .setCancelable(false)
                     .setTitle("温馨提示")
@@ -745,13 +757,7 @@ public class UserRunActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            if (mIRunDataService != null) {
-                                try {
-                                    mIRunDataService.stopRun();
-                                } catch (RemoteException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                            stopRunning();
 
                             finish();
                         }
@@ -802,13 +808,16 @@ public class UserRunActivity extends BaseActivity {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
 
-                                            uploadRunData(distance, points, avSpeed, maxSpeed, minSpeed);
+                                            stopRunning();
+
+                                            uploadRunData(distance, points, avSpeed, maxSpeed, minSpeed, mMaxPace, mMinPace, minCount);
 
                                         }
                                     })
                                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            stopRunning();
                                             finish();
                                         }
                                     }).show();
@@ -820,7 +829,8 @@ public class UserRunActivity extends BaseActivity {
                         public void onClick(DialogInterface dialog, int which) {
 
                             // TODO: 2017/9/19 记录跑步数据，然后退出。上传服务器
-                            uploadRunData(distance, points, avSpeed, maxSpeed, minSpeed);
+                            stopRunning();
+                            uploadRunData(distance, points, avSpeed, maxSpeed, minSpeed, mMaxPace, mMinPace, minCount);
 
                         }
                     })
@@ -830,11 +840,55 @@ public class UserRunActivity extends BaseActivity {
     }
 
 
-    private void uploadRunData(final double distance, final List<LatLng> points, final float avSpeed, final float maxSpeed, final float minSpeed) {
+    private void startRunning() {
+        if (mIRunDataService != null) {
+            try {
+                mIRunDataService.startRun();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void continueRunning() {
+        if (mIRunDataService != null) {
+            try {
+                mIRunDataService.startRun();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void pauseRunning() {
+        if (mIRunDataService != null) {
+            try {
+                mIRunDataService.pauseRun();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void stopRunning() {
+        if (mIRunDataService != null) {
+            try {
+                mIRunDataService.stopRun();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void uploadRunData(final double distance, final List<LatLng> points, final float avSpeed, final float maxSpeed, final float minSpeed,
+                               String maxPaceStr, String minPaceStr, int minCount) {
         UserInfoBmob user = BmobUser.getCurrentUser(UserInfoBmob.class);
         String objectId = user.getObjectId();
 
-        //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时 6.最小和最大配速
+        //1.精确时间 2.公里数 3.点坐标 4.平均配速 5.跑步用时 6.最小和最大速度 7.最大和最小配速 8.平均配速
         String runTime = TimeUtil.parseTimeFormat(mStartRunTime);
         String km = String.valueOf(distance);
         String avSpeedStr = String.valueOf(avSpeed);
@@ -843,8 +897,14 @@ public class UserRunActivity extends BaseActivity {
         String maxSpeedStr = String.valueOf(maxSpeed);
         String minSpeedStr = String.valueOf(minSpeed);
 
+        //计算平均配速
+
+        double avPace = CalculateUtil.getPaceDouble(minCount, distance);
+        String avPaceStr = CalculateUtil.getPaceResult(avPace, minCount, distance);
+
         if (objectId != null) {
             RunDataBmob runDataBmob = new RunDataBmob();
+            
             runDataBmob.setRunStartTime(runTime);
             runDataBmob.setRunDistance(km);
             runDataBmob.setAvSpeed(avSpeedStr);
@@ -853,6 +913,9 @@ public class UserRunActivity extends BaseActivity {
             runDataBmob.setpUserObjectId(objectId);
             runDataBmob.setMaxSpeed(maxSpeedStr);
             runDataBmob.setMinSpeed(minSpeedStr);
+            runDataBmob.setMaxPace(maxPaceStr);
+            runDataBmob.setMinPace(minPaceStr);
+            runDataBmob.setAvPace(avPaceStr);
 
             runDataBmob.save(new SaveListener<String>() {
                 @Override

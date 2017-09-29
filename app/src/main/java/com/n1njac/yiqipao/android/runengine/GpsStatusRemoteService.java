@@ -165,7 +165,7 @@ public class GpsStatusRemoteService extends Service {
 //                        broadcastData(SIGNAL_NONE);
 //                        break;
 //                    }
-                    
+
                     while (iterator2.hasNext() && count2 <= MAX_SATELLITE) {
                         GpsSatellite gpsSatellite = iterator2.next();
 
