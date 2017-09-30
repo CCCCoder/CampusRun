@@ -13,6 +13,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <LinearLayout
+            android:background="@drawable/his_detail_time_bg"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/his_run_icon"
+                android:background="@drawable/his_icon_bg"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+
+
+            <TextView
+                android:text="2017/09/21 18:20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <com.n1njac.yiqipao.android.ui.widget.RecordPathView
             android:id="@+id/map_record_path_view"

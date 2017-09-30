@@ -70,6 +70,7 @@
     <color name="start_color">#ff3f3f</color>
     <color name="center_color">#ffe400</color>
     <color name="end_color">#0de600</color>
+    <color name="his_detail_time">#66000000</color>
 
 
 </resources>

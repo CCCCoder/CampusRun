@@ -191,11 +191,15 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         String distance = runData.getRunDistance();
         String duration = runData.getRunDurationTime();
 
+        String avPace = runData.getAvPace();
+        String maxPace = runData.getMaxPace();
+        String minPace = runData.getMinPace();
 
+        //平均配速
         hisDetailAvspeedTv.setTypeface(typeface);
-        hisDetailAvspeedTv.setText(avSpeed);
+        hisDetailAvspeedTv.setText(avPace);
         bigHisDetailAvspeedTv.setTypeface(typeface);
-        bigHisDetailAvspeedTv.setText(avSpeed);
+        bigHisDetailAvspeedTv.setText(avPace);
 
         hisDetailDistanceTv.setTypeface(typeface);
         hisDetailDistanceTv.setText(distance);
@@ -207,9 +211,14 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         bigHisDetailDurationTv.setTypeface(typeface);
         bigHisDetailDurationTv.setText(duration);
 
+        //最满\快配速
+        hisDetailSlowestSpeedTv.setText(minPace);
         hisDetailSlowestSpeedTv.setTypeface(typeface);
         hisDetailFastSpeedTv.setTypeface(typeface);
+        hisDetailFastSpeedTv.setText(maxPace);
 
+        bigHisDetailSlowestSpeedTv.setText(minPace);
+        bigHisDetailFastSpeedTv.setText(maxPace);
         bigHisDetailSlowestSpeedTv.setTypeface(typeface);
         bigHisDetailFastSpeedTv.setTypeface(typeface);
 

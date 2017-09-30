@@ -487,6 +487,7 @@ public class UserRunActivity extends BaseActivity {
             switch (status) {
                 case SIGNAL_FULL:
 
+                    Log.d(TAG,"SIGNAL FULL");
                     currentStatus = SIGNAL_FULL;
 
                     Message msg = Message.obtain();
@@ -496,6 +497,7 @@ public class UserRunActivity extends BaseActivity {
                     break;
                 case SIGNAL_GOOD:
 
+                    Log.d(TAG,"SIGNAL GOOD");
                     currentStatus = SIGNAL_GOOD;
 
                     Message msg2 = Message.obtain();
@@ -505,6 +507,7 @@ public class UserRunActivity extends BaseActivity {
                     break;
                 case SIGNAL_BAD:
 
+                    Log.d(TAG,"SIGNAL BAD");
                     currentStatus = SIGNAL_BAD;
 
                     Message msg3 = Message.obtain();
@@ -514,6 +517,7 @@ public class UserRunActivity extends BaseActivity {
                     break;
                 case SIGNAL_NONE:
 
+                    Log.d(TAG,"SIGNAL NONE");
                     currentStatus = SIGNAL_NONE;
 
                     Message msg4 = Message.obtain();
