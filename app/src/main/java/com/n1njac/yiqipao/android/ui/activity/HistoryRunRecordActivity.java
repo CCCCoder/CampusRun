@@ -3,6 +3,7 @@ package com.n1njac.yiqipao.android.ui.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -45,6 +47,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by N1njaC on 2017/9/25.
@@ -97,11 +101,16 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
     MapView mMapView;
     @BindView(R.id.map_record_path_view)
     RecordPathView mapRecordPathView;
+    @BindView(R.id.map_back_iv)
+    ImageView mapBackIv;
+    @BindView(R.id.map_delete_iv)
+    ImageView mapDeleteIv;
+    @BindView(R.id.map_share_iv)
+    ImageView mapShareIv;
 
     private static final String TAG = HistoryRunRecordActivity.class.getSimpleName();
     private static final int FLING_MIN_DISTANCE = 50;
     private static final int FLING_MIN_VELOCITY = 200;
-
 
     //屏幕高度
     private int mHeight;
@@ -126,13 +135,15 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
 
     private Bitmap mStartIcon, mEndIcon;
 
+    private RunDataBmob runData;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.his_run_record_act);
         ButterKnife.bind(this);
-        RunDataBmob runData = (RunDataBmob) getIntent().getSerializableExtra("run_data");
+        runData = (RunDataBmob) getIntent().getSerializableExtra("run_data");
         Typeface boldTf = FontCacheUtil.getFont(this, "fonts/Avenir_Next_Condensed_demi_bold.ttf");
         initLayout(runData, boldTf);
         initMap(savedInstanceState, runData);
@@ -186,6 +197,7 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
 
 
     private void initLayout(RunDataBmob runData, Typeface typeface) {
+
 
         String avSpeed = runData.getAvSpeed();
         String distance = runData.getRunDistance();
@@ -305,15 +317,63 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         mAMap.addMarker(markerOptions);
     }
 
-    @OnClick({R.id.his_detail_back_iv, R.id.his_detail_delete_iv, R.id.his_detail_share_iv})
+    @OnClick({R.id.his_detail_back_iv, R.id.his_detail_delete_iv, R.id.his_detail_share_iv,
+            R.id.map_back_iv, R.id.map_delete_iv, R.id.map_share_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.his_detail_back_iv:
+                finish();
                 break;
             case R.id.his_detail_delete_iv:
+                deleteRunRecord();
                 break;
             case R.id.his_detail_share_iv:
                 break;
+            case R.id.map_back_iv:
+                finish();
+                break;
+            case R.id.map_delete_iv:
+                deleteRunRecord();
+                break;
+            case R.id.map_share_iv:
+                break;
+        }
+    }
+
+    //删除当前跑步记录
+    private void deleteRunRecord() {
+        new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .setMessage("确定要删除记录么？")
+                .setTitle("温馨提示")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteDataFromServer();
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
+    }
+
+    //先根据当前用户的object id 查询当前数据的object id ，然后执行删除
+    private void deleteDataFromServer() {
+        if (runData != null) {
+            String objectId = runData.getObjectId();
+            Log.d(TAG, "object id:" + objectId);
+            RunDataBmob runDataBmob = new RunDataBmob();
+            runDataBmob.delete(objectId, new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null) {
+                        ToastUtil.shortToast(HistoryRunRecordActivity.this, "删除成功！");
+                        finish();
+                    } else {
+                        ToastUtil.shortToast(HistoryRunRecordActivity.this, "删除失败：）");
+                        Log.d(TAG, "error code:" + e.getErrorCode() + " error msg:" + e.getLocalizedMessage());
+                    }
+                }
+            });
         }
     }
 

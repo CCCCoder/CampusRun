@@ -54,6 +54,12 @@ public class HistoryRecordListActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getDataFromServer();
+    }
+
     private void getDataFromServer() {
 
         mProgressDialog = new ProgressDialog(this);

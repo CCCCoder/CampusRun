@@ -8,15 +8,68 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="223dp">
+
+
         <com.amap.api.maps.MapView
             android:id="@+id/his_detail_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+            <RelativeLayout
+                android:background="@drawable/his_detail_time_bg"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"
+                android:layout_width="30dp"
+                android:layout_height="30dp">
+                <ImageView
+                    android:id="@+id/map_back_iv"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/common_back"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:background="@drawable/his_detail_time_bg"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="70dp"
+                android:layout_centerVertical="true"
+                android:layout_width="30dp"
+                android:layout_height="30dp">
+                <ImageView
+                    android:id="@+id/map_delete_iv"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/his_delete"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:background="@drawable/his_detail_time_bg"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
+                android:layout_width="30dp"
+                android:layout_height="30dp">
+                <ImageView
+                    android:id="@+id/map_share_iv"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/his_share"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
         <LinearLayout
             android:background="@drawable/his_detail_time_bg"
-            android:layout_marginLeft="30dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="20dp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -25,12 +78,18 @@
             <ImageView
                 android:src="@drawable/his_run_icon"
                 android:background="@drawable/his_icon_bg"
-                android:layout_width="32dp"
-                android:layout_height="32dp" />
+                android:layout_width="18dp"
+                android:layout_height="18dp" />
 
 
             <TextView
+                android:id="@+id/his_detail_start_time_tv"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/text_white"
+                android:layout_gravity="center"
                 android:text="2017/09/21 18:20"
+                android:textSize="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
