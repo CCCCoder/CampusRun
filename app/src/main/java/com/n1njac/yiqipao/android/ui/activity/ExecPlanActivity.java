@@ -9,17 +9,21 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.n1njac.yiqipao.android.ui.activity.BaseActivity;
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,11 +36,14 @@ import java.util.Locale;
 
 public class ExecPlanActivity extends BaseActivity implements View.OnClickListener {
 
-    private EditText aimDistance;
+    private static final String TAG = ExecPlanActivity.class.getSimpleName();
+
+    private TextView aimDistance;
     private ImageView runImage;
     private CheckBox alarmCheckBox;
     private TextView alarmTime;
     private Button save, returnBtn;
+    private RelativeLayout planDistanceView;
 
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -50,9 +57,7 @@ public class ExecPlanActivity extends BaseActivity implements View.OnClickListen
         initView();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-
         aimDistance.setText(prefs.getString("distance", "10"));
-
 
         if ("1".equals(prefs.getString("checkbox", null))) {
             alarmCheckBox.setChecked(true);
@@ -69,18 +74,20 @@ public class ExecPlanActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initView() {
-        aimDistance = (EditText) findViewById(R.id.exec_et);
+        aimDistance = (TextView) findViewById(R.id.exec_distance_tv);
         runImage = (ImageView) findViewById(R.id.run_image);
         alarmCheckBox = (CheckBox) findViewById(R.id.alarm_cb);
         alarmTime = (TextView) findViewById(R.id.alarmtime_tx);
         save = (Button) findViewById(R.id.submit_btn);
         returnBtn = (Button) findViewById(R.id.return_btn);
         save = (Button) findViewById(R.id.submit_btn);
-        aimDistance.setSelection(aimDistance.getText().length());
         returnBtn.setOnClickListener(this);
         runImage.setOnClickListener(this);
         alarmTime.setOnClickListener(this);
         save.setOnClickListener(this);
+
+        planDistanceView = (RelativeLayout) findViewById(R.id.exe_plan_rl);
+        planDistanceView.setOnClickListener(this);
 
     }
 
@@ -89,11 +96,8 @@ public class ExecPlanActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.return_btn:
 
-                Intent intent = new Intent();
-                intent.putExtra("distance", aimDistance.getText().toString());
-                Log.i("xyz", "ExecPlanActivity-distance:" + aimDistance.getText().toString());
-                setResult(RESULT_OK, intent);
-                finish();
+                return2Main();
+
                 break;
             case R.id.run_image:
                 Toast.makeText(this, "加油，干巴爹！", Toast.LENGTH_SHORT).show();
@@ -105,7 +109,49 @@ public class ExecPlanActivity extends BaseActivity implements View.OnClickListen
                 showTimePickerDialog();
                 break;
 
+            case R.id.exe_plan_rl:
+
+                setPlanDistance();
+
+                break;
+
         }
+    }
+
+    private void return2Main() {
+        Intent intent = new Intent();
+        intent.putExtra("distance", aimDistance.getText().toString());
+        Log.i(TAG, "ExecPlanActivity-distance:" + aimDistance.getText().toString());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    private void setPlanDistance() {
+        final EditText et = new EditText(this);
+        et.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
+        new AlertDialog.Builder(this)
+                .setTitle("设置跑步路程")
+                .setView(et)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String distance = et.getText().toString();
+
+                        if (distance.equals("")) {
+                            ToastUtil.shortToast(getApplicationContext(), "路程不能为空！");
+                        } else {
+                            double distanceDou = Double.valueOf(distance);
+                            if (distanceDou <= 0) {
+                                ToastUtil.shortToast(getApplicationContext(), "请设置大于0的路程");
+                            } else {
+                                aimDistance.setText(distance);
+                            }
+                        }
+
+                    }
+                })
+                .setCancelable(true)
+                .show();
     }
 
     private void showTimePickerDialog() {
@@ -151,6 +197,10 @@ public class ExecPlanActivity extends BaseActivity implements View.OnClickListen
                         dialog.dismiss();
                     }
                 }).show();
+    }
 
+    @Override
+    public void onBackPressed() {
+        return2Main();
     }
 }

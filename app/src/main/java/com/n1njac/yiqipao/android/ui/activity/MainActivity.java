@@ -349,6 +349,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
 //        这里做runMainActivity返回数据的处理。
 
+        Log.d(TAG, "distance----->" + data.getStringExtra("distance"));
+
     }
 
     @Override

@@ -40,8 +40,8 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:id="@+id/exe_plan_rl"
             android:layout_marginTop="5dp"
-
             android:layout_width="match_parent"
             android:layout_height="80dp">
 
@@ -54,9 +54,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/exec_et"
-                android:text="20"
+            <TextView
+                android:id="@+id/exec_distance_tv"
+                android:text="10"
                 android:textSize="18sp"
                 android:textColor="#000"
                 android:background="@null"

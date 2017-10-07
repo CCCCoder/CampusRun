@@ -20,4 +20,14 @@ public class TimeUtil {
         return ymStr + "\n" + dhmStr;
     }
 
+    //yyyy-MM-dd
+    public static StringBuilder getCurrentTimeYMD(long time) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(time);
+        StringBuilder sb = new StringBuilder();
+        sb.append(sdf.format(date));
+        return sb;
+    }
+
 }

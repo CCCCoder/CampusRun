@@ -1,9 +1,12 @@
 package com.n1njac.yiqipao.android.ui.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +16,30 @@ import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.TrackApplication;
+import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.ui.activity.ExecPlanActivity;
 import com.n1njac.yiqipao.android.ui.activity.HistoryDistanceActivity;
 import com.n1njac.yiqipao.android.ui.activity.HistoryRecordListActivity;
 import com.n1njac.yiqipao.android.ui.widget.DistanceDisplayArcView;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
+import com.n1njac.yiqipao.android.utils.TimeUtil;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import static android.app.Activity.RESULT_OK;
@@ -41,6 +57,10 @@ public class PersonalRunInfoFragment extends Fragment {
     private RelativeLayout root;
 
 
+
+    private SharedPreferences mPrefs;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,7 +70,7 @@ public class PersonalRunInfoFragment extends Fragment {
         exec = (TextView) view.findViewById(R.id.exec_text);
         history = (TextView) view.findViewById(R.id.history_tx);
         remindText = (TextView) view.findViewById(R.id.remind_tx);
-
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         exec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,9 +88,85 @@ public class PersonalRunInfoFragment extends Fragment {
         });
         distanceDisplayArcView = (DistanceDisplayArcView) view.findViewById(R.id.arc_view);
 
-        distanceDisplayArcView.setNowDistance(10, 4.7);
+        queryTodayCurrentDistance();
 
         return view;
+    }
+
+    private void queryTodayCurrentDistance() {
+
+        BmobQuery<RunDataBmob> query = new BmobQuery<>();
+        List<BmobQuery<RunDataBmob>> queryList = new ArrayList<>();
+
+        BmobQuery<RunDataBmob> startQ = new BmobQuery<>();
+        BmobQuery<RunDataBmob> endQ = new BmobQuery<>();
+
+        long systemTime = System.currentTimeMillis();
+        StringBuilder timeYMD1 = TimeUtil.getCurrentTimeYMD(systemTime);
+        StringBuilder timeYMD2 = TimeUtil.getCurrentTimeYMD(systemTime);
+        //一天的完整时间
+        String startTime = timeYMD1.append(" 00:00:00").toString();
+        String endTime = timeYMD2.append(" 23:59:59").toString();
+        Log.d(TAG, "start time:" + startTime);
+        Log.d(TAG, "end time:" + endTime);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = sdf.parse(startTime);
+            endDate = sdf.parse(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        startQ.addWhereGreaterThanOrEqualTo("createdAt", new BmobDate(startDate));
+        queryList.add(startQ);
+        endQ.addWhereLessThanOrEqualTo("createdAt", new BmobDate(endDate));
+        queryList.add(endQ);
+
+        query.and(queryList);
+        String objectId = BmobUser.getCurrentUser(UserInfoBmob.class).getObjectId();
+        Log.i(TAG, "object id:" + objectId);
+        query.addWhereEqualTo("pUserObjectId", objectId);
+
+        query.findObjects(new FindListener<RunDataBmob>() {
+            @Override
+            public void done(List<RunDataBmob> list, BmobException e) {
+                if (e == null) {
+                    Log.d(TAG, "data size:" + list.size());
+                    Log.d(TAG, "data:" + list.get(0).getRunDistance());
+
+                    setDistance(list);
+
+                } else {
+                    Log.d(TAG, "error:" + e.getErrorCode() + " " + e.getLocalizedMessage());
+                    ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
+                    String distance = mPrefs.getString("distance", "10");
+                    distanceDisplayArcView.setNowDistance(Double.parseDouble(distance), 0.0);
+                }
+
+            }
+        });
+
+
+    }
+
+    private void setDistance(List<RunDataBmob> list) {
+
+        double runDistance;
+        double mTodayTotalDistance = 0.0;
+        for (RunDataBmob data : list) {
+            if (!data.getRunDistance().equals("")) {
+                runDistance = Double.parseDouble(data.getRunDistance().trim());
+                mTodayTotalDistance += runDistance;
+            }
+        }
+
+        Log.d(TAG, "total distance:" + mTodayTotalDistance);
+
+        String planDistance = mPrefs.getString("distance", "10");
+        distanceDisplayArcView.setNowDistance(Double.parseDouble(planDistance), mTodayTotalDistance);
+
     }
 
 
@@ -79,9 +175,7 @@ public class PersonalRunInfoFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            String content = data.getStringExtra("distance");
-            double distance = Double.parseDouble(content);
-            distanceDisplayArcView.setNowDistance(distance, 4.7);
+            queryTodayCurrentDistance();
         }
     }
 }
