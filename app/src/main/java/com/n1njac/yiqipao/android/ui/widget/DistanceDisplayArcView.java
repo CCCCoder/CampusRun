@@ -13,11 +13,15 @@ import android.view.View;
 
 import com.n1njac.yiqipao.android.R;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by huanglei on 2017/1/14.
  */
 
 public class DistanceDisplayArcView extends View {
+
+    private static final String TAG = DistanceDisplayArcView.class.getSimpleName();
 
     //  开始角度
     private float startAngle = 135;
@@ -29,6 +33,12 @@ public class DistanceDisplayArcView extends View {
     private float currentAngle = 0;
 
     private String distance = "0";
+
+    private double distanceDouble = 0.0;
+
+    private double currentDistanceDou = 0.0;
+    private String currentDistanceDouReal ="0.0";
+
 
 
     public DistanceDisplayArcView(Context context) {
@@ -98,7 +108,7 @@ public class DistanceDisplayArcView extends View {
         p.setTextAlign(Paint.Align.CENTER);
         Typeface font = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL);
         p.setTypeface(font);
-        canvas.drawText(distance, getWidth() / 2, getHeight() / 2 - 100, p);
+        canvas.drawText(currentDistanceDouReal, getWidth() / 2, getHeight() / 2 - 100, p);
     }
 
     private void drawStepText(Canvas canvas) {
@@ -123,6 +133,8 @@ public class DistanceDisplayArcView extends View {
         }
         distance = currentDistance + "";
 
+        distanceDouble = currentDistance;
+
         double percent = currentDistance / totalDistance;
         float current = (float) (percent * sweepAngle);
         setInsideArcAnimation(current);
@@ -130,7 +142,7 @@ public class DistanceDisplayArcView extends View {
 
     }
 
-    private void setInsideArcAnimation(float current) {
+    private void setInsideArcAnimation(final float current) {
         ValueAnimator valueAnimator = new ValueAnimator();
         valueAnimator.setDuration(3000);
         valueAnimator.setFloatValues(0, current);
@@ -139,6 +151,12 @@ public class DistanceDisplayArcView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 currentAngle = (float) animation.getAnimatedValue();
+                double percent = currentAngle / current;
+                currentDistanceDou = distanceDouble * percent;
+                Log.d(TAG, "currentDistanceDou:" + currentDistanceDou);
+                DecimalFormat df = new DecimalFormat("#0.00");
+                currentDistanceDouReal = df.format(currentDistanceDou);
+                Log.d(TAG, "currentDistanceDouReal:" + currentDistanceDouReal);
                 invalidate();
             }
         });
