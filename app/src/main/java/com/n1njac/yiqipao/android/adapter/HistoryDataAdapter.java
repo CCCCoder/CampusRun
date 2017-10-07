@@ -49,7 +49,7 @@ public class HistoryDataAdapter extends RecyclerView.Adapter<HistoryDataAdapter.
         holder.runStartTime.setText(mRunDataList.get(position).getRunStartTime());
         holder.runDuration.setText(mRunDataList.get(position).getRunDurationTime());
         holder.runDistance.setText(mRunDataList.get(position).getRunDistance());
-        holder.runSpeed.setText(mRunDataList.get(position).getAvSpeed());
+        holder.runSpeed.setText(mRunDataList.get(position).getAvPace());
 
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override

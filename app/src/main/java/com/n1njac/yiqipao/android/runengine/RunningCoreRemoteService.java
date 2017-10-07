@@ -126,6 +126,8 @@ public class RunningCoreRemoteService extends Service implements AMapLocationLis
     public void onLocationChanged(AMapLocation aMapLocation) {
 
 
+        //经纬度不变的时候 可以不将数据添加到list中
+
         double latitude = aMapLocation.getLatitude();
         double longitude = aMapLocation.getLongitude();
         LatLng latLng = new LatLng(latitude, longitude);

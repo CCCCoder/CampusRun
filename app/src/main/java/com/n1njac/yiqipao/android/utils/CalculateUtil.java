@@ -21,22 +21,26 @@ public class CalculateUtil {
     //配速
     //   分钟/公里
     public static double getPaceDouble(int count, double distance) {
-
-        double min = (double) count / 60;
-
-        return min / distance;
+        double result = 0.0;
+        if (distance != 0) {
+            double min = (double) count / 60;
+            result = min / distance;
+        }
+        return result;
     }
 
 
     public static String getPaceResult(double paceDouble, int count, double distance) {
-        String result;
-        double min = (double) count / 60;
-        int paceInt = (int) (min / distance);
-        double secondDouble = paceDouble - paceInt;
-        int secondInt = (int) (secondDouble * 60);
+        String result = "0'0''";
+        if (paceDouble != 0 && count != 0 && distance != 0) {
+            double min = (double) count / 60;
+            int paceInt = (int) (min / distance);
+            double secondDouble = paceDouble - paceInt;
+            int secondInt = (int) (secondDouble * 60);
 
-        // 形如:10'23''
-        result = paceInt + "'" + secondInt + "''";
+            // 形如:10'23''
+            result = paceInt + "'" + secondInt + "''";
+        }
         return result;
     }
 

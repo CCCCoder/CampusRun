@@ -318,7 +318,8 @@ public class UserRunActivity extends BaseActivity {
                 timeCount++;
                 Log.d(TAG, "time count:" + timeCount);
                 String hour = String.valueOf(timeCount / 3600);
-                String minute = String.valueOf(CalculateUtil.parseMinute(timeCount));
+                //时间错误
+                String minute = String.valueOf(CalculateUtil.parseMinute(timeCount/60));
                 String second = String.valueOf(timeCount % 60);
 
 
@@ -399,7 +400,7 @@ public class UserRunActivity extends BaseActivity {
         public void onDistanceChange(double distance) throws RemoteException {
 
             //单位：米(转换为公里 1公里 = 1000米)
-            Log.d(TAG, "onDistanceChange---->distance" + distance);
+            Log.d(TAG, "onDistanceChange---->distance:" + distance);
 
             mKM = CalculateUtil.div(distance, 1000, 2);
 

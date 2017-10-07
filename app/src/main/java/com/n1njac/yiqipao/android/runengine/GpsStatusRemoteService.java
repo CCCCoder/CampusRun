@@ -78,6 +78,7 @@ public class GpsStatusRemoteService extends Service {
         @Override
         public void registerCallback(IGpsStatusCallback callback) throws RemoteException {
 
+            Log.d(TAG,"register gps callback");
             mCallback.register(callback);
         }
 
@@ -137,20 +138,26 @@ public class GpsStatusRemoteService extends Service {
                             if (count > 8) {
                                 //满格信号
                                 broadcastData(SIGNAL_FULL);
+                                break;
 
                             } else if (count >= 4) {
 
                                 //两格信号
                                 broadcastData(SIGNAL_GOOD);
+                                break;
 
                             } else {
                                 //一格信号
 
                                 broadcastData(SIGNAL_BAD);
+                                break;
 
                             }
                         }
                     }
+                    //测试用
+                    broadcastData(SIGNAL_BAD);
+
                     Log.d(TAG, "satellite num:" + count);
                     break;
 
