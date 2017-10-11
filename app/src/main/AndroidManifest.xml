@@ -146,6 +146,8 @@
         <service
             android:name="com.amap.api.location.APSService"
             android:process=":gps" />
+
+
     </application>
 
 </manifest>

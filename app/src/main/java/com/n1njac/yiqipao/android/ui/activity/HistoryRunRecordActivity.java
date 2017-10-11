@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -107,6 +108,18 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
     ImageView mapDeleteIv;
     @BindView(R.id.map_share_iv)
     ImageView mapShareIv;
+    @BindView(R.id.his_detail_start_time_tv)
+    TextView hisDetailStartTimeTv;
+    @BindView(R.id.detail_ll)
+    LinearLayout detailLl;
+    @BindView(R.id.his_detail_bg)
+    ImageView hisDetailBg;
+    @BindView(R.id.big_detail_ll)
+    LinearLayout bigDetailLl;
+    @BindView(R.id.big_his_detail_bg)
+    ImageView bigHisDetailBg;
+    @BindView(R.id.big_his_content)
+    RelativeLayout bigHisContent;
 
     private static final String TAG = HistoryRunRecordActivity.class.getSimpleName();
     private static final int FLING_MIN_DISTANCE = 50;
@@ -206,6 +219,10 @@ public class HistoryRunRecordActivity extends BaseActivity implements View.OnTou
         String avPace = runData.getAvPace();
         String maxPace = runData.getMaxPace();
         String minPace = runData.getMinPace();
+
+        //跑步结束的时间
+        String endRunTime = runData.getCreatedAt();
+        hisDetailStartTimeTv.setText(endRunTime);
 
         //平均配速
         hisDetailAvspeedTv.setTypeface(typeface);

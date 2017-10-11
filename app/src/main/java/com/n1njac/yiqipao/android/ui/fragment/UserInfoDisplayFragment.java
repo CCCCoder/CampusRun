@@ -1,9 +1,14 @@
 package com.n1njac.yiqipao.android.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +18,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
+import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.ui.widget.BezierView;
-import com.n1njac.yiqipao.android.utils.SizeUtil;
 import com.n1njac.yiqipao.android.utils.ToastUtil;
+
+import java.text.DecimalFormat;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -32,6 +44,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserInfoDisplayFragment extends Fragment {
+
+    private static final String TAG = UserInfoDisplayFragment.class.getSimpleName();
 
     @BindView(R.id.bezier_bg)
     BezierView bezierBg;
@@ -61,6 +75,12 @@ public class UserInfoDisplayFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.user_info_frag, container, false);
         unbinder = ButterKnife.bind(this, view);
+        getDataFromServer();
+
+        UpdateRunDataReceiver receiver = new UpdateRunDataReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(PersonalRunInfoFragment.UPDATE_RUN_DATA_ACTION);
+        getActivity().registerReceiver(receiver, filter);
 
         return view;
     }
@@ -71,7 +91,7 @@ public class UserInfoDisplayFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.user_icon_iv, R.id.edit_user_info_btn,R.id.user_info_setting_iv})
+    @OnClick({R.id.user_icon_iv, R.id.edit_user_info_btn, R.id.user_info_setting_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_icon_iv:
@@ -81,7 +101,6 @@ public class UserInfoDisplayFragment extends Fragment {
                 mPopupWindow.setFocusable(true);
                 mPopupWindow.setOutsideTouchable(true);
                 mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-
 
                 //设置动画必须在设置location之前
                 mPopupWindow.setAnimationStyle(R.style.Popupwindow);
@@ -147,4 +166,53 @@ public class UserInfoDisplayFragment extends Fragment {
             }
         });
     }
+
+
+    //查询跑步次数和总路程
+    public void getDataFromServer() {
+        String objectId = BmobUser.getCurrentUser(UserInfoBmob.class).getObjectId();
+
+        Log.d(TAG, "objectId:" + objectId);
+        BmobQuery<RunDataBmob> query = new BmobQuery<>();
+        query.addWhereEqualTo("pUserObjectId", objectId);
+
+        // TODO: 2017/10/11 这里数据量大的时候需要分页处理数据，bmob只支持最大500条的查询
+        query.findObjects(new FindListener<RunDataBmob>() {
+            @Override
+            public void done(List<RunDataBmob> list, BmobException e) {
+
+
+                if (e == null) {
+                    int count = list.size();
+                    userRunCountTv.setText(count + "");
+
+                    DecimalFormat df = new DecimalFormat("#0.00");
+                    double totalDistance = 0.0;
+                    for (RunDataBmob r : list) {
+                        if (!r.getRunDistance().equals("")) {
+                            totalDistance += Double.parseDouble(r.getRunDistance().trim());
+                        }
+                    }
+
+                    userInfoDistanceTv.setText(String.valueOf(df.format(totalDistance)));
+                    Log.d(TAG, "total distance:" + totalDistance);
+
+                } else {
+                    userRunCountTv.setText("0");
+                    userInfoDistanceTv.setText("0.00");
+                    Log.d(TAG, "error code：" + e.getErrorCode() + " mgs:" + e.getLocalizedMessage());
+                }
+            }
+        });
+    }
+
+
+    private class UpdateRunDataReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "------------>receive update");
+            getDataFromServer();
+        }
+    }
+
 }

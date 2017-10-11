@@ -71,7 +71,8 @@ public class HistoryRecordListActivity extends BaseActivity {
 
         BmobQuery<RunDataBmob> query = new BmobQuery<>();
         query.addWhereEqualTo("pUserObjectId", objectId);
-        query.setLimit(50);
+        // TODO: 2017/10/11 这里数据量大的时候需要分页处理数据，bmob只支持最大500条的查询
+//        query.setLimit(50);
         query.order("-createdAt");
         query.findObjects(new FindListener<RunDataBmob>() {
             @Override

@@ -129,11 +129,13 @@ public class DistanceDisplayArcView extends View {
     public void setNowDistance(double totalDistance, double currentDistance) {
 
         if (currentDistance > totalDistance) {
+            distanceDouble = currentDistance;
             currentDistance = totalDistance;
+        }else {
+            distanceDouble = currentDistance;
         }
-        distance = currentDistance + "";
 
-        distanceDouble = currentDistance;
+//        distance = currentDistance + "";
 
         double percent = currentDistance / totalDistance;
         float current = (float) (percent * sweepAngle);

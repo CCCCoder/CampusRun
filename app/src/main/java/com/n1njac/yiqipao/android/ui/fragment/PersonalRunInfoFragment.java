@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +17,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.n1njac.yiqipao.android.R;
-import com.n1njac.yiqipao.android.TrackApplication;
 import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.ui.activity.ExecPlanActivity;
-import com.n1njac.yiqipao.android.ui.activity.HistoryDistanceActivity;
 import com.n1njac.yiqipao.android.ui.activity.HistoryRecordListActivity;
 import com.n1njac.yiqipao.android.ui.widget.DistanceDisplayArcView;
 import com.n1njac.yiqipao.android.utils.SizeUtil;
 import com.n1njac.yiqipao.android.utils.TimeUtil;
-import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,15 +31,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -91,11 +83,10 @@ public class PersonalRunInfoFragment extends Fragment {
         distanceDisplayArcView = (DistanceDisplayArcView) view.findViewById(R.id.arc_view);
         queryTodayCurrentDistance();
 
-        //注册接收更新数据的receiver
-        UpdateRunDataReceiver runDataReceiver = new UpdateRunDataReceiver();
+        UpdateRunDataReceiver receiver = new UpdateRunDataReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(UPDATE_RUN_DATA_ACTION);
-        getActivity().registerReceiver(runDataReceiver, filter);
+        getActivity().registerReceiver(receiver, filter);
 
         return view;
     }
