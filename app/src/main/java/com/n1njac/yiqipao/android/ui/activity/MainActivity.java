@@ -1,9 +1,11 @@
 package com.n1njac.yiqipao.android.ui.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -70,15 +72,21 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     private ImageView mIcon;
 
+    private SharedPreferences mPrefs;
+
     private static final int TAKE_PHOTO = 1;
     private static final int CHOOSE_FROM_ALBUM = 2;
 
     private int selectItem = 0;
 
+    private UpdateIconReceiver mReceiver;
+
     private static final int CONSTANT_EXE_PLAN = 1001;
     private static final int CONSTANT_HIS_DISTANCE = 1002;
     private static final int CONSTANT_ABOUT = 1003;
     private static final int CONSTANT_SWITCH = 1004;
+
+    public static final String UPDATE_ICON = "com.n1njac.yiqipao.android.update_icon";
 
 
     private ServiceConnection gpsConn = new ServiceConnection() {
@@ -108,61 +116,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
         setBottomNavigationBar();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-                switch (selectItem) {
-
-                    case CONSTANT_EXE_PLAN:
-                        startActivity(new Intent(MainActivity.this, ExecPlanActivity.class));
-                        selectItem = 0;
-                        break;
-                    case CONSTANT_HIS_DISTANCE:
-                        startActivity(new Intent(MainActivity.this, HistoryRecordListActivity.class));
-                        selectItem = 0;
-                        break;
-                    case CONSTANT_ABOUT:
-                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
-                        selectItem = 0;
-                        break;
-                    case CONSTANT_SWITCH:
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                                .setMessage("切换用户将会清除您的登录信息哦")
-                                .setTitle("提示")
-                                .setCancelable(true)
-                                .setNegativeButton("取消", null)
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        BmobUser.logOut();
-                                        Intent intent = new Intent(MainActivity.this, NewLoginActivity.class);
-                                        startActivity(intent);
-                                    }
-                                });
-                        builder.show();
-                        selectItem = 0;
-                        break;
-                }
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
+        mDrawerLayout.addDrawerListener(new MyDrawerListener());
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -170,61 +124,118 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         mIcon = (ImageView) view.findViewById(R.id.icon_image);
 
         //判断是否有头像uri，有的话直接从缓存里面拿。没有设置即默认。
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getString("iconUri", null) != null) {
-            Uri uri = Uri.parse(prefs.getString("iconUri", null));
-            Glide.with(this).load(uri).centerCrop().into(mIcon);
-        }
-
-        mIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTakePhotoOrChooseFromAlbumDialog();
-            }
-        });
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String avatarUrl = mPrefs.getString("avatar_user", null);
+        //设置头像
+        Glide.with(this).load(avatarUrl).error(R.drawable.boy).into(mIcon);
 
         mNavigationView.setCheckedItem(R.id.second_item);
         mNavigationView.setItemIconTintList(null);
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+        mNavigationView.setNavigationItemSelectedListener(new MyNavigationItemSelectedListener());
 
-                switch (item.getItemId()) {
-
-                    case R.id.second_item:
-                        selectItem = CONSTANT_EXE_PLAN;
-
-                        break;
-                    case R.id.third_item:
-                        selectItem = CONSTANT_HIS_DISTANCE;
-
-                        break;
-                    case R.id.about_item:
-                        selectItem = CONSTANT_ABOUT;
-
-                        break;
-                    case R.id.switch_item:
-                        selectItem = CONSTANT_SWITCH;
-
-                        break;
-                }
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
-
-
-        //启动绑定gps服务
-
-//        Intent intent = new Intent(this, GpsStatusRemoteService.class);
-//        intent.setComponent(new ComponentName("com.n1njac.yiqipao.android", "com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService"));
-//        startService(intent);
-//
-//        bindService(new Intent(this, GpsStatusRemoteService.class), gpsConn, Context.BIND_AUTO_CREATE);
-
+        mReceiver = new UpdateIconReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(UPDATE_ICON);
+        this.registerReceiver(mReceiver, filter);
 
     }
 
+    private class MyNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem item) {
+
+            switch (item.getItemId()) {
+
+                case R.id.second_item:
+                    selectItem = CONSTANT_EXE_PLAN;
+
+                    break;
+                case R.id.third_item:
+                    selectItem = CONSTANT_HIS_DISTANCE;
+
+                    break;
+                case R.id.about_item:
+                    selectItem = CONSTANT_ABOUT;
+
+                    break;
+                case R.id.switch_item:
+                    selectItem = CONSTANT_SWITCH;
+
+                    break;
+            }
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+    }
+
+    private class MyDrawerListener implements DrawerLayout.DrawerListener {
+        @Override
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+
+            switch (selectItem) {
+
+                case CONSTANT_EXE_PLAN:
+                    startActivity(new Intent(MainActivity.this, ExecPlanActivity.class));
+                    selectItem = 0;
+                    break;
+                case CONSTANT_HIS_DISTANCE:
+                    startActivity(new Intent(MainActivity.this, HistoryRecordListActivity.class));
+                    selectItem = 0;
+                    break;
+                case CONSTANT_ABOUT:
+                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                    selectItem = 0;
+                    break;
+                case CONSTANT_SWITCH:
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                            .setMessage("切换用户将会清除您的登录信息哦")
+                            .setTitle("提示")
+                            .setCancelable(true)
+                            .setNegativeButton("取消", null)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    BmobUser.logOut();
+                                    Intent intent = new Intent(MainActivity.this, NewLoginActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                    builder.show();
+                    selectItem = 0;
+                    break;
+            }
+
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+
+        }
+    }
+
+
+    //头像改变通知广播
+
+    private class UpdateIconReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String avatarUrl = mPrefs.getString("avatar_user", null);
+            //设置头像
+            Glide.with(MainActivity.this).load(avatarUrl).error(R.drawable.boy).into(mIcon);
+        }
+    }
 
     //    设置底部的bar
     public void setBottomNavigationBar() {
@@ -334,24 +345,24 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == TAKE_PHOTO) {
-                Uri uri = data.getData();
-                Glide.with(this).load(uri).centerCrop().into(mIcon);
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-                editor.putString("iconUri", uri.toString());
-                editor.apply();
-            }
-        }
-
-//        这里做runMainActivity返回数据的处理。
-
-        Log.d(TAG, "distance----->" + data.getStringExtra("distance"));
-
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == RESULT_OK) {
+//            if (requestCode == TAKE_PHOTO) {
+//                Uri uri = data.getData();
+//                Glide.with(this).load(uri).centerCrop().into(mIcon);
+//                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+//                editor.putString("iconUri", uri.toString());
+//                editor.apply();
+//            }
+//        }
+//
+////        这里做runMainActivity返回数据的处理。
+//
+//        Log.d(TAG, "distance----->" + data.getStringExtra("distance"));
+//
+//    }
 
     @Override
     public void onBackPressed() {
@@ -368,5 +379,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                     }
                 });
         builder.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mReceiver != null) {
+            this.unregisterReceiver(mReceiver);
+        }
     }
 }

@@ -87,7 +87,7 @@
                     android:id="@+id/user_run_count_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4"
+                    android:text="0"
                     android:textColor="#783AFF"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -112,7 +112,7 @@
                     android:id="@+id/user_info_distance_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12.3"
+                    android:text="0.00"
                     android:textColor="#783AFF"
                     android:textSize="30sp"
                     android:textStyle="bold" />

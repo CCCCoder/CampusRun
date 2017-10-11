@@ -52,6 +52,8 @@ public class PersonalRunInfoFragment extends Fragment {
     private RelativeLayout root;
     private SharedPreferences mPrefs;
 
+    private UpdateRunDataReceiver mReceiver;
+
     public static final String UPDATE_RUN_DATA_ACTION = "com.n1njac.yiqipao.android.update_run_data";
 
 
@@ -83,10 +85,10 @@ public class PersonalRunInfoFragment extends Fragment {
         distanceDisplayArcView = (DistanceDisplayArcView) view.findViewById(R.id.arc_view);
         queryTodayCurrentDistance();
 
-        UpdateRunDataReceiver receiver = new UpdateRunDataReceiver();
+        mReceiver = new UpdateRunDataReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(UPDATE_RUN_DATA_ACTION);
-        getActivity().registerReceiver(receiver, filter);
+        getActivity().registerReceiver(mReceiver, filter);
 
         return view;
     }
@@ -185,4 +187,11 @@ public class PersonalRunInfoFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mReceiver != null) {
+            getActivity().unregisterReceiver(mReceiver);
+        }
+    }
 }

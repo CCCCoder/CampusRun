@@ -109,6 +109,7 @@
     <string name="his_title">运动详情</string>
     <string name="his_distance_text">公里</string>
     <string name="his_def_prompt">还没完成今天的任务哦：）继续加油</string>
+    <string name="change_user_info">修改资料</string>
 
 
 </resources>

@@ -85,7 +85,7 @@
         <!-- 用于进程保活 -->
         <service
             android:name="cn.bmob.push.lib.service.PushNotifyService"
-            android:process=":bmobpush"></service>
+            android:process=":bmobpush"/>
 
 
         <receiver android:name="cn.bmob.push.PushReceiver">
@@ -146,6 +146,10 @@
         <service
             android:name="com.amap.api.location.APSService"
             android:process=":gps" />
+
+        <activity
+            android:theme="@style/AppTheme5"
+            android:name=".ui.activity.ChangeUserInfoActivity"/>
 
 
     </application>

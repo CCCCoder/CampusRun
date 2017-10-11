@@ -9,8 +9,8 @@
         android:textSize="16sp"
         android:textColor="#000"
         android:gravity="center"
-        android:id="@+id/popup_check_big_icon_tv"
-        android:text="查看大图"
+        android:id="@+id/popup_from_album_tv"
+        android:text="相册"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
@@ -19,12 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="1px" />
     <TextView
-        android:id="@+id/popup_change_icon_tv"
+        android:id="@+id/popup_take_photo_tv"
         android:textSize="16sp"
         android:textColor="#000"
         android:gravity="center"
 
-        android:text="更换头像"
+        android:text="拍摄"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
