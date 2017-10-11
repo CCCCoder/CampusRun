@@ -109,7 +109,7 @@ public class LoginFragment extends Fragment {
                 String account = loginAccountEt.getText().toString();
                 String password = passwordEt.getText().toString();
 
-                progressDialog.show();
+
 
                 loginCheck(account, password);
 
@@ -169,6 +169,7 @@ public class LoginFragment extends Fragment {
             return;
         }
 
+        progressDialog.show();
         login(account, password);
 
     }

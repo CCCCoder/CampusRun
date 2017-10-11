@@ -1,6 +1,9 @@
 package com.n1njac.yiqipao.android.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -55,10 +58,9 @@ public class PersonalRunInfoFragment extends Fragment {
     private TextView exec, history;
     private TextView remindText;
     private RelativeLayout root;
-
-
-
     private SharedPreferences mPrefs;
+
+    public static final String UPDATE_RUN_DATA_ACTION = "com.n1njac.yiqipao.android.update_run_data";
 
 
     @Nullable
@@ -87,8 +89,13 @@ public class PersonalRunInfoFragment extends Fragment {
             }
         });
         distanceDisplayArcView = (DistanceDisplayArcView) view.findViewById(R.id.arc_view);
-
         queryTodayCurrentDistance();
+
+        //注册接收更新数据的receiver
+        UpdateRunDataReceiver runDataReceiver = new UpdateRunDataReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(UPDATE_RUN_DATA_ACTION);
+        getActivity().registerReceiver(runDataReceiver, filter);
 
         return view;
     }
@@ -140,14 +147,13 @@ public class PersonalRunInfoFragment extends Fragment {
 
                 } else {
                     Log.d(TAG, "error:" + e.getErrorCode() + " " + e.getLocalizedMessage());
-                    ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
-                    String distance = mPrefs.getString("distance", "10");
-                    distanceDisplayArcView.setNowDistance(Double.parseDouble(distance), 0.0);
+
+//                    String distance = mPrefs.getString("distance", "10");
+//                    distanceDisplayArcView.setNowDistance(Double.parseDouble(distance), 0.0);
                 }
 
             }
         });
-
 
     }
 
@@ -178,4 +184,14 @@ public class PersonalRunInfoFragment extends Fragment {
             queryTodayCurrentDistance();
         }
     }
+
+
+    private class UpdateRunDataReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "------------>receive update");
+            queryTodayCurrentDistance();
+        }
+    }
+
 }

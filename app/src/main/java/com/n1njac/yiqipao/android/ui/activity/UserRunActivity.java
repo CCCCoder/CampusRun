@@ -45,6 +45,7 @@ import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
 import com.n1njac.yiqipao.android.runengine.RunningCoreRemoteService;
+import com.n1njac.yiqipao.android.ui.fragment.PersonalRunInfoFragment;
 import com.n1njac.yiqipao.android.ui.widget.RunDataTextView;
 import com.n1njac.yiqipao.android.utils.CalculateUtil;
 import com.n1njac.yiqipao.android.utils.FontCacheUtil;
@@ -319,7 +320,7 @@ public class UserRunActivity extends BaseActivity {
                 Log.d(TAG, "time count:" + timeCount);
                 String hour = String.valueOf(timeCount / 3600);
                 //时间错误
-                String minute = String.valueOf(CalculateUtil.parseMinute(timeCount/60));
+                String minute = String.valueOf(CalculateUtil.parseMinute(timeCount / 60));
                 String second = String.valueOf(timeCount % 60);
 
 
@@ -488,7 +489,7 @@ public class UserRunActivity extends BaseActivity {
             switch (status) {
                 case SIGNAL_FULL:
 
-                    Log.d(TAG,"SIGNAL FULL");
+                    Log.d(TAG, "SIGNAL FULL");
                     currentStatus = SIGNAL_FULL;
 
                     Message msg = Message.obtain();
@@ -498,7 +499,7 @@ public class UserRunActivity extends BaseActivity {
                     break;
                 case SIGNAL_GOOD:
 
-                    Log.d(TAG,"SIGNAL GOOD");
+                    Log.d(TAG, "SIGNAL GOOD");
                     currentStatus = SIGNAL_GOOD;
 
                     Message msg2 = Message.obtain();
@@ -508,7 +509,7 @@ public class UserRunActivity extends BaseActivity {
                     break;
                 case SIGNAL_BAD:
 
-                    Log.d(TAG,"SIGNAL BAD");
+                    Log.d(TAG, "SIGNAL BAD");
                     currentStatus = SIGNAL_BAD;
 
                     Message msg3 = Message.obtain();
@@ -518,7 +519,7 @@ public class UserRunActivity extends BaseActivity {
                     break;
                 case SIGNAL_NONE:
 
-                    Log.d(TAG,"SIGNAL NONE");
+                    Log.d(TAG, "SIGNAL NONE");
                     currentStatus = SIGNAL_NONE;
 
                     Message msg4 = Message.obtain();
@@ -929,6 +930,10 @@ public class UserRunActivity extends BaseActivity {
                         ToastUtil.shortToast(getApplicationContext(), e.getMessage());
                         Log.d(TAG, "上传数据库------->error code:" + e.getErrorCode() + " error:" + e.getMessage());
                     } else {
+
+                        //上传服务器跑步数据之后，广播通知数据展示界面更新数据
+                        sendBroadcast(new Intent(PersonalRunInfoFragment.UPDATE_RUN_DATA_ACTION));
+
                         finish();
                     }
                 }

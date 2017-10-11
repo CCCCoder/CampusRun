@@ -37,7 +37,7 @@ public class DistanceDisplayArcView extends View {
     private double distanceDouble = 0.0;
 
     private double currentDistanceDou = 0.0;
-    private String currentDistanceDouReal ="0.0";
+    private String currentDistanceDouReal ="0.00";
 
 
 
@@ -139,8 +139,8 @@ public class DistanceDisplayArcView extends View {
         float current = (float) (percent * sweepAngle);
         setInsideArcAnimation(current);
 
-
     }
+
 
     private void setInsideArcAnimation(final float current) {
         ValueAnimator valueAnimator = new ValueAnimator();
