@@ -114,7 +114,7 @@
     <string name="change_user_sex">性别</string>
     <string name="change_user_height">身高</string>
     <string name="change_user_weight">体重</string>
-    <string name="chang_user_defstr">点击设置</string>
+    <string name="chang_user_defstr">未设置</string>
     <string name="change_user_save">保存修改</string>
 
 

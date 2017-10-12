@@ -10,9 +10,10 @@ import cn.bmob.v3.BmobObject;
 public class NewUserInfoBmob extends BmobObject {
 
     private String pNickName;
-    private String pSex;
-    private String pHeight;
-    private String pWeight;
+    //0:未设置 1:男 2:女
+    private int pSex;
+    private int pHeight;
+    private int pWeight;
     private String pHobby;
     private String pUserObjectId;
 
@@ -24,28 +25,28 @@ public class NewUserInfoBmob extends BmobObject {
         this.pNickName = pNickName;
     }
 
-    public String getpSex() {
+    public int getpSex() {
         return pSex;
     }
 
-    public void setpSex(String pSex) {
+    public void setpSex(int pSex) {
         this.pSex = pSex;
     }
 
 
-    public String getpHeight() {
+    public int getpHeight() {
         return pHeight;
     }
 
-    public void setpHeight(String pHeight) {
+    public void setpHeight(int pHeight) {
         this.pHeight = pHeight;
     }
 
-    public String getpWeight() {
+    public int getpWeight() {
         return pWeight;
     }
 
-    public void setpWeight(String pWeight) {
+    public void setpWeight(int pWeight) {
         this.pWeight = pWeight;
     }
 

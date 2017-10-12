@@ -191,7 +191,7 @@ public class LoginFragment extends Fragment {
                     startActivity(intent);
 
                     //注册给定nick name为注册的账号
-                    updateNickName(userInfoBmob.getObjectId());
+                    updateUserInfo(userInfoBmob.getObjectId());
 
                     Log.d(TAG, "objectId:" + userInfoBmob.getObjectId());
 
@@ -205,13 +205,13 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void updateNickName(String objectId) {
+    private void updateUserInfo(String objectId) {
         NewUserInfoBmob userInfoBmob = new NewUserInfoBmob();
         userInfoBmob.setpNickName(loginAccountEt.getText().toString());
         userInfoBmob.setObjectId(objectId);
-        userInfoBmob.setpSex("null");
-        userInfoBmob.setpHeight("null");
-        userInfoBmob.setpWeight("null");
+        userInfoBmob.setpSex(0);
+        userInfoBmob.setpHeight(0);
+        userInfoBmob.setpWeight(0);
         userInfoBmob.setpHobby("null");
 
         userInfoBmob.save(new SaveListener<String>() {
