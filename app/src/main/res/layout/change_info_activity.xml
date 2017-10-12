@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/change_user_header_rl"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize">
 
         <Button
+            android:id="@+id/change_user_back_btn"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
             android:background="@drawable/return_z"
@@ -27,8 +29,141 @@
     </RelativeLayout>
 
 
+    <RelativeLayout
+        android:layout_below="@+id/change_user_header_rl"
+        android:id="@+id/nick_name_rl"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:layout_centerVertical="true"
+            android:text="@string/change_user_nickname"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/nick_name_tv"
+            android:text="N1njaC"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:background="@color/text_gray"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/nick_name_rl"
+        android:id="@+id/sex_rl"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:layout_centerVertical="true"
+            android:text="@string/change_user_sex"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/sex_tv"
+            android:text="@string/chang_user_defstr"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:background="@color/text_gray"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/sex_rl"
+        android:id="@+id/height_rl"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:layout_centerVertical="true"
+            android:text="@string/change_user_height"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/height_tv"
+            android:text="@string/chang_user_defstr"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:background="@color/text_gray"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@+id/height_rl"
+        android:id="@+id/weight_rl"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:layout_centerVertical="true"
+            android:text="@string/change_user_weight"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/weight_tv"
+            android:text="@string/chang_user_defstr"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:background="@color/text_gray"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1px" />
+
+    </RelativeLayout>
 
 
+    <Button
+        android:id="@+id/change_user_save_btn"
+        android:textColor="#fff"
+        android:textSize="17sp"
+        android:text="@string/change_user_save"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn_submit_bg"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_width="250dp"
+        android:layout_height="40dp" />
 
-
-</LinearLayout>
+</RelativeLayout>

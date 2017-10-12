@@ -19,7 +19,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.n1njac.yiqipao.android.bmobObject.NewUserInfoBmob;
 import com.n1njac.yiqipao.android.ui.activity.MainActivity;
 import com.n1njac.yiqipao.android.R;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
@@ -110,7 +112,6 @@ public class LoginFragment extends Fragment {
                 String password = passwordEt.getText().toString();
 
 
-
                 loginCheck(account, password);
 
 
@@ -189,6 +190,9 @@ public class LoginFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 
+                    //注册给定nick name为注册的账号
+                    updateNickName(userInfoBmob.getObjectId());
+
                     Log.d(TAG, "objectId:" + userInfoBmob.getObjectId());
 
                 } else {
@@ -199,6 +203,27 @@ public class LoginFragment extends Fragment {
             }
         });
 
+    }
+
+    private void updateNickName(String objectId) {
+        NewUserInfoBmob userInfoBmob = new NewUserInfoBmob();
+        userInfoBmob.setpNickName(loginAccountEt.getText().toString());
+        userInfoBmob.setObjectId(objectId);
+        userInfoBmob.setpSex("null");
+        userInfoBmob.setpHeight("null");
+        userInfoBmob.setpWeight("null");
+        userInfoBmob.setpHobby("null");
+
+        userInfoBmob.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+
+                if (e != null) {
+                    ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
+                    Log.d(TAG, "error code:" + e.getErrorCode() + " error:" + e.getMessage());
+                }
+            }
+        });
     }
 
 }

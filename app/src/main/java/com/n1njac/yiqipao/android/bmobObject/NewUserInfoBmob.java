@@ -11,11 +11,9 @@ public class NewUserInfoBmob extends BmobObject {
 
     private String pNickName;
     private String pSex;
-    private String pBirth;
     private String pHeight;
     private String pWeight;
     private String pHobby;
-
     private String pUserObjectId;
 
     public String getpNickName() {
@@ -34,13 +32,6 @@ public class NewUserInfoBmob extends BmobObject {
         this.pSex = pSex;
     }
 
-    public String getpBirth() {
-        return pBirth;
-    }
-
-    public void setpBirth(String pBirth) {
-        this.pBirth = pBirth;
-    }
 
     public String getpHeight() {
         return pHeight;

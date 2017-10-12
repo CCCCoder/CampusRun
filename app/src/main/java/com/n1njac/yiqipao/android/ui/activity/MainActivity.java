@@ -231,6 +231,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            Log.d(TAG, "--------------->onReceive");
+
             String avatarUrl = mPrefs.getString("avatar_user", null);
             //设置头像
             Glide.with(MainActivity.this).load(avatarUrl).error(R.drawable.boy).into(mIcon);
