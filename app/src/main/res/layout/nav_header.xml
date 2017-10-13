@@ -6,7 +6,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/icon_image"
-        android:src="@drawable/icon"
+        android:src="@drawable/boy"
         android:clickable="true"
         android:layout_centerInParent="true"
         android:layout_width="70dp"
@@ -15,7 +15,7 @@
     <TextView
         android:layout_below="@+id/icon_image"
         android:id="@+id/username_tx"
-        android:text="Android"
+        android:text=""
         android:padding="10dp"
         android:textSize="20sp"
         android:textColor="#fff"

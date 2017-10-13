@@ -35,6 +35,8 @@ import android.widget.ImageView;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.bumptech.glide.Glide;
+import com.n1njac.yiqipao.android.bmobObject.NewUserInfoBmob;
+import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.login.NewLoginActivity;
 import com.n1njac.yiqipao.android.runengine.GpsStatusRemoteService;
 import com.n1njac.yiqipao.android.ui.fragment.UserInfoDisplayFragment;
@@ -45,11 +47,15 @@ import com.n1njac.yiqipao.android.ui.fragment.PersonalInfoFragment;
 import com.n1njac.yiqipao.android.ui.fragment.PersonalRunInfoFragment;
 import com.n1njac.yiqipao.android.ui.fragment.RunFragment;
 import com.n1njac.yiqipao.android.utils.ActivityManagerUtil;
+import com.n1njac.yiqipao.android.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
@@ -123,11 +129,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         View view = mNavigationView.getHeaderView(0);
         mIcon = (ImageView) view.findViewById(R.id.icon_image);
 
-        //判断是否有头像uri，有的话直接从缓存里面拿。没有设置即默认。
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String avatarUrl = mPrefs.getString("avatar_user", null);
-        //设置头像
-        Glide.with(this).load(avatarUrl).error(R.drawable.boy).into(mIcon);
+        updateIconFromServer();
 
         mNavigationView.setCheckedItem(R.id.second_item);
         mNavigationView.setItemIconTintList(null);
@@ -138,6 +140,27 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         filter.addAction(UPDATE_ICON);
         this.registerReceiver(mReceiver, filter);
 
+    }
+
+    //从服务器更新头像
+    private void updateIconFromServer() {
+        BmobQuery<NewUserInfoBmob> query = new BmobQuery<>();
+        String objectId = BmobUser.getCurrentUser(UserInfoBmob.class).getObjectId();
+        query.addWhereEqualTo("pUserObjectId", objectId);
+        query.findObjects(new FindListener<NewUserInfoBmob>() {
+            @Override
+            public void done(List<NewUserInfoBmob> list, BmobException e) {
+                if (e == null) {
+                    NewUserInfoBmob userInfo = list.get(0);
+                    if (userInfo != null) {
+                        String url = userInfo.getpAvatarUrl();
+                        Glide.with(MainActivity.this).load(url).error(R.drawable.boy).into(mIcon);
+                    }
+                } else {
+                    ToastUtil.shortToast(MainActivity.this, e.getLocalizedMessage());
+                }
+            }
+        });
     }
 
     private class MyNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -231,9 +254,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d(TAG, "--------------->onReceive");
-
-            String avatarUrl = mPrefs.getString("avatar_user", null);
+            String avatarUrl = intent.getStringExtra("avatar_url");
+            Log.d(TAG, "--------------->onReceive:url:" + avatarUrl);
             //设置头像
             Glide.with(MainActivity.this).load(avatarUrl).error(R.drawable.boy).into(mIcon);
         }

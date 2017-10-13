@@ -17,6 +17,16 @@ public class NewUserInfoBmob extends BmobObject {
     private String pHobby;
     private String pUserObjectId;
 
+    private String pAvatarUrl;
+
+    public String getpAvatarUrl() {
+        return pAvatarUrl;
+    }
+
+    public void setpAvatarUrl(String pAvatarUrl) {
+        this.pAvatarUrl = pAvatarUrl;
+    }
+
     public String getpNickName() {
         return pNickName;
     }

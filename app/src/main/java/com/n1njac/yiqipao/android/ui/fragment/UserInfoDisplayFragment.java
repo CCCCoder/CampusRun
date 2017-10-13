@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.amap.api.maps.model.LatLng;
 import com.bumptech.glide.Glide;
 import com.n1njac.yiqipao.android.R;
+import com.n1njac.yiqipao.android.bmobObject.NewUserInfoBmob;
 import com.n1njac.yiqipao.android.bmobObject.RunDataBmob;
 import com.n1njac.yiqipao.android.bmobObject.UserInfoBmob;
 import com.n1njac.yiqipao.android.ui.activity.ChangeUserInfoActivity;
@@ -57,6 +58,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -93,8 +95,6 @@ public class UserInfoDisplayFragment extends Fragment {
 
     private Uri mPhotoUri;
     private String mAvatarUrl;
-    private SharedPreferences.Editor mEditor;
-    private SharedPreferences mSf;
 
     private static final int CHOOSE_ALBUM = 0x777;
     private static final int TAKE_PHOTO = 0x778;
@@ -108,22 +108,16 @@ public class UserInfoDisplayFragment extends Fragment {
         View view = inflater.inflate(R.layout.user_info_frag, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        mEditor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-        mSf = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         getDataFromServer();
+        getAvatarFromServer();
 
         mReceiver = new UpdateRunDataReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(PersonalRunInfoFragment.UPDATE_RUN_DATA_ACTION);
         getActivity().registerReceiver(mReceiver, filter);
-
-        mAvatarUrl = mSf.getString("avatar_user", null);
-        //设置头像
-        Glide.with(getActivity()).load(mAvatarUrl).error(R.drawable.boy).into(userIconIv);
-
         return view;
     }
+
 
     @Override
     public void onDestroyView() {
@@ -245,21 +239,19 @@ public class UserInfoDisplayFragment extends Fragment {
     //查询跑步次数和总路程
     public void getDataFromServer() {
         String objectId = BmobUser.getCurrentUser(UserInfoBmob.class).getObjectId();
-
         Log.d(TAG, "objectId:" + objectId);
         BmobQuery<RunDataBmob> query = new BmobQuery<>();
         query.addWhereEqualTo("pUserObjectId", objectId);
 
         // TODO: 2017/10/11 这里数据量大的时候需要分页处理数据，bmob只支持最大500条的查询
         query.findObjects(new FindListener<RunDataBmob>() {
-            @SuppressLint("SetTextI18n")
             @Override
             public void done(List<RunDataBmob> list, BmobException e) {
 
 
                 if (e == null) {
                     int count = list.size();
-                    userRunCountTv.setText(count + "");
+                    userRunCountTv.setText(String.valueOf(count));
 
                     DecimalFormat df = new DecimalFormat("#0.00");
                     double totalDistance = 0.0;
@@ -279,6 +271,33 @@ public class UserInfoDisplayFragment extends Fragment {
                 }
             }
         });
+    }
+
+    //从服务器更新头像和
+    private void getAvatarFromServer() {
+        String objectId = BmobUser.getCurrentUser(UserInfoBmob.class).getObjectId();
+        Log.d(TAG, "objectId:" + objectId);
+        BmobQuery<NewUserInfoBmob> query = new BmobQuery<>();
+        query.addWhereEqualTo("pUserObjectId", objectId);
+        query.findObjects(new FindListener<NewUserInfoBmob>() {
+            @Override
+            public void done(List<NewUserInfoBmob> list, BmobException e) {
+
+                if (e == null) {
+                    NewUserInfoBmob userInfoBmob = list.get(0);
+                    String url = userInfoBmob.getpAvatarUrl();
+                    String nickName = userInfoBmob.getpNickName();
+                    userIdTv.setText(nickName);
+                    Glide.with(getActivity()).load(url).error(R.drawable.boy).into(userIconIv);
+
+                } else {
+
+                    Log.d(TAG, "error code：" + e.getErrorCode() + " msg:" + e.getLocalizedMessage());
+                }
+            }
+        });
+
+
     }
 
 
@@ -351,12 +370,10 @@ public class UserInfoDisplayFragment extends Fragment {
 
                             if (e == null) {
                                 mAvatarUrl = bmobFile.getFileUrl();
-                                mEditor.putString("avatar_user", mAvatarUrl);
-                                mEditor.commit();
+//                                mEditor.putString("avatar_user", mAvatarUrl);
+//                                mEditor.commit();
 
-                                //通知MainActivity更改头像
-
-                                getActivity().sendBroadcast(new Intent(MainActivity.UPDATE_ICON));
+                                updateAvatar(mAvatarUrl);
 
                                 Log.d(TAG, "url:" + mAvatarUrl);
                             } else {
@@ -373,5 +390,49 @@ public class UserInfoDisplayFragment extends Fragment {
                 }
             }
         }
+    }
+
+    //更新服务器用户头像url
+
+    private void updateAvatar(final String url) {
+        BmobQuery<NewUserInfoBmob> query = new BmobQuery<>();
+        String objectId = BmobUser.getCurrentUser(UserInfoBmob.class).getObjectId();
+        query.addWhereEqualTo("pUserObjectId", objectId);
+        query.findObjects(new FindListener<NewUserInfoBmob>() {
+            @Override
+            public void done(List<NewUserInfoBmob> list, BmobException e) {
+                if (e == null) {
+                    NewUserInfoBmob userInfo = list.get(0);
+                    if (userInfo != null) {
+                        String objectId = userInfo.getObjectId();
+                        updateAvatarReal(objectId, url);
+                    }
+                } else {
+                    ToastUtil.shortToast(getActivity(), e.getLocalizedMessage());
+                    Log.d(TAG, "error code:" + e.getErrorCode() + " msg:" + e.getLocalizedMessage());
+                }
+            }
+        });
+
+    }
+
+    private void updateAvatarReal(String objectId, final String url) {
+
+        NewUserInfoBmob userInfoBmob = new NewUserInfoBmob();
+        userInfoBmob.setpAvatarUrl(url);
+        userInfoBmob.update(objectId, new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e != null) {
+                    Log.d(TAG, "error code:" + e.getErrorCode() + " msg:" + e.getLocalizedMessage());
+                } else {
+                    //通知侧滑栏更新头像
+                    Intent intent = new Intent();
+                    intent.putExtra("avatar_url", url);
+                    intent.setAction(MainActivity.UPDATE_ICON);
+                    getActivity().sendBroadcast(intent);
+                }
+            }
+        });
     }
 }

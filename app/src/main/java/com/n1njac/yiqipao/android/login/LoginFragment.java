@@ -190,7 +190,7 @@ public class LoginFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 
-                    //注册给定nick name为注册的账号
+                    //创建用户信息表
                     updateUserInfo(userInfoBmob.getObjectId());
 
                     Log.d(TAG, "objectId:" + userInfoBmob.getObjectId());
@@ -213,6 +213,7 @@ public class LoginFragment extends Fragment {
         userInfoBmob.setpHeight(0);
         userInfoBmob.setpWeight(0);
         userInfoBmob.setpHobby("null");
+        userInfoBmob.setpAvatarUrl("null");
 
         userInfoBmob.save(new SaveListener<String>() {
             @Override
