@@ -91,7 +91,7 @@ public class UserInfoDisplayFragment extends Fragment {
     ImageView userInfoSettingIv;
 
     private PopupWindow mPopupWindow;
-    private UpdateRunDataReceiver mReceiver;
+    private UpdateDataReceiver mReceiver;
 
     private Uri mPhotoUri;
     private String mAvatarUrl;
@@ -99,6 +99,8 @@ public class UserInfoDisplayFragment extends Fragment {
     private static final int CHOOSE_ALBUM = 0x777;
     private static final int TAKE_PHOTO = 0x778;
     private static final int CROP_PIC = 0x779;
+
+
 
 
     @Nullable
@@ -109,11 +111,12 @@ public class UserInfoDisplayFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         getDataFromServer();
-        getAvatarFromServer();
+        getAvatarAndNameFromServer();
 
-        mReceiver = new UpdateRunDataReceiver();
+        mReceiver = new UpdateDataReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(PersonalRunInfoFragment.UPDATE_RUN_DATA_ACTION);
+        filter.addAction(ChangeUserInfoActivity.UPDATE_NICK_NAME);
         getActivity().registerReceiver(mReceiver, filter);
         return view;
     }
@@ -248,7 +251,6 @@ public class UserInfoDisplayFragment extends Fragment {
             @Override
             public void done(List<RunDataBmob> list, BmobException e) {
 
-
                 if (e == null) {
                     int count = list.size();
                     userRunCountTv.setText(String.valueOf(count));
@@ -273,8 +275,8 @@ public class UserInfoDisplayFragment extends Fragment {
         });
     }
 
-    //从服务器更新头像和
-    private void getAvatarFromServer() {
+    //从服务器更新头像和nick name
+    private void getAvatarAndNameFromServer() {
         String objectId = BmobUser.getCurrentUser(UserInfoBmob.class).getObjectId();
         Log.d(TAG, "objectId:" + objectId);
         BmobQuery<NewUserInfoBmob> query = new BmobQuery<>();
@@ -297,15 +299,19 @@ public class UserInfoDisplayFragment extends Fragment {
             }
         });
 
-
     }
 
-
-    private class UpdateRunDataReceiver extends BroadcastReceiver {
+    private class UpdateDataReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "------------>receive update");
-            getDataFromServer();
+
+
+            if (intent.getAction().equals(PersonalRunInfoFragment.UPDATE_RUN_DATA_ACTION)){
+                getDataFromServer();
+            }else if (intent.getAction().equals(ChangeUserInfoActivity.UPDATE_NICK_NAME)){
+                getAvatarAndNameFromServer();
+            }
         }
     }
 
@@ -383,8 +389,6 @@ public class UserInfoDisplayFragment extends Fragment {
                         }
 
                     });
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

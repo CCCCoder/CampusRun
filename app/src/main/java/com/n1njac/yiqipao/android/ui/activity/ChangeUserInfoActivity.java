@@ -8,6 +8,7 @@ package com.n1njac.yiqipao.android.ui.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -81,6 +82,8 @@ public class ChangeUserInfoActivity extends BaseActivity {
     private ProgressDialog mProgressDialog;
 
     private String mUserInfoItemObjectId;
+
+    public static final String UPDATE_NICK_NAME = "com.n1njac.yiqipao.android.update_nickname";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -191,6 +194,7 @@ public class ChangeUserInfoActivity extends BaseActivity {
                 mProgressDialog.dismiss();
                 if (e == null) {
                     ToastUtil.shortToast(ChangeUserInfoActivity.this, "保存成功");
+                    sendBroadcast(new Intent(UPDATE_NICK_NAME));
                     finish();
                 } else {
                     ToastUtil.shortToast(ChangeUserInfoActivity.this, "保存失败:" + e.getLocalizedMessage());
